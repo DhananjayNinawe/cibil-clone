@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CIBIL Clone
+
+A pixel-faithful clone of the [TransUnion CIBIL](https://www.cibil.com) credit profile registration page, built with Next.js 16, React 19, TypeScript, and Tailwind CSS v4.
+
+## Features
+
+- **Registration form** with full client-side validation
+  - Email, 10-digit mobile number, password strength rules
+  - Confirm password match check
+  - First / last name (letters only)
+  - ID type selector with per-type format validation (Aadhaar, PAN, Passport, Voter ID, Driving License)
+  - Date of birth with 18+ age gate
+  - 6-digit pincode
+  - Terms & Conditions consent checkbox
+- **Multi-language support** — English, Hindi, Marathi, Tamil (switchable via header dropdown)
+- **Password visibility toggles** on password and confirm-password fields
+- **ID number masking** using `-webkit-text-security` (no extra `type="password"` fields that confuse browser heuristics)
+- **Accessible form structure** — all inputs inside a single `<form>`, proper `autocomplete` attributes, `noValidate` with JS-driven validation
+- **Form reset** after successful submission
+
+## Tech Stack
+
+| Layer | Choice |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| UI library | React 19 |
+| Language | TypeScript 5 |
+| Styling | Tailwind CSS v4 |
+| i18n | Custom context + translation map (`lib/i18n.ts`) |
+
+## Project Structure
+
+```
+cibil-clone/
+├── app/
+│   ├── layout.tsx          # Root layout — wraps app in LanguageProvider
+│   ├── page.tsx            # Home page — composes Header, RegistrationForm, Footer
+│   └── globals.css         # Tailwind base styles
+├── components/
+│   ├── Header.tsx          # Sticky header with logo, login button, language switcher
+│   ├── RegistrationForm.tsx# Main form with validation logic
+│   └── Footer.tsx          # Copyright and policy links
+├── context/
+│   └── LanguageContext.tsx # Language state + t() translation helper
+└── lib/
+    └── i18n.ts             # Translation strings for en / hi / mr / ta
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm (or yarn / pnpm / bun)
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Other scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build   # Production build
+npm run start   # Serve production build
+npm run lint    # ESLint
+```
 
-## Learn More
+## Form Validation Rules
 
-To learn more about Next.js, take a look at the following resources:
+| Field | Rules |
+|---|---|
+| Email | Required, valid email format |
+| Mobile | Required, exactly 10 digits |
+| Password | Required, min 8 chars, uppercase, lowercase, number, special character |
+| Confirm Password | Required, must match Password |
+| First / Last Name | Required, min 2 chars, letters only |
+| ID Type | Required, must select one |
+| ID Number | Required; Aadhaar → 12 digits, PAN → AAAAA9999A, Passport → A1234567, Voter ID → ABC1234567 |
+| Date of Birth | Required, must be 18+ years old |
+| Pincode | Required, exactly 6 digits |
+| Terms | Must be checked |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Errors appear on blur (field by field) and all at once on submit attempt.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Internationalisation
 
-## Deploy on Vercel
+Languages are defined in [`lib/i18n.ts`](lib/i18n.ts). To add a new language:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Add the language code to the `Language` type.
+2. Add an entry to the `languages` array with `code`, `label`, and `nativeLabel`.
+3. Add a full translation object under that code in `translations`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+This project is for educational and demonstration purposes only. CIBIL and TransUnion are registered trademarks of TransUnion CIBIL Limited.
