@@ -2,35 +2,19 @@
 
 import { useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
-
-function EyeIcon({ visible, onToggle }: { visible: boolean; onToggle: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onToggle}
-      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-    >
-      {visible ? (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-        </svg>
-      ) : (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-        </svg>
-      )}
-    </button>
-  );
-}
-
-function InfoIcon() {
-  return (
-    <svg className="w-4 h-4 text-yellow-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-    </svg>
-  );
-}
+import { EyeIcon, InfoIcon } from "@/components/icons";
+import {
+  validateEmail,
+  validateMobile,
+  validatePassword,
+  validateConfirmPassword,
+  validateName,
+  validateIdType,
+  validateIdNumber,
+  validateDob,
+  validatePincode,
+  validateAgreed,
+} from "@/lib/validators";
 
 interface FormState {
   email: string;
@@ -68,73 +52,6 @@ const ID_TYPES = [
   { key: "passVoterId", value: "voter-id" },
   { key: "passDrivingLicense", value: "driving-license" },
 ] as const;
-
-function validateEmail(v: string): string | undefined {
-  if (!v.trim()) return "Email address is required";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return "Please enter a valid email address";
-}
-
-function validateMobile(v: string): string | undefined {
-  if (!v.trim()) return "Mobile number is required";
-  if (!/^\d{10}$/.test(v)) return "Please enter a valid 10-digit mobile number";
-}
-
-function validatePassword(v: string): string | undefined {
-  if (!v) return "Password is required";
-  if (v.length < 8) return "Password must be at least 8 characters";
-  if (!/[A-Z]/.test(v)) return "Must contain at least one uppercase letter";
-  if (!/[a-z]/.test(v)) return "Must contain at least one lowercase letter";
-  if (!/\d/.test(v)) return "Must contain at least one number";
-  if (!/[!@#$%^&*(),.?":{}|<>_\-]/.test(v)) return "Must contain at least one special character";
-}
-
-function validateConfirmPassword(v: string, password: string): string | undefined {
-  if (!v) return "Please confirm your password";
-  if (v !== password) return "Passwords do not match";
-}
-
-function validateName(v: string, label: string): string | undefined {
-  if (!v.trim()) return `${label} is required`;
-  if (v.trim().length < 2) return `${label} must be at least 2 characters`;
-  if (!/^[a-zA-Z\s]+$/.test(v)) return `${label} must contain only letters`;
-}
-
-function validateIdType(v: string): string | undefined {
-  if (!v) return "Please select an ID type";
-}
-
-function validateIdNumber(v: string, idType: string): string | undefined {
-  if (!v.trim()) return "ID number is required";
-  if (idType === "aadhaar" && !/^\d{12}$/.test(v))
-    return "Aadhaar number must be exactly 12 digits";
-  if (idType === "pan" && !/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(v.toUpperCase()))
-    return "PAN must be in format: AAAAA9999A";
-  if (idType === "passport" && !/^[A-Z][0-9]{7}$/.test(v.toUpperCase()))
-    return "Passport must be in format: A1234567";
-  if (idType === "voter-id" && !/^[A-Z]{3}[0-9]{7}$/.test(v.toUpperCase()))
-    return "Voter ID must be in format: ABC1234567";
-}
-
-function validateDob(v: string): string | undefined {
-  if (!v) return "Date of birth is required";
-  const dob = new Date(v);
-  if (isNaN(dob.getTime())) return "Please enter a valid date";
-  const today = new Date();
-  let age = today.getFullYear() - dob.getFullYear();
-  const m = today.getMonth() - dob.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
-  if (age < 18) return "You must be at least 18 years old";
-  if (age > 100) return "Please enter a valid date of birth";
-}
-
-function validatePincode(v: string): string | undefined {
-  if (!v.trim()) return "Pincode is required";
-  if (!/^\d{6}$/.test(v)) return "Pincode must be exactly 6 digits";
-}
-
-function validateAgreed(v: boolean): string | undefined {
-  if (!v) return "You must agree to the Terms and Conditions";
-}
 
 function validateAll(form: FormState): FormErrors {
   return {
