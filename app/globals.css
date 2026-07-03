@@ -1,5 +1,35 @@
 @import "tailwindcss";
 
+/* Intro (Fontfabric) — self-served from cibil.com CDN. Sends Access-Control-Allow-Origin: * */
+@font-face {
+  font-family: "Intro";
+  src: url("https://www.cibil.com/content/dam/cibil/fonts/2CA963-3-0.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Intro";
+  src: url("https://www.cibil.com/content/dam/cibil/fonts/2CA963-6-0.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Intro";
+  src: url("https://www.cibil.com/content/dam/cibil/fonts/2CA963-9-0.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Intro";
+  src: url("https://www.cibil.com/content/dam/cibil/fonts/2CA963-0-0.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -8,7 +38,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: "Intro", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
@@ -22,5 +52,5 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 }
