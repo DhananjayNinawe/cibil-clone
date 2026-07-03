@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import { TranslationKey } from "@/lib/i18n";
 import {
@@ -177,8 +178,13 @@ function FullFooterLayout({
               </a>
             </div>
             <div className="mt-6">
-              <span className="text-xl font-bold text-gray-700">tu</span>
-              <p className="text-sm text-gray-600 mt-1">{t("infoForGood")}</p>
+              <Image
+                src="/ifg-lockup-yellow-grey.svg"
+                alt={t("infoForGood")}
+                width={150}
+                height={86}
+                className="h-auto w-37.5 select-none"
+              />
             </div>
             <p className="text-xs text-gray-400 mt-4 max-w-xs">{t("copyright")}</p>
           </div>
