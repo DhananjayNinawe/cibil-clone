@@ -1,17 +1,22 @@
-function AgentSilhouette() {
-  return (
-    <svg viewBox="0 0 200 200" className="absolute right-6 sm:right-16 bottom-0 h-full w-auto" aria-hidden="true">
-      <circle cx="130" cy="90" r="55" fill="#ffffff" opacity="0.15" />
-      <circle cx="128" cy="78" r="24" fill="#ffffff" opacity="0.25" />
-      <path d="M90 140q38 -22 76 0l4 60h-84z" fill="#ffffff" opacity="0.25" />
-    </svg>
-  );
-}
+import Image from "next/image";
+
+const HERO_IMAGE_URL =
+  "https://www.cibil.com/contact-us/_jcr_content/root/contentcontainer/pagesection/image.coreimg.75.1440.jpeg/1683913902553/contact1.jpeg";
 
 export default function HeroBanner() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-r from-[#0a3a52] via-[#0f6b8f] to-[#5fc3e8] h-64 sm:h-80">
-      <AgentSilhouette />
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+      <div className="relative w-full aspect-1440/440 overflow-hidden">
+        <Image
+          src={HERO_IMAGE_URL}
+          alt="CIBIL customer support"
+          fill
+          priority
+          unoptimized
+          sizes="(max-width: 1280px) 100vw, 1280px"
+          className="object-cover"
+        />
+      </div>
     </section>
   );
 }

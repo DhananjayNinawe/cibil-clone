@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import { TranslationKey } from "@/lib/i18n";
 import { PlayIcon } from "@/components/icons";
@@ -31,13 +32,27 @@ function RegionalLangs() {
   );
 }
 
-function VideoThumb({ gradient }: { gradient: string }) {
+function VideoThumb({ videoId, title }: { videoId: string; title: string }) {
   return (
-    <div className={`relative w-full h-40 rounded-lg overflow-hidden bg-gradient-to-br ${gradient} flex items-center justify-center my-3`}>
-      <button aria-label="Play video" className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center">
-        <PlayIcon className="w-6 h-6 text-red-600 ml-0.5" />
-      </button>
-    </div>
+    <a
+      href={`https://www.youtube.com/watch?v=${videoId}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Play video: ${title}`}
+      className="relative w-full max-w-md aspect-video rounded-lg overflow-hidden flex items-center justify-center bg-black my-3"
+    >
+      <Image
+        src={`https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`}
+        alt={title}
+        fill
+        unoptimized
+        sizes="(max-width: 768px) 100vw, 448px"
+        className="object-cover"
+      />
+      <span className="relative w-14 h-14 rounded-full bg-white/90 flex items-center justify-center">
+        <PlayIcon className="w-7 h-7 text-red-600 ml-0.5" />
+      </span>
+    </a>
   );
 }
 
@@ -77,7 +92,7 @@ export default function UcsContent() {
               {t("ucsVideoLinkLine")}
             </a>
           </p>
-          <VideoThumb gradient="from-[#f5c518] to-[#e0a800]" />
+          <VideoThumb videoId="7cHGllcvWjY" title="How to read your CIBIL Report | TransUnion CIBIL" />
           <p>{t("ucsRegionalLangs")}</p>
           <RegionalLangs />
         </QaBlock>
@@ -136,7 +151,7 @@ export default function UcsContent() {
           </p>
         </QaBlock>
         <QaBlock q={t("ucsQ10")}>
-          <VideoThumb gradient="from-[#5a9a6a] to-[#2a5a3a]" />
+          <VideoThumb videoId="FS08WcDyBkA" title="Does an enquiry affect your CIBIL Score? | TransUnion CIBIL" />
           <p>{t("ucsEnquiriesRegional")}</p>
           <RegionalLangs />
         </QaBlock>

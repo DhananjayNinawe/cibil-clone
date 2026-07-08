@@ -1,7 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import CreditSidebarCard from "@/components/faq/CreditSidebarCard";
+
+const FOUR_FACTORS_IMG =
+  "https://www.cibil.com/faq/credit-score-and-loan-basics/_jcr_content/root/contentcontainer/pagesection/columnrow/contentcontainer_1786931170/image.coreimg.75.1440.jpeg/1738733444575/factors.jpeg";
 
 function QaBlock({ q, children }: { q: string; children: React.ReactNode }) {
   return (
@@ -61,15 +65,26 @@ export default function CsbContent() {
           </p>
         </QaBlock>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8 my-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8 mt-10">
           <FactorCard title={t("csbFactorAgeTitle")} desc={t("csbFactorAgeDesc")} />
           <FactorCard title={t("csbFactorUtilTitle")} desc={t("csbFactorUtilDesc")} />
-          <div className="bg-[#f5c518] rounded-2xl p-6 flex flex-col justify-center">
-            <p className="text-2xl font-extrabold text-gray-900 leading-tight">{t("csbFourFactorsTitle")}</p>
-            <p className="text-lg font-semibold text-gray-800">{t("csbFourFactorsSubtitle")}</p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-[minmax(0,260px)_1fr] gap-x-10 gap-y-8 items-center my-10">
+          <div className="relative aspect-square w-full max-w-[260px] mx-auto sm:mx-0">
+            <Image
+              src={FOUR_FACTORS_IMG}
+              alt={`${t("csbFourFactorsTitle")} ${t("csbFourFactorsSubtitle")}`}
+              fill
+              unoptimized
+              sizes="260px"
+              className="object-contain"
+            />
           </div>
-          <FactorCard title={t("csbFactorPaymentTitle")} desc={t("csbFactorPaymentDesc")} />
-          <FactorCard title={t("csbFactorEnquiriesTitle")} desc={t("csbFactorEnquiriesDesc")} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8">
+            <FactorCard title={t("csbFactorPaymentTitle")} desc={t("csbFactorPaymentDesc")} />
+            <FactorCard title={t("csbFactorEnquiriesTitle")} desc={t("csbFactorEnquiriesDesc")} />
+          </div>
         </div>
 
         <QaBlock q={t("csbQ4")}>

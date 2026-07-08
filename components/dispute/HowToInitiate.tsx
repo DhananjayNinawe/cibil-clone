@@ -1,20 +1,23 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import { TranslationKey } from "@/lib/i18n";
-import { ReportChartIcon, DocumentAlertIcon, ScaleIcon, PhoneCheckIcon } from "@/components/icons";
+
+const STEP_BASE =
+  "https://www.cibil.com/consumer-dispute-resolution/_jcr_content/root/contentcontainer/pagesection_83362557/contentcontainer/pagesectionwithbackg/contentcontainer/columnrow";
 
 interface Step {
   label: TranslationKey;
-  icon: React.ReactNode;
+  image: string;
 }
 
 const STEPS: Step[] = [
-  { label: "step1Label", icon: <ReportChartIcon /> },
-  { label: "step2Label", icon: <DocumentAlertIcon /> },
-  { label: "step3Label", icon: <ScaleIcon /> },
-  { label: "step4Label", icon: <PhoneCheckIcon /> },
+  { label: "step1Label", image: `${STEP_BASE}/item_1764741897337.coreimg.svg/1764742170853/frame34.svg` },
+  { label: "step2Label", image: `${STEP_BASE}/item_1764741902134.coreimg.svg/1764742215793/frame35.svg` },
+  { label: "step3Label", image: `${STEP_BASE}/item_1764741906358.coreimg.svg/1764742249099/frame36.svg` },
+  { label: "step4Label", image: `${STEP_BASE}/item_1764741911591.coreimg.svg/1764742281557/frame37.svg` },
 ];
 
 export default function HowToInitiate() {
@@ -33,9 +36,16 @@ export default function HowToInitiate() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
         {STEPS.map((step, i) => (
           <div key={step.label} className="flex flex-col items-center text-center">
-            <div className="w-24 h-24 rounded-full bg-[#0a3a52] flex items-center justify-center">{step.icon}</div>
+            <Image
+              src={step.image}
+              alt={t(step.label)}
+              width={192}
+              height={192}
+              unoptimized
+              className="w-40 h-40 sm:w-48 sm:h-48"
+            />
             <p className="font-bold text-gray-800 mt-4">{t(step.label)}</p>
-            <div className="text-sm text-gray-600 mt-2 max-w-[200px]">
+            <div className="text-sm text-gray-600 mt-2 max-w-50">
               {i === 0 && (
                 <>
                   <p>{t("step1Line1")}</p>

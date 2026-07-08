@@ -1,25 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 
-function CityscapePlaceholder() {
-  return (
-    <div className="relative w-full h-full min-h-[260px] overflow-hidden bg-gradient-to-br from-[#8fd0ea] via-[#bfe6d8] to-[#f3e6b8]">
-      <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-[#4a6b5c]/70 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 flex items-end gap-1 px-2 h-1/2">
-        {[40, 65, 50, 80, 55, 70, 45, 90, 60].map((h, i) => (
-          <div
-            key={i}
-            className="flex-1 bg-[#3a4a52]/60 rounded-t-sm"
-            style={{ height: `${h}%` }}
-          />
-        ))}
-      </div>
-      <div className="absolute bottom-0 left-0 right-0 h-4 bg-[#5a6b6a]/50" />
-    </div>
-  );
-}
+const HERO_IMAGE_URL =
+  "https://www.transunioncibil.com/content/dam/transunion-cibil/corporate/images/header/About-Us-2hero-D-220916.jpg";
 
 export default function HeroSection() {
   const { t } = useLanguage();
@@ -39,7 +25,17 @@ export default function HeroSection() {
           {t("knowMoreBtn")}
         </Link>
       </div>
-      <CityscapePlaceholder />
+      <div className="relative w-full min-h-65 lg:min-h-full">
+        <Image
+          src={HERO_IMAGE_URL}
+          alt={t("aboutUsHeroTitle")}
+          fill
+          priority
+          unoptimized
+          sizes="(max-width: 1024px) 100vw, 50vw"
+          className="object-cover"
+        />
+      </div>
     </section>
   );
 }

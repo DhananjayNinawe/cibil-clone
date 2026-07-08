@@ -6,7 +6,7 @@ import { TranslationKey } from "@/lib/i18n";
 import { PlusMinusCircleIcon } from "@/components/icons";
 
 function FaqItemView({ title, children }: { title: string; children: React.ReactNode }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="border-b border-gray-200 py-4 last:border-b-0">

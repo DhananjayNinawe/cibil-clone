@@ -1,8 +1,24 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import CreditSidebarCard from "@/components/faq/CreditSidebarCard";
+
+const DISPUTE_FLOW_IMAGE =
+  "https://www.cibil.com/faq/loan-rejections-disputes/_jcr_content/root/contentcontainer/pagesection/columnrow/contentcontainer_1786931170/image.coreimg.75.1440.jpeg/1671464745775/dispute-horizontal-flow-if-report-received-from-lender.jpeg";
+const DISPUTE_FLOW_IMAGE_2 =
+  "https://www.cibil.com/faq/loan-rejections-disputes/_jcr_content/root/contentcontainer/pagesection/columnrow/contentcontainer_1786931170/image_38853473.coreimg.75.1440.jpeg/1671464816941/dispute-horizontal-flow-if-report-received-from-lender.jpeg";
+const UNDER_DISPUTE_ALERT_IMAGE =
+  "https://www.cibil.com/faq/loan-rejections-disputes/_jcr_content/root/contentcontainer/pagesection/columnrow/contentcontainer_1786931170/image_38853473_copy.coreimg.75.1440.jpeg/1680641281919/loan-rejection-disputes-02.jpeg";
+
+function FlowImage({ src, alt }: { src: string; alt: string }) {
+  return (
+    <div className="relative w-full aspect-1440/220 overflow-hidden">
+      <Image src={src} alt={alt} fill unoptimized sizes="(max-width: 1024px) 100vw, 760px" className="object-contain" />
+    </div>
+  );
+}
 
 function QaBlock({ q, children }: { q: string; children: React.ReactNode }) {
   return (
@@ -57,9 +73,7 @@ export default function LrdContent() {
 
         <QaBlock q={t("lrdQ5")}>
           <p>{t("lrdA5Intro")}</p>
-          <div className="h-16 rounded bg-gray-100 flex items-center justify-center text-xs text-gray-400">
-            [ Dispute process diagram ]
-          </div>
+          <FlowImage src={DISPUTE_FLOW_IMAGE} alt={t("lrdA5Intro")} />
           <p>
             <a href="#" className="text-blue-700 hover:underline">
               {t("lrdA5VideoLink")}
@@ -71,6 +85,7 @@ export default function LrdContent() {
           </p>
           <p>{t("lrdA5Once")}</p>
           <p>{t("lrdA5Time")}</p>
+          <FlowImage src={DISPUTE_FLOW_IMAGE_2} alt={t("lrdA5UnderstandSuffix")} />
           <p>
             <Link href="/consumer-dispute-resolution" className="text-blue-700 hover:underline">
               {t("lrdA5UnderstandLink")}
@@ -106,6 +121,16 @@ export default function LrdContent() {
         </QaBlock>
         <QaBlock q={t("lrdQ14")}>
           <p>{t("lrdA14")}</p>
+          <div className="relative w-full aspect-1440/380 overflow-hidden">
+            <Image
+              src={UNDER_DISPUTE_ALERT_IMAGE}
+              alt={t("lrdQ14")}
+              fill
+              unoptimized
+              sizes="(max-width: 1024px) 100vw, 760px"
+              className="object-contain object-left"
+            />
+          </div>
         </QaBlock>
         <QaBlock q={t("lrdQ15")}>
           <p>{t("lrdA15")}</p>

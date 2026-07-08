@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { TranslationKey } from "@/lib/i18n";
@@ -12,6 +13,9 @@ interface FaqHeroProps {
   ctaKey?: TranslationKey;
   ctaHref?: string;
   gradient?: string;
+  /** Optional real hero image; falls back to the gradient placeholder when absent. */
+  imageSrc?: string;
+  imageAlt?: string;
 }
 
 /** Reusable Knowledge Center hero: text block on a light-grey band, gradient placeholder image on the right. */
@@ -22,6 +26,8 @@ export default function FaqHero({
   ctaKey,
   ctaHref = "/register",
   gradient = "from-[#8fb8cc] to-[#3a5a6a]",
+  imageSrc,
+  imageAlt = "",
 }: FaqHeroProps) {
   const { t } = useLanguage();
 
@@ -42,11 +48,25 @@ export default function FaqHero({
           </Link>
         )}
       </div>
-      <div className={`relative w-full h-full min-h-[200px] overflow-hidden bg-gradient-to-br ${gradient}`}>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-24 h-24 rounded-full bg-white/15" />
+      {imageSrc ? (
+        <div className="relative w-full h-full min-h-[200px] overflow-hidden">
+          <Image
+            src={imageSrc}
+            alt={imageAlt}
+            fill
+            priority
+            unoptimized
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="object-cover"
+          />
         </div>
-      </div>
+      ) : (
+        <div className={`relative w-full h-full min-h-[200px] overflow-hidden bg-gradient-to-br ${gradient}`}>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-24 h-24 rounded-full bg-white/15" />
+          </div>
+        </div>
+      )}
     </section>
   );
 }

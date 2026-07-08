@@ -1,17 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 
-function PersonPhonePlaceholder() {
-  return (
-    <div className="relative w-full h-full min-h-[220px] overflow-hidden bg-gradient-to-br from-[#e8b97a] to-[#8a5a35]">
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-24 h-24 rounded-full bg-white/15" />
-      </div>
-    </div>
-  );
-}
+const HERO_IMAGE = "https://www.cibil.com/content/dam/cibil/consumer/dispute-new.png";
 
 export default function HeroSection() {
   const { t } = useLanguage();
@@ -29,7 +22,17 @@ export default function HeroSection() {
             {t("disputeHeroBtn")}
           </Link>
         </div>
-        <PersonPhonePlaceholder />
+        <div className="relative w-full min-h-55 overflow-hidden">
+          <Image
+            src={HERO_IMAGE}
+            alt=""
+            fill
+            priority
+            unoptimized
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="object-cover"
+          />
+        </div>
       </section>
 
       <div className="bg-[#f5c518] py-2.5 px-4">

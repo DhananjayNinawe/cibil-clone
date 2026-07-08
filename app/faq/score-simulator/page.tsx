@@ -20,7 +20,8 @@ export default function ScoreSimulatorPage() {
           descKey="ssHeroDesc"
           ctaKey="simulateNowBtn"
           ctaHref="/register"
-          gradient="from-[#bfe6f5] to-[#7fc3e0]"
+          imageSrc="https://www.cibil.com/content/dam/cibil/consumer/Score-simulator-banner.jpg"
+          imageAlt="Make the right credit decisions with Score Simulator"
         />
         <ScoreSimContent />
       </main>

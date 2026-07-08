@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { TranslationKey } from "@/lib/i18n";
@@ -27,8 +28,16 @@ function HeroSection() {
           </p>
           <p className="text-xs text-gray-500 mt-4 max-w-md">{t("fcsHeroEligibility")}</p>
         </div>
-        <div className="relative w-full h-full min-h-[220px] overflow-hidden bg-gradient-to-br from-[#0a3a52] to-[#1a6d8a] flex items-center justify-center">
-          <p className="text-white text-2xl font-bold text-center px-6">Looking for a Loan?</p>
+        <div className="relative w-full h-full min-h-[220px] overflow-hidden">
+          <Image
+            src="https://www.cibil.com/content/dam/cibil/consumer/facr/banner-image.png"
+            alt="Looking for a Loan? Check your Free CIBIL Score first."
+            fill
+            priority
+            unoptimized
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="object-cover"
+          />
         </div>
       </section>
       <div className="bg-[#fdf6d8] py-3 px-4">
@@ -102,10 +111,22 @@ export default function FcsContent() {
 
       <div className="bg-[#fdf6d8] py-10 px-4">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-          <p className="text-lg font-semibold text-gray-800 max-w-xl">{t("fcsVideoBannerTitle")}</p>
-          <button className="bg-[#f5c518] hover:bg-[#e8b800] text-gray-900 text-sm font-bold rounded-full px-6 py-2.5 transition-colors shrink-0">
-            {t("watchNowBtn")}
-          </button>
+          <div className="max-w-xl">
+            <p className="text-lg font-semibold text-gray-800">{t("fcsVideoBannerTitle")}</p>
+            <button className="mt-6 bg-[#f5c518] hover:bg-[#e8b800] text-gray-900 text-sm font-bold rounded-full px-6 py-2.5 transition-colors">
+              {t("watchNowBtn")}
+            </button>
+          </div>
+          <div className="relative w-full max-w-70 aspect-4/3 shrink-0">
+            <Image
+              src="https://www.cibil.com/content/dam/cibil/consumer/facr/Watch_and_learn.svg"
+              alt="Watch and learn about CIBIL Score & Credit Monitoring"
+              fill
+              unoptimized
+              sizes="280px"
+              className="object-contain"
+            />
+          </div>
         </div>
       </div>
 

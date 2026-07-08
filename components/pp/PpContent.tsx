@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import CreditSidebarCard from "@/components/faq/CreditSidebarCard";
 
@@ -31,16 +32,14 @@ export default function PpContent() {
         <QaBlock q={t("ppQ2")}>
           <p>{t("ppA2")}</p>
           <div className="mt-4">
-            <div className="flex items-center gap-2 text-gray-500 mb-2">
-              <span className="w-6 h-6 rounded-full border-2 border-[#00b0f0]" />
-              <span className="font-semibold text-lg">{t("ppRefreshCenter")}</span>
-            </div>
-            <p className="font-bold text-gray-800">
-              {t("ppReportAge")}
-            </p>
-            <div className="inline-block bg-orange-500 text-white text-sm font-bold rounded px-6 py-3 mt-3 shadow">
-              {t("ppBuyReportsBtn")} ▶
-            </div>
+            <Image
+              src="https://www.cibil.com/faq/purchase-post-purchase-help/_jcr_content/root/contentcontainer/pagesection/columnrow/contentcontainer_1786931170/image.coreimg.jpeg/1680548740381/purchase-post-01.jpeg"
+              alt={t("ppRefreshCenter")}
+              width={520}
+              height={360}
+              unoptimized
+              className="h-auto w-full max-w-130"
+            />
           </div>
           <p className="mt-4">
             <a href="/login" className="text-blue-700 hover:underline">

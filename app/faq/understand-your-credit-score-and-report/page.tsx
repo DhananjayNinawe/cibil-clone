@@ -14,7 +14,13 @@ export default function UnderstandCreditScoreReportPage() {
     <div className="flex flex-col min-h-screen">
       <Header variant="site" />
       <main className="flex-1">
-        <FaqHero titleKey="ucsHeroTitle" ctaKey="checkNewScoreBtn" ctaHref="/register" gradient="from-[#c7ccd1] to-[#6a7a85]" />
+        <FaqHero
+          titleKey="ucsHeroTitle"
+          ctaKey="checkNewScoreBtn"
+          ctaHref="/register"
+          imageSrc="https://www.cibil.com/content/dam/cibil/consumer/S-Credit-Reporting-2hero-D-090916.jpg"
+          imageAlt="Learn everything you need to know about the new CIBIL Score"
+        />
         <UcsContent />
       </main>
       <Footer variant="full" accentTop />

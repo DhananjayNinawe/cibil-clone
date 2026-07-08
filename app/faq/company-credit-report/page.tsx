@@ -14,7 +14,13 @@ export default function CompanyCreditReportPage() {
     <div className="flex flex-col min-h-screen">
       <Header variant="site" />
       <main className="flex-1">
-        <FaqHero titleKey="ccrfHeroTitle" ctaKey="getRankReportBtn" ctaHref="/register" gradient="from-[#c7d2da] to-[#7a8a95]" />
+        <FaqHero
+          titleKey="ccrfHeroTitle"
+          ctaKey="getRankReportBtn"
+          ctaHref="/register"
+          imageSrc="https://www.cibil.com/content/dam/cibil/consumer/P-Custom-Scorecards-2hero-D-310816.jpg"
+          imageAlt="Two business colleagues reviewing a company credit report"
+        />
         <CcrfContent />
       </main>
       <Footer variant="full" accentTop />

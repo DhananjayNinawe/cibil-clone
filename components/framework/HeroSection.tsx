@@ -1,16 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 
-function ShieldHexagonPlaceholder() {
-  return (
-    <div className="relative w-full h-full min-h-[220px] overflow-hidden bg-gradient-to-br from-[#2a4a3a] to-[#0a1a15]">
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-24 h-24 rounded-full bg-green-400/20" />
-      </div>
-    </div>
-  );
-}
+const HERO_IMAGE_URL =
+  "https://www.cibil.com/content/dam/cibil/consumer/compensation/compensation_banner.jpg";
 
 export default function HeroSection() {
   const { t } = useLanguage();
@@ -27,7 +21,17 @@ export default function HeroSection() {
           {t("readMoreBtn")}
         </a>
       </div>
-      <ShieldHexagonPlaceholder />
+      <div className="relative w-full min-h-65 lg:min-h-full">
+        <Image
+          src={HERO_IMAGE_URL}
+          alt={t("frameworkHeroTitle")}
+          fill
+          priority
+          unoptimized
+          sizes="(max-width: 1024px) 100vw, 50vw"
+          className="object-cover"
+        />
+      </div>
     </section>
   );
 }

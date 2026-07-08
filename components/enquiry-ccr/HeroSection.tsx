@@ -1,16 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 
-function LoanApplicationPlaceholder() {
-  return (
-    <div className="relative w-full h-full min-h-[240px] overflow-hidden bg-gradient-to-br from-[#f0e2c8] to-[#d8c298]">
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-32 h-24 rounded bg-white/40 rotate-6" />
-      </div>
-    </div>
-  );
-}
+const HERO_IMAGE = "https://www.cibil.com/content/dam/cibil/consumer/enq26/rankenq/images/commercial-banner.jpg";
 
 export default function HeroSection() {
   const { t } = useLanguage();
@@ -29,7 +22,16 @@ export default function HeroSection() {
             {t("ccrHeroBtn")}
           </a>
         </div>
-        <LoanApplicationPlaceholder />
+        <div className="relative w-full min-h-60 overflow-hidden">
+          <Image
+            src={HERO_IMAGE}
+            alt=""
+            fill
+            unoptimized
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="object-cover"
+          />
+        </div>
       </section>
 
       <div className="bg-[#f5c518] py-2.5 px-4">

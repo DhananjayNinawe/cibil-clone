@@ -14,7 +14,13 @@ export default function LoanRejectionsDisputesPage() {
     <div className="flex flex-col min-h-screen">
       <Header variant="site" />
       <main className="flex-1">
-        <FaqHero titleKey="lrdHeroTitle" ctaKey="raiseDisputeOnlineBtn" ctaHref="/consumer-dispute-resolution" />
+        <FaqHero
+          titleKey="lrdHeroTitle"
+          ctaKey="raiseDisputeOnlineBtn"
+          ctaHref="/consumer-dispute-resolution"
+          imageSrc="https://www.cibil.com/content/dam/cibil/consumer/P-TransUnion-CIBIL-Bureau-Credit-Characteristics-2hero-D-190816.jpg"
+          imageAlt="Loan rejections and disputes"
+        />
         <LrdContent />
       </main>
       <Footer variant="full" accentTop />

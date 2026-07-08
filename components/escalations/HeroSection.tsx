@@ -1,16 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 
-function OfficeMeetingPlaceholder() {
-  return (
-    <div className="relative w-full h-full min-h-[220px] overflow-hidden bg-gradient-to-br from-[#4a6a7a] to-[#1a2a33]">
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-24 h-24 rounded-full bg-white/15" />
-      </div>
-    </div>
-  );
-}
+const HERO_IMAGE_URL = "https://www.cibil.com/content/dam/cibil/consumer/credit-advice.jpg";
 
 export default function HeroSection() {
   const { t } = useLanguage();
@@ -21,7 +14,17 @@ export default function HeroSection() {
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-snug">{t("concernsHeroTitle")}</h1>
         <p className="text-gray-600 mt-4 max-w-md">{t("concernsHeroDesc")}</p>
       </div>
-      <OfficeMeetingPlaceholder />
+      <div className="relative w-full h-full min-h-55 overflow-hidden">
+        <Image
+          src={HERO_IMAGE_URL}
+          alt={t("concernsHeroTitle")}
+          fill
+          priority
+          unoptimized
+          sizes="(max-width: 1024px) 100vw, 50vw"
+          className="object-cover"
+        />
+      </div>
     </section>
   );
 }

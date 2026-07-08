@@ -1,17 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 
-function ThoughtfulPersonPlaceholder() {
-  return (
-    <div className="relative w-full h-full min-h-[220px] overflow-hidden bg-gradient-to-br from-[#b0855f] to-[#3a2a1f]">
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-24 h-24 rounded-full bg-white/15" />
-      </div>
-    </div>
-  );
-}
+const HERO_IMAGE =
+  "https://www.cibil.com/content/dam/cibil/consumer/P-TransUnion-CIBIL-Commercial-Credit-Information-Report-2hero-D-190816.jpg";
 
 export default function HeroSection() {
   const { t } = useLanguage();
@@ -28,7 +22,16 @@ export default function HeroSection() {
           {t("raiseDisputeBtn")}
         </Link>
       </div>
-      <ThoughtfulPersonPlaceholder />
+      <div className="relative w-full min-h-55 overflow-hidden">
+        <Image
+          src={HERO_IMAGE}
+          alt=""
+          fill
+          unoptimized
+          sizes="(max-width: 1024px) 100vw, 50vw"
+          className="object-cover"
+        />
+      </div>
     </section>
   );
 }

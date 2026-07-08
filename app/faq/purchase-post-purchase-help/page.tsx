@@ -14,7 +14,13 @@ export default function PurchasePostPurchaseHelpPage() {
     <div className="flex flex-col min-h-screen">
       <Header variant="site" />
       <main className="flex-1">
-        <FaqHero titleKey="ppHeroTitle" ctaKey="getYoursNowBtn" ctaHref="/choose-subscription" gradient="from-[#d0d8de] to-[#8a97a2]" />
+        <FaqHero
+          titleKey="ppHeroTitle"
+          ctaKey="getYoursNowBtn"
+          ctaHref="/choose-subscription"
+          imageSrc="https://www.cibil.com/content/dam/cibil/consumer/S-Collections-Management-2hero-D-090916.jpg"
+          imageAlt="Get unlimited access to CIBIL Score"
+        />
         <PpContent />
       </main>
       <Footer variant="full" accentTop />

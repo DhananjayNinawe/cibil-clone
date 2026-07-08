@@ -1,16 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 
-function CardHandoverPlaceholder() {
-  return (
-    <div className="relative w-full h-full min-h-[220px] overflow-hidden bg-gradient-to-br from-[#c98a5a] to-[#5a3a25]">
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-24 h-24 rounded-full bg-white/15" />
-      </div>
-    </div>
-  );
-}
+const HERO_IMAGE = "https://www.cibil.com/content/dam/cibil/consumer/enq26/banner.jpg";
 
 export default function HeroSection() {
   const { t } = useLanguage();
@@ -32,7 +25,16 @@ export default function HeroSection() {
         </a>
         <p className="text-xs text-gray-500 italic mt-2">{t("enquiryScoreNote")}</p>
       </div>
-      <CardHandoverPlaceholder />
+      <div className="relative w-full min-h-55 overflow-hidden">
+        <Image
+          src={HERO_IMAGE}
+          alt=""
+          fill
+          unoptimized
+          sizes="(max-width: 1024px) 100vw, 50vw"
+          className="object-cover"
+        />
+      </div>
     </section>
   );
 }

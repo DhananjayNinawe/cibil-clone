@@ -1,15 +1,22 @@
 "use client";
 
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
-import { PersonSilhouetteIcon } from "@/components/icons";
 
-function ArticleCard({ title, excerpt, gradient }: { title: string; excerpt: string; gradient: string }) {
+function ArticleCard({ title, excerpt, image }: { title: string; excerpt: string; image: string }) {
   const { t } = useLanguage();
 
   return (
     <div>
-      <div className={`w-full h-32 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center mb-4`}>
-        <PersonSilhouetteIcon className="w-10 h-10 text-white/40" />
+      <div className="relative w-full h-40 rounded-lg overflow-hidden bg-gray-100 mb-4">
+        <Image
+          src={image}
+          alt={title}
+          fill
+          unoptimized
+          sizes="(max-width: 640px) 100vw, 33vw"
+          className="object-cover"
+        />
       </div>
       <p className="font-bold text-gray-900 leading-snug">{title}</p>
       <p className="text-sm text-gray-500 mt-2 line-clamp-2">{excerpt}</p>
@@ -19,6 +26,10 @@ function ArticleCard({ title, excerpt, gradient }: { title: string; excerpt: str
     </div>
   );
 }
+
+const BLOG_1 = "https://www.cibil.com/content/dam/cibil/consumer/enq26/blog-1.png";
+const BLOG_2 = "https://www.cibil.com/content/dam/cibil/consumer/enq26/blog-2.png";
+const BLOG_3 = "https://www.cibil.com/content/dam/cibil/consumer/enq26/blob%203.png";
 
 export default function RecommendedReadsSection() {
   const { t } = useLanguage();
@@ -32,17 +43,17 @@ export default function RecommendedReadsSection() {
         <ArticleCard
           title={t("enquiryArticle1Title")}
           excerpt={t("enquiryArticle1Excerpt")}
-          gradient="from-[#e8a35e] to-[#8a5a25]"
+          image={BLOG_1}
         />
         <ArticleCard
           title={t("enquiryArticle2Title")}
           excerpt={t("enquiryArticle2Excerpt")}
-          gradient="from-[#5aa9c9] to-[#1c5d78]"
+          image={BLOG_2}
         />
         <ArticleCard
           title={t("disputeArticle1Title")}
           excerpt={t("disputeArticle1Excerpt")}
-          gradient="from-[#e07a5f] to-[#0a3a52]"
+          image={BLOG_3}
         />
       </div>
     </section>
