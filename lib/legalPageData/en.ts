@@ -1,28 +1,5 @@
-/**
- * Content for the legal pages, transcribed from the source site.
- *
- * Like `lib/footerPageData.ts`, this is long-form document copy rather than UI chrome, so it lives
- * here as plain English data instead of being split across the four locale files. Legal text is
- * binding and must not be machine-translated; the page chrome around it (title, intro, table of
- * contents heading) *is* i18n'd. To refresh the document, replace the strings below — the page and
- * its table of contents are generated from this array, so no component changes are needed.
- *
- * `body` strings support the inline markup understood by `lib/richText.tsx`:
- *   `**bold**`, `[label](/href)`, and lines starting with `- ` become bullets.
- */
-
-export interface TermsSubsection {
-  heading: string;
-  body: string;
-}
-
-export interface TermsSection {
-  /** Slug for the in-page anchor and the table-of-contents link. */
-  id: string;
-  heading: string;
-  body?: string;
-  subsections?: TermsSubsection[];
-}
+/** English (authoritative) text of the Terms and Conditions. See `./index.ts`. */
+import type { TermsSection } from "./types";
 
 /** Lead-in paragraphs shown above the first numbered section. */
 export const TERMS_INTRO: string[] = [

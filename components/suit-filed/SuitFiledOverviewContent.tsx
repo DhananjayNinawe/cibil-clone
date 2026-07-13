@@ -6,7 +6,7 @@ import { SUIT_FILED_OVERVIEW } from "@/lib/footerPageData";
 import { renderRichText } from "@/lib/richText";
 
 export default function SuitFiledOverviewContent() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   return (
     <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -16,7 +16,7 @@ export default function SuitFiledOverviewContent() {
         <SuitFiledSideNav active="suitFiledSideOverview" />
 
         <div className="text-sm text-gray-700 leading-relaxed">
-          {SUIT_FILED_OVERVIEW.map((section) => (
+          {SUIT_FILED_OVERVIEW[language].map((section) => (
             <div key={section.heading} className="mb-8 last:mb-0">
               <h2 className="font-bold text-gray-900 mb-3">{section.heading}</h2>
               <div className="space-y-4">{renderRichText(section.body)}</div>

@@ -1152,6 +1152,25 @@ export const mr: Record<TranslationKey, string> = {
   jaagranKahaaniyaan: "CIBIL च्या कहाण्या",
   jaagranChapterLabel: "प्रकरण",
 
+  // Jaagran — video, blog and comic titles (content, but user-visible, so translated).
+  jaagranVideoFiveSimpleWays: "तुमचा क्रेडिट प्रवास सुरू करण्याचे 5 सोपे मार्ग",
+  jaagranVideoFourFactors: "तुमच्या CIBIL स्कोअरवर परिणाम करणारे चार घटक जाणून घ्या",
+  jaagranVideoBuildingProfile: "क्रेडिटसाठी नवीन असणाऱ्यांसाठी क्रेडिट प्रोफाइल तयार करणे",
+  jaagranBlogMaintainHealthyScore: "क्रेडिटसाठी नवीन आहात? चांगला CIBIL स्कोअर कसा टिकवावा ते जाणून घ्या",
+  jaagranBlogFirstTimeUsers: "प्रथमच क्रेडिट घेणाऱ्यांसाठी मार्गदर्शक",
+  jaagranBlogStabilityForties: "चाळिशीतील आर्थिक स्थैर्यासाठी विशीतच तयारी करा",
+  jaagranBlogCreditRoadmap: "तुमची आर्थिक आणि क्रेडिट योजना कशी तयार कराल",
+  jaagranBlogMillennialsGuide: "निरोगी क्रेडिट प्रोफाइल तयार करण्यासाठी मिलेनियल्ससाठी मार्गदर्शक",
+  jaagranComicDreamCar: "सुप्पंडी आणि त्याची स्वप्नातील कार",
+  jaagranComicCreditCard: "सुप्पंडीला हवे क्रेडिट कार्ड",
+  jaagranComicDreamCollege: "सुप्पंडी आणि रेणूचे स्वप्नातील कॉलेज",
+  jaagranComicNeighbourhoodStore: "सुप्पंडी आणि शेजारचे दुकान",
+  jaagranComicCibilMyths: "सुप्पंडी आणि CIBIL विषयीचे गैरसमज",
+
+  // Shown above the translated Terms, Privacy Policy and RBI-scheme documents.
+  legalTranslationNotice:
+    "हा अनुवाद केवळ तुमच्या सोयीसाठी दिला आहे. कोणतीही तफावत आढळल्यास, या दस्तऐवजाची इंग्रजी आवृत्तीच ग्राह्य धरली जाईल.",
+
   // CIBIL Saksham page
   sakshamTitle: "CIBIL सक्षम",
   sakshamSubtitle: "तुम्हाला क्रेडिट ज्ञानाने सशक्त करणे",

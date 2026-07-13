@@ -1150,6 +1150,26 @@ export const en = {
   jaagranKahaaniyaan: "CIBIL Ki Kahaaniyaan",
   jaagranChapterLabel: "Chapter",
 
+  // Jaagran — video, blog and comic titles (content, but user-visible, so translated).
+  jaagranVideoFiveSimpleWays: "5 Simple Ways To Start Your Credit Journey",
+  jaagranVideoFourFactors: "Know The Four Factors That Influence Your CIBIL Score",
+  jaagranVideoBuildingProfile: "Building Credit Profile for New-To-Credit users",
+  jaagranBlogMaintainHealthyScore: "New-to-credit? Here's how to maintain a healthy CIBIL score",
+  jaagranBlogFirstTimeUsers: "First-time users guide to establishing credit",
+  jaagranBlogStabilityForties: "Set Yourself Up in Your 20s for Financial Stability in Your 40s",
+  jaagranBlogCreditRoadmap: "How To Create Your Financial And Credit Roadmap",
+  jaagranBlogMillennialsGuide: "Millennials Guide For Building A Healthy Credit Profile",
+  jaagranComicDreamCar: "Suppandi and his dream car",
+  jaagranComicCreditCard: "Suppandi wants a credit card",
+  jaagranComicDreamCollege: "Suppandi and Renu's dream college",
+  jaagranComicNeighbourhoodStore: "Suppandi and the neighbourhood store",
+  jaagranComicCibilMyths: "Suppandi and the CIBIL myths",
+
+  // Shown above the translated Terms, Privacy Policy and RBI-scheme documents. These are binding
+  // legal texts: the translation aids comprehension, but the English original remains authoritative.
+  legalTranslationNotice:
+    "This is a translation provided for your convenience. In the event of any discrepancy, the English version of this document shall prevail.",
+
   // CIBIL Saksham page
   sakshamTitle: "CIBIL Saksham",
   sakshamSubtitle: "Empowering You With Credit Knowledge",

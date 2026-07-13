@@ -70,38 +70,56 @@ translated, including headings, buttons, alt text and aria-labels.
 If a component needs `t()` but is a server component, add `"use client"` and
 `const { t } = useLanguage();` — that is the established pattern for every `*Content.tsx`.
 
-Two checks. First, find text that never reaches `t()` (scans JSX text plus `alt` / `aria-label` /
-`title` / `placeholder`):
+## Page copy in `lib/` must be locale-keyed too
+
+The catalog is not the only place user-visible text lives. Long-form page copy — the Terms, the
+Privacy Policy, the RBI scheme summaries, the company timeline, the blog headlines — lives in `lib/`
+data modules, because splitting a 4,000-word contract across a flat key-value catalog is unreadable.
+
+**Data in `lib/` is user-visible text and gets translated exactly like everything else.** It is
+keyed by locale rather than by `t()`:
+
+- **Long-form documents** are a directory per document — `lib/legalPageData/`,
+  `lib/privacyPolicyData/`, `lib/gistRbiSchemeData/` — holding `types.ts`, one file per locale
+  (`en`/`hi`/`mr`/`ta`), and an `index.ts` that assembles them into `Record<Language, T>`. The
+  component reads `DOC[language]`. Every locale must define the same section `id` slugs in the same
+  order, or in-page anchors break when the reader switches language.
+- **Shorter data** (`lib/blogCards.ts`, `lib/footerPageData.ts`) stays a single file and exposes
+  either `Record<Language, T[]>` or, per-item, `title: Record<Language, string>`.
+
+This was once the site's biggest translation hole: roughly ten pages rendered entirely in English in
+every locale, and no check caught it, because the audits only ever scanned `components/` for JSX
+text. Data files rendered via `{item.title}` were invisible to them. Do not reintroduce that gap.
+
+### The Terms, Privacy Policy and RBI-scheme pages are binding legal text
+
+They are fully translated, but the **English version remains authoritative** — each renders
+`<TranslationNotice />` (`components/shared/TranslationNotice.tsx`) above the document, which shows
+the `legalTranslationNotice` string on every locale except English. If you add another legal or
+regulatory document, translate it *and* give it that banner. Never let a translation quietly become
+the operative legal text.
+
+## The check
+
+One command covers all of it — catalog parity, locale-keyed data, and hardcoded component text:
 
 ```bash
-node -e '
-const {readFileSync,readdirSync,statSync}=require("fs");const files=[];
-(function w(d){for(const e of readdirSync(d)){const p=`${d}/${e}`;
-statSync(p).isDirectory()?w(p):/\.tsx$/.test(p)&&files.push(p)}})("components");
-const OK=/^(CIBIL|TransUnion|RBI|NBFC|PAN|GST|OTP|ID|MSME|CERSAI|FAQs?|LinkedIn|Facebook|YouTube|Instagram)$/i;
-const hits=[];for(const f of files){readFileSync(f,"utf8").split(/\r?\n/).forEach((l,i)=>{
-if(/^\s*(\/\/|\*)/.test(l))return;
-for(const m of l.matchAll(/>([^<>{}\n]{3,})</g)){const s=m[1].trim();
-if(/[A-Za-z]{3,}/.test(s)&&!OK.test(s))hits.push(`${f}:${i+1}  ${s}`)}
-for(const m of l.matchAll(/\b(alt|placeholder|title|aria-label)="([^"]{3,})"/g)){const s=m[2].trim();
-if(/[A-Za-z]{3,}/.test(s)&&!OK.test(s))hits.push(`${f}:${i+1}  [${m[1]}] ${s}`)}})}
-console.log(hits.join("\n")||"none");'
+npm run check:i18n
 ```
 
-Second, find keys whose translation is still byte-identical to the English (i.e. never translated):
+`scripts/check-i18n.mjs` transpiles the real `lib/` modules and compares the actual objects rather
+than grepping source, which is what lets it see into data files. It fails if:
 
-```bash
-node -e '
-const {readFileSync}=require("fs");
-const p=l=>{const m=new Map();const re=/^  (\w+):\s*(?:\r?\n\s*)?"([^"]*)"/gm;
-let x;const s=readFileSync(`lib/i18n/${l}.ts`,"utf8");while(x=re.exec(s))m.set(x[1],x[2]);return m};
-const en=p("en");
-for(const l of ["hi","mr","ta"]){const o=p(l);
-const same=[...en.keys()].filter(k=>o.get(k)===en.get(k)&&/[A-Za-z]{4,}/.test(en.get(k)||""));
-console.log(l+":", same.length?same.join(", "):"ok")}'
-```
+- a key is missing from `hi`/`mr`/`ta`, or its value is still byte-identical to the English;
+- a locale-keyed data module is missing a locale, or its structure drifts from `en` (different entry
+  counts, different keys, or a changed `id`/`href`/`image`/`reference`);
+- a translated string contains no Devanagari (`hi`/`mr`) or Tamil (`ta`) script but does contain
+  English prose — i.e. it was copied through untranslated;
+- a component has user-visible text (JSX text, `alt`, `aria-label`, `title`, `placeholder`) that
+  never reaches `t()`.
 
-Review anything either check prints. A hit is only acceptable if it is a proper noun or token from the
-list above. As of the last audit both checks are clean: the only values matching English are the brand
-strings (`brand`, `homeHeroBrand`, `productsHeadingPrefix`, `aboutUsEyebrow`, `concernsMatterBrand`),
-the email addresses, `statQuoteAuthor` and `ccrfCode` — all of which are correct as-is.
+Proper nouns and non-linguistic tokens are allowlisted in the script and may stay in Latin script:
+brand names (`CIBIL`, `TransUnion`, `RBI`, `NBFC`, `PAN`), the logo tagline ("Part of TransUnion"),
+the `JAAG₹AN` wordmark, email addresses, URLs, RBI circular reference numbers, prices and numerals,
+and input masks like `DD / MM / YYYY`. If you add a legitimate one, add it to `ALLOWED_LATIN` in the
+script rather than silencing the check.

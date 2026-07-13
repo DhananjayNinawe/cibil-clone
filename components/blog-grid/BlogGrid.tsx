@@ -8,8 +8,8 @@ import { TranslationKey } from "@/lib/i18n";
 
 /**
  * Shared Knowledge Center blog-listing layout: hero band + image, "Topics" grid of blog cards,
- * teal subscribe banner, and the legal disclaimer. Card titles are passed in as plain strings (article names)
- * — see the README note on why these aren't in the i18n system.
+ * teal subscribe banner, and the legal disclaimer. Card headlines are localised per-locale in
+ * `lib/blogCards.ts` and picked by the active language.
  *
  * Hero and card artwork are both optional: without them, the band and tiles fall back to the gradient.
  */
@@ -30,7 +30,7 @@ export default function BlogGrid({
   ctaKey = "blogPostLink",
   cards,
 }: BlogGridProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   return (
     <>
@@ -62,15 +62,14 @@ export default function BlogGrid({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
           {cards.map((card, i) => {
-            const title = typeof card === "string" ? card : card.title;
-            const image = typeof card === "string" ? null : card.image;
+            const title = card.title[language];
 
             return (
               <article key={`${title}-${i}`} className="flex flex-col">
                 <div className="relative w-full aspect-[16/7] rounded overflow-hidden bg-gradient-to-br from-[#cdeffb] to-[#8fd0ea] mb-3">
-                  {image && (
+                  {card.image && (
                     <Image
-                      src={image}
+                      src={card.image}
                       alt=""
                       fill
                       unoptimized

@@ -1,25 +1,5 @@
-/**
- * Content for the "Gist of RBI Scheme" page, transcribed from the source site.
- *
- * Like `lib/legalPageData.ts`, this is long-form regulatory copy rather than UI chrome, so it lives
- * here as plain English data instead of being split across the four locale files. The text quotes
- * RBI circulars verbatim (including the definition of "wilful default") and must not be
- * machine-translated; the page chrome around it (title, side nav) *is* i18n'd. To refresh the
- * document, replace the strings below — the page renders whatever is in this array, so no component
- * changes are needed.
- *
- * `body` strings support the inline markup understood by `lib/richText.tsx`:
- *   `**bold**`, `[label](/href)`, and lines starting with `- ` become bullets.
- *
- * Headings are numbered by the component from array order — do not prefix them with "1." here.
- */
-
-export interface GistScheme {
-  /** Slug for the in-page anchor. */
-  id: string;
-  heading: string;
-  body: string;
-}
+/** English (authoritative) text of the RBI scheme summaries. See `./index.ts`. */
+import type { GistScheme } from "./types";
 
 export const GIST_RBI_SCHEMES: GistScheme[] = [
   {

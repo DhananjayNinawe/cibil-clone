@@ -1152,6 +1152,25 @@ export const ta: Record<TranslationKey, string> = {
   jaagranKahaaniyaan: "CIBIL இன் கதைகள்",
   jaagranChapterLabel: "அத்தியாயம்",
 
+  // Jaagran — video, blog and comic titles (content, but user-visible, so translated).
+  jaagranVideoFiveSimpleWays: "உங்கள் கடன் பயணத்தைத் தொடங்க 5 எளிய வழிகள்",
+  jaagranVideoFourFactors: "உங்கள் CIBIL மதிப்பெண்ணைப் பாதிக்கும் நான்கு காரணிகளை அறியுங்கள்",
+  jaagranVideoBuildingProfile: "கடனுக்குப் புதியவர்களுக்கான கடன் சுயவிவரத்தை உருவாக்குதல்",
+  jaagranBlogMaintainHealthyScore: "கடனுக்குப் புதியவரா? நல்ல CIBIL மதிப்பெண்ணை எப்படிப் பராமரிப்பது",
+  jaagranBlogFirstTimeUsers: "முதன்முறை கடன் பெறுவோருக்கான வழிகாட்டி",
+  jaagranBlogStabilityForties: "40 வயதில் நிதி நிலைத்தன்மைக்காக 20 வயதிலேயே தயாராகுங்கள்",
+  jaagranBlogCreditRoadmap: "உங்கள் நிதி மற்றும் கடன் திட்டத்தை எவ்வாறு உருவாக்குவது",
+  jaagranBlogMillennialsGuide: "ஆரோக்கியமான கடன் சுயவிவரத்தை உருவாக்க மில்லேனியல்களுக்கான வழிகாட்டி",
+  jaagranComicDreamCar: "சுப்பாண்டியும் அவரது கனவுக் காரும்",
+  jaagranComicCreditCard: "சுப்பாண்டிக்கு கிரெடிட் கார்டு வேண்டும்",
+  jaagranComicDreamCollege: "சுப்பாண்டியும் ரேணுவின் கனவுக் கல்லூரியும்",
+  jaagranComicNeighbourhoodStore: "சுப்பாண்டியும் அக்கம்பக்கத்துக் கடையும்",
+  jaagranComicCibilMyths: "சுப்பாண்டியும் CIBIL தவறான எண்ணங்களும்",
+
+  // Shown above the translated Terms, Privacy Policy and RBI-scheme documents.
+  legalTranslationNotice:
+    "இது உங்கள் வசதிக்காக வழங்கப்படும் மொழிபெயர்ப்பு ஆகும். ஏதேனும் முரண்பாடு ஏற்பட்டால், இந்த ஆவணத்தின் ஆங்கிலப் பதிப்பே செல்லுபடியாகும்.",
+
   // CIBIL Saksham page
   sakshamTitle: "CIBIL சக்ஷம்",
   sakshamSubtitle: "உங்களை கடன் அறிவுடன் மேம்படுத்துதல்",

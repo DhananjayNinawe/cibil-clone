@@ -9,7 +9,7 @@ const HERO_IMAGE_URL =
   "https://www.transunioncibil.com/content/dam/transunion-cibil/business/images/header/post/INT-IN-24-2815101-India-About-us-Web-Image-Desktop-Header.jpg";
 
 export default function CompanyHistoryContent() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   return (
     <>
@@ -41,7 +41,7 @@ export default function CompanyHistoryContent() {
 
       {/* Timeline */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {COMPANY_HISTORY.map((entry, i) => (
+        {COMPANY_HISTORY[language].map((entry, i) => (
           <div
             key={i}
             className="grid grid-cols-1 sm:grid-cols-[180px_1fr] sm:items-center gap-4 sm:gap-10 border-b border-gray-200 py-8 last:border-b-0"

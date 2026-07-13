@@ -1,29 +1,5 @@
-/**
- * The Privacy Policy document, transcribed from the source site (cibil.com/privacy-policy).
- *
- * Like `lib/footerPageData.ts`, this is source-of-truth content rather than UI chrome, so it lives
- * here as plain English data instead of being split across the four locale files: it is a legal
- * instrument whose wording is published in English only, and a machine translation of it would
- * misstate the obligations it describes. Only the surrounding chrome (page title, "Last updated"
- * label) is i18n'd.
- *
- * `body` strings use the inline markup understood by `renderRichText`: `**bold**`, `[label](href)`,
- * and lines beginning `- ` become a bullet list.
- */
-
-export interface PolicyPart {
-  /** Optional sub-heading within a section (e.g. "Information we collect automatically"). */
-  subheading?: string;
-  /** Rich-text body; paragraphs separated by newlines. */
-  body?: string;
-  /** A tight, un-spaced run of lines — used for the Grievance Officer's postal address. */
-  lines?: string[];
-}
-
-export interface PolicySection {
-  heading: string;
-  parts: PolicyPart[];
-}
+/** English (authoritative) text of the Privacy Policy. See `./index.ts`. */
+import type { PolicySection } from "./types";
 
 export const PRIVACY_POLICY_LAST_UPDATED = "Aug 5, 2025";
 

@@ -61,3 +61,6 @@ $RECYCLE.BIN/
 
 # turbopack
 .turbo
+
+# scratch dir that scripts/check-i18n.mjs transpiles lib/ into; removed on a clean run
+.i18n-check/

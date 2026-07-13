@@ -31,13 +31,13 @@ const FILTERS: TranslationKey[] = [
 interface Video {
   key: string;
   youtubeId: string;
-  title: string;
+  title: TranslationKey;
   topics: TranslationKey[];
 }
 
 interface Blog {
   key: string;
-  title: string;
+  title: TranslationKey;
   image: string;
   href: string;
   topics: TranslationKey[];
@@ -47,19 +47,19 @@ const VIDEOS: Video[] = [
   {
     key: "five-simple-ways",
     youtubeId: "5kzfjlJ5s1o",
-    title: "5 Simple Ways To Start Your Credit Journey",
+    title: "jaagranVideoFiveSimpleWays",
     topics: ["filterNewToCredit", "filterCreditAdvice"],
   },
   {
     key: "four-factors",
     youtubeId: "VOHHGpDfd-8",
-    title: "Know The Four Factors That Influence Your CIBIL Score",
+    title: "jaagranVideoFourFactors",
     topics: ["filterUnderstandingCibil", "filterCreditAdvice", "filterCreditMyths"],
   },
   {
     key: "building-profile",
     youtubeId: "VOHHGpDfd-8",
-    title: "Building Credit Profile for New-To-Credit users",
+    title: "jaagranVideoBuildingProfile",
     topics: ["filterNewToCredit", "filterUnderstandingCibil", "filterCommercialCredit"],
   },
 ];
@@ -67,47 +67,47 @@ const VIDEOS: Video[] = [
 const BLOGS: Blog[] = [
   {
     key: "maintain-healthy-score",
-    title: "New-to-credit? Here's how to maintain a healthy CIBIL score",
+    title: "jaagranBlogMaintainHealthyScore",
     image: `${CIBIL_BLOG}/new-to-credit-heres-how-to-maintain-a-healthy-cibil-score/_jcr_content/root/pagesection_1639233989/image.coreimg.75.1440.png/1699255454828/ntc-credit.png`,
     href: `${CIBIL_BLOG}/new-to-credit-heres-how-to-maintain-a-healthy-cibil-score/`,
     topics: ["filterNewToCredit", "filterCreditAdvice", "filterUnderstandingCibil"],
   },
   {
     key: "first-time-users",
-    title: "First-time users guide to establishing credit",
+    title: "jaagranBlogFirstTimeUsers",
     image: `${CIBIL_BLOG}/first-time-users-guide-to-establishing-credit-infographic/_jcr_content/root/pagesection_1639233989/image.coreimg.75.1440.png/1671208834821/first-time-users-guide.png`,
     href: `${CIBIL_BLOG}/first-time-users-guide-to-establishing-credit-infographic/`,
     topics: ["filterNewToCredit", "filterCreditAdvice"],
   },
   {
     key: "stability-in-your-forties",
-    title: "Set Yourself Up in Your 20s for Financial Stability in Your 40s",
+    title: "jaagranBlogStabilityForties",
     image: `${CIBIL_BLOG}/set-yourself-up-in-your-twenties-for-financial-stability-in-your-fourties/_jcr_content/root/pagesection_1639233989/image.coreimg.75.1440.png/1696483648677/stability-in-your-fourties-.png`,
     href: `${CIBIL_BLOG}/set-yourself-up-in-your-twenties-for-financial-stability-in-your-fourties/`,
     topics: ["filterCreditAdvice", "filterCreditMyths"],
   },
   {
     key: "credit-roadmap",
-    title: "How To Create Your Financial And Credit Roadmap",
+    title: "jaagranBlogCreditRoadmap",
     image: `${CIBIL_BLOG}/how-to-create-your-financial-and-credit-roadmap/_jcr_content/root/pagesection_1639233989/image.coreimg.75.1440.jpeg/1671208803156/credit-roadmap.jpeg`,
     href: `${CIBIL_BLOG}/how-to-create-your-financial-and-credit-roadmap/`,
     topics: ["filterCreditAdvice", "filterCommercialCredit", "filterCreditMyths"],
   },
   {
     key: "millennials-guide",
-    title: "Millennials Guide For Building A Healthy Credit Profile",
+    title: "jaagranBlogMillennialsGuide",
     image: `${CIBIL_BLOG}/millennial-consumer-pattern/_jcr_content/root/pagesection_1639233989/image.coreimg.75.1440.jpeg/1671208513747/millenial.jpeg`,
     href: `${CIBIL_BLOG}/millennial-consumer-pattern/`,
     topics: ["filterNewToCredit", "filterCreditMyths", "filterCommercialCredit"],
   },
 ];
 
-const KAHAANIYAAN = [
-  { title: "Suppandi and his dream car", image: `${KAHAANIYAAN_ART}/c1.jpg` },
-  { title: "Suppandi wants a credit card", image: `${KAHAANIYAAN_ART}/c2.jpg` },
-  { title: "Suppandi and Renu's dream college", image: `${KAHAANIYAAN_ART}/c3.jpg` },
-  { title: "Suppandi and the neighbourhood store", image: `${KAHAANIYAAN_ART}/c4.jpg` },
-  { title: "Suppandi and the CIBIL myths", image: `${KAHAANIYAAN_ART}/c5.jpg` },
+const KAHAANIYAAN: { title: TranslationKey; image: string }[] = [
+  { title: "jaagranComicDreamCar", image: `${KAHAANIYAAN_ART}/c1.jpg` },
+  { title: "jaagranComicCreditCard", image: `${KAHAANIYAAN_ART}/c2.jpg` },
+  { title: "jaagranComicDreamCollege", image: `${KAHAANIYAAN_ART}/c3.jpg` },
+  { title: "jaagranComicNeighbourhoodStore", image: `${KAHAANIYAAN_ART}/c4.jpg` },
+  { title: "jaagranComicCibilMyths", image: `${KAHAANIYAAN_ART}/c5.jpg` },
 ];
 
 function HeroArt() {
@@ -181,6 +181,8 @@ function Feature({
 }
 
 function VideoCard({ video }: { video: Video }) {
+  const { t } = useLanguage();
+
   return (
     <a
       href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
@@ -191,7 +193,7 @@ function VideoCard({ video }: { video: Video }) {
       <div className="relative aspect-video overflow-hidden rounded-lg bg-gray-900">
         <Image
           src={yt(video.youtubeId)}
-          alt={video.title}
+          alt={t(video.title)}
           fill
           unoptimized
           sizes="(max-width: 640px) 80vw, 33vw"
@@ -206,7 +208,7 @@ function VideoCard({ video }: { video: Video }) {
         </span>
       </div>
       <p className="mt-2 text-sm font-semibold leading-snug text-gray-800 group-hover:text-[#00b0f0]">
-        {video.title}
+        {t(video.title)}
       </p>
     </a>
   );
@@ -264,7 +266,7 @@ function BlogCard({ blog }: { blog: Blog }) {
       <div className="relative aspect-16/10 bg-gray-100">
         <Image
           src={blog.image}
-          alt={blog.title}
+          alt={t(blog.title)}
           fill
           unoptimized
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -272,7 +274,7 @@ function BlogCard({ blog }: { blog: Blog }) {
         />
       </div>
       <div className="flex flex-1 flex-col justify-between bg-[#eef1f8] px-4 py-3">
-        <p className="text-sm font-semibold leading-snug text-gray-800">{blog.title}</p>
+        <p className="text-sm font-semibold leading-snug text-gray-800">{t(blog.title)}</p>
         <a
           href={blog.href}
           target="_blank"
@@ -481,7 +483,7 @@ export default function JaagranContent() {
               <div className="relative aspect-4/3 overflow-hidden rounded-lg bg-gray-100">
                 <Image
                   src={chapter.image}
-                  alt={chapter.title}
+                  alt={t(chapter.title)}
                   fill
                   unoptimized
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -491,7 +493,7 @@ export default function JaagranContent() {
               <p className="mt-3 text-xs text-gray-500">
                 {t("jaagranChapterLabel")} {index + 1}
               </p>
-              <p className="mt-0.5 text-sm font-semibold text-gray-800">{chapter.title}</p>
+              <p className="mt-0.5 text-sm font-semibold text-gray-800">{t(chapter.title)}</p>
             </article>
           ))}
         </div>

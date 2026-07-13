@@ -2,14 +2,15 @@
 
 import { useLanguage } from "@/context/LanguageContext";
 import { renderRichText } from "@/lib/richText";
+import TranslationNotice from "@/components/shared/TranslationNotice";
 import { TERMS_INTRO, TERMS_SECTIONS, type TermsSection } from "@/lib/legalPageData";
 
 /**
- * The Terms and Conditions document. Body copy is long-form legal text and lives in
- * `lib/legalPageData.ts` as English data (see the note there); only the chrome around it is i18n'd.
+ * The Terms and Conditions document. The body is translated per locale (see `lib/legalPageData/`),
+ * with `TranslationNotice` marking the English text as the authoritative one off English.
  */
 export default function TermsContent() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   return (
     <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -19,13 +20,15 @@ export default function TermsContent() {
         <TableOfContents />
 
         <div className="min-w-0 text-sm leading-relaxed text-gray-700">
+          <TranslationNotice />
+
           <div className="space-y-4">
-            {TERMS_INTRO.map((para, i) => (
+            {TERMS_INTRO[language].map((para, i) => (
               <p key={i}>{para}</p>
             ))}
           </div>
 
-          {TERMS_SECTIONS.map((section, i) => (
+          {TERMS_SECTIONS[language].map((section, i) => (
             <Section key={section.id} section={section} index={i + 1} />
           ))}
         </div>
@@ -35,7 +38,7 @@ export default function TermsContent() {
 }
 
 function TableOfContents() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   return (
     <nav aria-label={t("termsTocHeading")} className="lg:sticky lg:top-6 lg:self-start">
@@ -43,7 +46,7 @@ function TableOfContents() {
         {t("termsTocHeading")}
       </h2>
       <ol className="space-y-2.5">
-        {TERMS_SECTIONS.map((section, i) => (
+        {TERMS_SECTIONS[language].map((section, i) => (
           <li key={section.id} className="flex gap-2 text-sm">
             <span className="text-gray-400">{i + 1}.</span>
             <a href={`#${section.id}`} className="text-gray-700 hover:text-[#00b0f0] hover:underline">

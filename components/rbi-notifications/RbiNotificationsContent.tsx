@@ -5,7 +5,7 @@ import SuitFiledSideNav from "@/components/suit-filed/SuitFiledSideNav";
 import { RBI_CIRCULARS } from "@/lib/footerPageData";
 
 export default function RbiNotificationsContent() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   return (
     <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -26,7 +26,7 @@ export default function RbiNotificationsContent() {
               </tr>
             </thead>
             <tbody>
-              {RBI_CIRCULARS.map((c) => (
+              {RBI_CIRCULARS[language].map((c) => (
                 <tr key={c.sr}>
                   <td className="border border-gray-200 px-4 py-3 text-center text-gray-700">{c.sr}</td>
                   <td className="border border-gray-200 px-4 py-3 text-center text-gray-700">{c.category}</td>
