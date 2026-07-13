@@ -4,44 +4,47 @@ import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { TranslationKey } from "@/lib/i18n";
-import { ReportChartIcon, ClockIcon, PersonContactIcon, DocumentIcon, BankIcon } from "@/components/icons";
+import { renderRichText } from "@/lib/richText";
 import FaqAccordion, { FaqItem } from "@/components/faq/FaqAccordion";
+
+const DAM = "https://www.cibil.com/content/dam/cibil/consumer/facr";
+
+const BTN =
+  "inline-block w-fit rounded-full bg-[#ffd700] px-6 py-3 text-sm font-semibold text-black transition-colors hover:bg-[#e8c400]";
 
 function HeroSection() {
   const { t } = useLanguage();
+
   return (
     <>
-      <section className="grid grid-cols-1 lg:grid-cols-2 bg-gray-100">
-        <div className="flex flex-col justify-center px-4 sm:px-8 lg:px-16 py-12">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-snug">{t("fcsHeroTitle")}</h1>
-          <Link
-            href="/register"
-            className="inline-block mt-6 w-fit bg-[#f5c518] hover:bg-[#e8b800] text-gray-900 text-sm font-bold rounded-full px-6 py-2.5 transition-colors"
-          >
+      <section className="grid grid-cols-1 items-center bg-white lg:grid-cols-2">
+        <div className="px-6 py-12 sm:px-10 lg:py-0 lg:pl-18 lg:pr-8">
+          <h1 className="text-3xl font-bold leading-tight text-black sm:text-4xl lg:text-[44px]">{t("fcsHeroTitle")}</h1>
+          <Link href="/register" className={`${BTN} mt-8`}>
             {t("getFreeScoreBtn")}
           </Link>
-          <p className="text-sm text-gray-600 mt-4">
+          <p className="mt-8 text-sm text-gray-700">
             {t("alreadyHaveAccount")}{" "}
-            <Link href="/login" className="text-gray-900 font-semibold underline">
+            <Link href="/login" className="ml-1 font-bold text-black underline">
               {t("logInLink")}
             </Link>
           </p>
-          <p className="text-xs text-gray-500 mt-4 max-w-md">{t("fcsHeroEligibility")}</p>
+          <p className="mt-6 max-w-md text-[13px] leading-relaxed text-gray-600">{t("fcsHeroEligibility")}</p>
         </div>
-        <div className="relative w-full h-full min-h-[220px] overflow-hidden">
+        <div className="flex justify-center lg:justify-end">
           <Image
-            src="https://www.cibil.com/content/dam/cibil/consumer/facr/banner-image.png"
-            alt="Looking for a Loan? Check your Free CIBIL Score first."
-            fill
+            src={`${DAM}/banner-image.png`}
+            alt={t("fcsBannerAlt")}
+            width={480}
+            height={480}
             priority
             unoptimized
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover"
+            className="h-auto w-full max-w-120"
           />
         </div>
       </section>
-      <div className="bg-[#fdf6d8] py-3 px-4">
-        <p className="text-center text-sm text-gray-700 max-w-4xl mx-auto">{t("fcsFreeBanner")}</p>
+      <div className="bg-[#fff3c0] px-4 py-3.5">
+        <p className="text-center text-sm text-[#6f4116]">{t("fcsFreeBanner")}</p>
       </div>
     </>
   );
@@ -49,30 +52,37 @@ function HeroSection() {
 
 function WhatYouGet() {
   const { t } = useLanguage();
-  const items: { icon: React.ReactNode; text: TranslationKey }[] = [
-    { icon: <ReportChartIcon className="w-5 h-5 text-[#0a3a52]" />, text: "fcsGet1" },
-    { icon: <ClockIcon className="w-5 h-5 text-[#0a3a52]" />, text: "fcsGet2" },
-    { icon: <PersonContactIcon className="w-5 h-5 text-[#0a3a52]" />, text: "fcsGet3" },
-    { icon: <DocumentIcon className="w-5 h-5 text-[#0a3a52]" />, text: "fcsGet4" },
-    { icon: <BankIcon className="w-5 h-5 text-[#0a3a52]" />, text: "fcsGet5" },
+
+  const items: { icon: string; text: TranslationKey }[] = [
+    { icon: "cibil_score", text: "fcsGet1" },
+    { icon: "cibil_payment", text: "fcsGet2" },
+    { icon: "personal_info", text: "fcsGet3" },
+    { icon: "all_enquiry", text: "fcsGet4" },
+    { icon: "loan_credit", text: "fcsGet5" },
   ];
 
   return (
-    <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+    <section className="grid grid-cols-1 items-center gap-10 bg-white px-6 py-16 sm:px-10 lg:grid-cols-2 lg:gap-0 lg:pl-18 lg:pr-10">
       <div>
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">{t("fcsWhatYouGetHeading")}</h2>
-        <Link
-          href="/register"
-          className="inline-block mt-6 bg-[#f5c518] hover:bg-[#e8b800] text-gray-900 text-sm font-bold rounded-full px-6 py-2.5 transition-colors"
-        >
+        <h2 className="max-w-md text-[26px] font-bold leading-[1.6] text-gray-900 lg:text-[30px]">
+          {t("fcsWhatYouGetHeading")}
+        </h2>
+        <Link href="/register" className={`${BTN} mt-8`}>
           {t("getStartedNowBtn")}
         </Link>
       </div>
-      <ul className="space-y-6">
+      <ul className="space-y-7">
         {items.map((item) => (
-          <li key={item.text} className="flex items-start gap-3">
-            <span className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center shrink-0">{item.icon}</span>
-            <p className="text-sm text-gray-700">{t(item.text)}</p>
+          <li key={item.text} className="flex items-start gap-4">
+            <Image
+              src={`${DAM}/${item.icon}.svg`}
+              alt=""
+              width={54}
+              height={54}
+              unoptimized
+              className="h-13.5 w-13.5 shrink-0"
+            />
+            <div className="pt-2 text-sm leading-relaxed text-gray-700">{renderRichText(t(item.text))}</div>
           </li>
         ))}
       </ul>
@@ -80,71 +90,77 @@ function WhatYouGet() {
   );
 }
 
+function VideoBanner() {
+  const { t } = useLanguage();
+
+  return (
+    <section className="relative overflow-hidden bg-[#fff3c0] px-6 py-14 sm:px-10">
+      {/* Decorative circles bleeding off the left edge, as on the source page. */}
+      <div className="pointer-events-none absolute -left-10 -top-10 h-40 w-40 rounded-full bg-[#ffeb9e]" aria-hidden />
+      <div className="pointer-events-none absolute left-2 top-28 h-12 w-12 rounded-full bg-[#ffd700]" aria-hidden />
+
+      <div className="relative flex flex-col items-center gap-8 sm:flex-row sm:justify-between lg:pl-24 lg:pr-10">
+        <div className="max-w-xl">
+          <p className="text-lg leading-[1.9] text-gray-800 lg:text-xl">{t("fcsVideoBannerTitle")}</p>
+          <Link href="/watch-and-learn" className={`${BTN} mt-6`}>
+            {t("watchNowBtn")}
+          </Link>
+        </div>
+        <Image
+          src={`${DAM}/Watch_and_learn.svg`}
+          alt={t("fcsWatchLearnAlt")}
+          width={260}
+          height={200}
+          unoptimized
+          className="h-auto w-full max-w-65 shrink-0"
+        />
+      </div>
+    </section>
+  );
+}
+
 export default function FcsContent() {
   const { t } = useLanguage();
 
-  const faqKeys: TranslationKey[] = [
-    "fcsFaq1",
-    "fcsFaq2",
-    "fcsFaq3",
-    "fcsFaq4",
-    "fcsFaq5",
-    "fcsFaq6",
-    "fcsFaq7",
-    "fcsFaq8",
-    "fcsFaq9",
-    "fcsFaq10",
+  const faqs: { q: TranslationKey; a: TranslationKey }[] = [
+    { q: "fcsFaq1", a: "fcsA1" },
+    { q: "fcsFaq2", a: "fcsA2" },
+    { q: "fcsFaq3", a: "fcsA3" },
+    { q: "fcsFaq4", a: "fcsA4" },
+    { q: "fcsFaq5", a: "fcsA5" },
+    { q: "fcsFaq6", a: "fcsA6" },
+    { q: "fcsFaq7", a: "fcsA7" },
+    { q: "fcsFaq8", a: "fcsA8" },
+    { q: "fcsFaq9", a: "fcsA9" },
+    { q: "fcsFaq10", a: "fcsA10" },
   ];
-  const faqItems: FaqItem[] = faqKeys.map((k) => ({ question: t(k), answer: <p>{t("sectionContentComingSoon")}</p> }));
+  const faqItems: FaqItem[] = faqs.map(({ q, a }) => ({ question: t(q), answer: renderRichText(t(a)) }));
 
   return (
     <>
       <HeroSection />
       <WhatYouGet />
 
-      <section className="bg-gray-50 py-16 px-4">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-center text-2xl font-bold text-gray-900 mb-8">{t("fcsFaqHeading")}</h2>
-          <FaqAccordion items={faqItems} />
+      <section className="bg-[#f7f9fa] px-6 py-16">
+        <div className="mx-auto max-w-311">
+          <h2 className="mb-10 text-center text-[26px] font-bold text-gray-900 lg:text-[32px]">{t("fcsFaqHeading")}</h2>
+          <FaqAccordion items={faqItems} defaultOpenFirst />
         </div>
       </section>
 
-      <div className="bg-[#fdf6d8] py-10 px-4">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="max-w-xl">
-            <p className="text-lg font-semibold text-gray-800">{t("fcsVideoBannerTitle")}</p>
-            <button className="mt-6 bg-[#f5c518] hover:bg-[#e8b800] text-gray-900 text-sm font-bold rounded-full px-6 py-2.5 transition-colors">
-              {t("watchNowBtn")}
-            </button>
-          </div>
-          <div className="relative w-full max-w-70 aspect-4/3 shrink-0">
-            <Image
-              src="https://www.cibil.com/content/dam/cibil/consumer/facr/Watch_and_learn.svg"
-              alt="Watch and learn about CIBIL Score & Credit Monitoring"
-              fill
-              unoptimized
-              sizes="280px"
-              className="object-contain"
-            />
-          </div>
-        </div>
-      </div>
+      <VideoBanner />
 
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-center text-2xl font-bold text-gray-900 mb-8">{t("fcsTermsHeading")}</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-sm text-gray-600">
-          <p className="flex items-start gap-2">
-            <span className="text-[#00b0f0] mt-1">•</span>
-            {t("fcsTerm1")}
-          </p>
-          <p className="flex items-start gap-2 sm:border-l sm:border-gray-200 sm:pl-8">
-            <span className="text-[#00b0f0] mt-1">•</span>
-            {t("fcsTerm2")}
-          </p>
-          <p className="flex items-start gap-2 sm:border-l sm:border-gray-200 sm:pl-8">
-            <span className="text-[#00b0f0] mt-1">•</span>
-            {t("fcsTerm3")}
-          </p>
+      <section className="bg-white px-6 py-16">
+        <div className="mx-auto max-w-311">
+          <h2 className="mb-10 text-center text-[26px] font-bold text-gray-900 lg:text-[30px]">{t("fcsTermsHeading")}</h2>
+          <div className="grid grid-cols-1 gap-8 text-sm leading-relaxed text-gray-600 sm:grid-cols-3">
+            {(["fcsTerm1", "fcsTerm2", "fcsTerm3"] as const).map((key, i) => (
+              <p key={key} className={`flex items-start gap-2 ${i > 0 ? "sm:border-l sm:border-gray-200 sm:pl-8" : ""}`}>
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#00b0f0]" aria-hidden />
+                <span>{t(key)}</span>
+              </p>
+            ))}
+          </div>
         </div>
       </section>
     </>

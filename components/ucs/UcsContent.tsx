@@ -92,7 +92,7 @@ export default function UcsContent() {
               {t("ucsVideoLinkLine")}
             </a>
           </p>
-          <VideoThumb videoId="7cHGllcvWjY" title="How to read your CIBIL Report | TransUnion CIBIL" />
+          <VideoThumb videoId="7cHGllcvWjY" title={t("ucsVideoReadReportTitle")} />
           <p>{t("ucsRegionalLangs")}</p>
           <RegionalLangs />
         </QaBlock>
@@ -151,7 +151,7 @@ export default function UcsContent() {
           </p>
         </QaBlock>
         <QaBlock q={t("ucsQ10")}>
-          <VideoThumb videoId="FS08WcDyBkA" title="Does an enquiry affect your CIBIL Score? | TransUnion CIBIL" />
+          <VideoThumb videoId="FS08WcDyBkA" title={t("ucsVideoEnquiryTitle")} />
           <p>{t("ucsEnquiriesRegional")}</p>
           <RegionalLangs />
         </QaBlock>

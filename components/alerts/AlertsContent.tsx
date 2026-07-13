@@ -1,9 +1,48 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { TranslationKey } from "@/lib/i18n";
-import { BellIcon, CheckCircleIcon } from "@/components/icons";
+import { CheckCircleIcon } from "@/components/icons";
+
+/** Bleeds off the right edge of the hero. Ships with its own backdrop, phone and pills baked in. */
+const HERO_BANNER = "https://www.cibil.com/content/dam/cibil/consumer/alerts/alert-banner-web.png";
+
+/** The alerts page centres its copy in a column narrower than the site header. */
+const COLUMN = "mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8";
+
+const BENEFITS: TranslationKey[] = [
+  "productIndividualsTitle",
+  "featScoreHistory",
+  "featWhereYouStand",
+  "footerCreditEducation",
+];
+
+/** Underlines the locale's key word in brand yellow; falls back to plain text if it isn't found. */
+function InstantHeading() {
+  const { t } = useLanguage();
+  const heading = t("alrInstantHeading");
+  const word = t("alrInstantHeadingHighlight");
+  const at = heading.indexOf(word);
+
+  return (
+    <h2 className="text-2xl font-bold leading-snug text-gray-900 sm:text-[28px]">
+      {at < 0 ? (
+        heading
+      ) : (
+        <>
+          {heading.slice(0, at)}
+          <span className="relative inline-block">
+            {word}
+            <span aria-hidden className="absolute inset-x-0 -bottom-1 h-1.25 bg-[#f5c518]" />
+          </span>
+          {heading.slice(at + word.length)}
+        </>
+      )}
+    </h2>
+  );
+}
 
 function PlanCard({
   nameKey,
@@ -19,23 +58,36 @@ function PlanCard({
   popular?: boolean;
 }) {
   const { t } = useLanguage();
+
   return (
-    <div className={`relative rounded-lg border p-6 ${popular ? "bg-[#fdf6d8] border-[#f5c518]" : "bg-white border-gray-200"}`}>
+    <div
+      className={`relative rounded-xl border px-5 py-7 ${
+        popular ? "border-[#f5c518] bg-[#fdf6d8]" : "border-gray-200 bg-white"
+      }`}
+    >
+      {/* Overhangs the corner, but never past the column's padding — else it scrolls the page sideways on phones. */}
       {popular && (
-        <span className="absolute -top-2 -right-2 bg-[#0a3a52] text-white text-[10px] font-bold px-3 py-1 rounded rotate-12">
+        <span className="absolute -right-4 top-2 z-10 w-28 rotate-45 bg-[#0a3a52] py-1 text-center text-[9px] font-bold text-white shadow-sm sm:-right-7">
           {t("alrMostPopular")}
         </span>
       )}
+
       <p className="text-sm text-gray-500">{t(nameKey)}</p>
-      <p className="text-3xl font-bold text-gray-900 mt-1">{t(priceKey)}</p>
-      <div className="flex items-center gap-2 mt-1">
-        <span className="text-sm text-gray-600">{t(periodKey)}</span>
-        <span className="text-xs font-medium text-gray-600 bg-yellow-100 rounded-full px-2 py-0.5">{t(saveKey)}</span>
+      <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900">{t(priceKey)}</p>
+
+      <div className="mt-2 flex items-center gap-2 whitespace-nowrap">
+        <span className="text-[13px] text-gray-600">{t(periodKey)}</span>
+        <span className="rounded-full bg-[#f5c518]/35 px-2 py-0.5 text-[11px] font-medium text-gray-700">
+          {t(saveKey)}
+        </span>
       </div>
+
       <Link
         href="/choose-subscription"
-        className={`block text-center mt-5 rounded-full py-2.5 text-sm font-bold transition-colors ${
-          popular ? "bg-[#f5c518] hover:bg-[#e8b800] text-gray-900" : "border-2 border-[#f5c518] text-gray-800 hover:bg-[#f5c518]"
+        className={`mt-6 block rounded-full py-2.5 text-center text-xs font-bold tracking-wide transition-colors ${
+          popular
+            ? "bg-[#f5c518] text-gray-900 hover:bg-[#e8b800]"
+            : "border-2 border-[#f5c518] bg-white text-gray-800 hover:bg-[#f5c518]"
         }`}
       >
         {t("sidebarSubscribeNowBtn")}
@@ -47,73 +99,93 @@ function PlanCard({
 export default function AlertsContent() {
   const { t } = useLanguage();
 
-  const benefits: TranslationKey[] = ["scoreCardTitle", "featScoreHistory", "featWhereYouStand", "footerCreditEducation"];
-
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-white border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          <div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">{t("alrHeroTitle")}</h1>
-            <p className="text-gray-600 mt-4 max-w-md">{t("alrHeroDesc")}</p>
+      {/* Hero — copy in the column, banner bleeding off the right edge on desktop. */}
+      <section className="relative overflow-hidden bg-white">
+        <div className={`${COLUMN} py-12 lg:py-20`}>
+          <div className="lg:max-w-lg">
+            <h1 className="text-3xl font-bold leading-tight text-gray-900 sm:text-[40px] sm:leading-[1.15]">
+              {t("alrHeroTitle")}
+            </h1>
+            <p className="mt-5 max-w-md text-gray-600">{t("alrHeroDesc")}</p>
             <Link
               href="/register"
-              className="inline-block mt-6 bg-[#f5c518] hover:bg-[#e8b800] text-gray-900 text-sm font-bold rounded-full px-8 py-3 transition-colors"
+              className="mt-8 inline-block rounded-full bg-[#f5c518] px-9 py-3.5 text-xs font-bold tracking-wide text-gray-900 transition-colors hover:bg-[#e8b800]"
             >
               {t("getAlertsBtn")}
             </Link>
           </div>
-          <div className="relative h-64 rounded-2xl bg-gradient-to-br from-[#dff3ea] to-[#a8d8c0] flex items-center justify-center">
-            <BellIcon className="w-16 h-16 text-white/50" />
-          </div>
+        </div>
+
+        <div className="px-4 pb-10 sm:px-6 lg:absolute lg:right-0 lg:top-0 lg:px-0 lg:pb-0">
+          <Image
+            src={HERO_BANNER}
+            alt=""
+            aria-hidden
+            width={576}
+            height={350}
+            unoptimized
+            preload
+            className="mx-auto h-auto w-full max-w-sm select-none lg:mx-0 lg:w-96 lg:max-w-none xl:w-md 2xl:w-120"
+          />
         </div>
       </section>
 
-      {/* Monitor banner */}
-      <div className="bg-[#e6f7fd] py-4 px-4">
-        <p className="text-center text-sm text-gray-800 max-w-5xl mx-auto">
-          <span className="font-medium text-gray-500">{t("alrMonitorLabel")}</span>{" "}
-          <span className="font-bold">{t("alrMonitorItems")}</span>
-        </p>
+      {/* What CIBIL Alerts watches for you. */}
+      <div className={COLUMN}>
+        <div className="flex flex-wrap items-center gap-x-10 gap-y-1 rounded-lg bg-[#e6f7fd] px-6 py-4 sm:px-10">
+          <span className="text-sm text-gray-500">{t("alrMonitorLabel")}</span>
+          <span className="text-sm font-bold text-gray-800">{t("alrMonitorItems")}</span>
+        </div>
       </div>
 
-      {/* Instant alerts + pricing */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+      {/* Benefits + pricing. */}
+      <section className={`${COLUMN} grid grid-cols-1 items-start gap-10 py-16 lg:grid-cols-2 lg:gap-14`}>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 leading-snug">
-            {t("alrInstantHeading")}
-          </h2>
-          <p className="text-gray-700 mt-4">{t("alrInstantDesc")}</p>
-          <p className="text-gray-800 font-semibold mt-6">{t("alrOtherBenefits")}</p>
-          <ul className="mt-3 space-y-2">
-            {benefits.map((b) => (
-              <li key={b} className="flex items-center gap-2 text-sm text-gray-700">
-                <CheckCircleIcon className="w-4 h-4 text-[#00b0f0]" />
-                {t(b)}
+          <InstantHeading />
+          <p className="mt-5 text-gray-800">{t("alrInstantDesc")}</p>
+          <p className="mt-7 text-sm text-gray-700">{t("alrOtherBenefits")}</p>
+          <ul className="mt-4 space-y-2.5">
+            {BENEFITS.map((benefit) => (
+              <li key={benefit} className="flex items-center gap-2.5 text-sm text-gray-700">
+                <CheckCircleIcon className="h-4.5 w-4.5 shrink-0 text-[#00b0f0]" />
+                {t(benefit)}
               </li>
             ))}
           </ul>
         </div>
 
         <div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <PlanCard nameKey="alrPlanStandard" priceKey="alrPlanStandardPrice" periodKey="alrPlanStandardPeriod" saveKey="planStandardSave" />
-            <PlanCard nameKey="alrPlanPremium" priceKey="alrPlanPremiumPrice" periodKey="alrPlanPremiumPeriod" saveKey="planPremiumSave" popular />
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <PlanCard
+              nameKey="alrPlanStandard"
+              priceKey="alrPlanStandardPrice"
+              periodKey="alrPlanStandardPeriod"
+              saveKey="planStandardSave"
+            />
+            <PlanCard
+              nameKey="alrPlanPremium"
+              priceKey="alrPlanPremiumPrice"
+              periodKey="alrPlanPremiumPeriod"
+              saveKey="planPremiumSave"
+              popular
+            />
           </div>
-          <p className="text-xs text-gray-500 mt-4">{t("alrOnlyStandardPremium")}</p>
+          <p className="mt-4 text-xs text-gray-500">{t("alrOnlyStandardPremium")}</p>
         </div>
       </section>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div className="border-y-2 border-[#00b0f0]/40 py-6 text-center">
-          <p className="text-gray-700">
-            <Link href="/" className="text-blue-700 hover:underline font-medium">
-              {t("alrSafeguardClickHere")}
-            </Link>{" "}
-            {t("safeguardProfileBanner")}
-          </p>
-        </div>
+      <div className={`${COLUMN} pb-20`}>
+        <p className="border-y border-[#7fd3ee] py-6 text-center text-gray-700">
+          <Link
+            href="/cibil-score-report"
+            className="font-medium text-gray-900 underline underline-offset-4 hover:text-[#00b0f0]"
+          >
+            {t("alrSafeguardClickHere")}
+          </Link>{" "}
+          {t("safeguardProfileBanner")}
+        </p>
       </div>
     </>
   );

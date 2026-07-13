@@ -178,6 +178,44 @@ export function PlusMinusCircleIcon({
   );
 }
 
+export function RosetteCheckIcon({ className = "w-6 h-6 text-[#0a3a52]" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.3}
+        d="M12 2.5l1.9 1.45 2.36-.3.94 2.19 2.19.94-.3 2.36L20.54 11l-1.45 1.86.3 2.36-2.19.94-.94 2.19-2.36-.3L12 19.5l-1.9-1.45-2.36.3-.94-2.19-2.19-.94.3-2.36L3.46 11l1.45-1.86-.3-2.36 2.19-.94.94-2.19 2.36.3L12 2.5z"
+      />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.75 11.2l2.2 2.2 4.3-4.3" />
+    </svg>
+  );
+}
+
+export function ClipboardIcon({ className = "w-6 h-6 text-[#0a3a52]" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.3}
+        d="M9 4.5H7A1.5 1.5 0 005.5 6v13A1.5 1.5 0 007 20.5h10a1.5 1.5 0 001.5-1.5V6A1.5 1.5 0 0017 4.5h-2"
+      />
+      <rect x="9" y="2.75" width="6" height="3.5" rx="1" strokeWidth={1.3} />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.3} d="M8.5 10.5h7M8.5 13.5h7M8.5 16.5h4" />
+    </svg>
+  );
+}
+
+export function CircleCheckOutlineIcon({ className = "w-6 h-6 text-[#0a3a52]" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9.25" strokeWidth={1.3} />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7.75 12.3l2.9 2.9 5.6-6.4" />
+    </svg>
+  );
+}
+
 export function ChatBubbleIcon({ className = "w-5 h-5" }: { className?: string }) {
   return (
     <svg className={className} fill="currentColor" viewBox="0 0 24 24">
@@ -360,6 +398,61 @@ export function YoutubeIcon({ className = "w-8 h-8" }: { className?: string }) {
     <svg className={className} viewBox="0 0 24 24" fill="none">
       <circle cx="12" cy="12" r="12" fill="#FF0000" />
       <path fill="#fff" d="M10 15.5v-7l6 3.5-6 3.5z" />
+    </svg>
+  );
+}
+
+export function LightbulbIcon({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M9.5 17.5h5M10 20.5h4M12 3a6 6 0 00-3.5 10.9c.5.4.8 1 .9 1.6h5.2c.1-.6.4-1.2.9-1.6A6 6 0 0012 3z"
+      />
+    </svg>
+  );
+}
+
+export function CheckIcon({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.5l5 5 10-11" />
+    </svg>
+  );
+}
+
+export function XMarkIcon({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
+}
+
+export function TrendIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M7 3v18m0 0l-3-3m3 3l3-3M17 21V3m0 0l-3 3m3-3l3 3" />
+    </svg>
+  );
+}
+
+export function PeopleIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+      <path d="M9 11a3.5 3.5 0 100-7 3.5 3.5 0 000 7zm0 1.5c-2.7 0-6 1.35-6 4V19h12v-2.5c0-2.65-3.3-4-6-4zm8-1.5a3 3 0 100-6 3 3 0 000 6zm0 1.5c-.5 0-1.05.06-1.6.18 1.3.94 2.1 2.2 2.1 3.82V19h5.5v-2.5c0-2.65-3.3-4-6-4z" />
+    </svg>
+  );
+}
+
+export function GaugeIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+      <path strokeLinecap="round" d="M3.5 17a9 9 0 1117 0" />
+      <path strokeLinecap="round" d="M12 17l4.2-5" />
+      <circle cx="12" cy="17" r="1.4" fill="currentColor" stroke="none" />
     </svg>
   );
 }

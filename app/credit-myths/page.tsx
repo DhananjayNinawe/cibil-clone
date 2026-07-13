@@ -14,7 +14,12 @@ export default function CreditMythsPage() {
     <div className="flex flex-col min-h-screen">
       <Header variant="site" />
       <main className="flex-1">
-        <BlogGrid titleKey="creditMythsTitle" cards={CREDIT_MYTHS_CARDS} gradient="from-[#5aa9d9] to-[#2a6a9a]" />
+        <BlogGrid
+          titleKey="creditMythsTitle"
+          cards={CREDIT_MYTHS_CARDS}
+          heroImage="https://www.cibil.com/content/dam/cibil/consumer/myths.jpg"
+          gradient="from-[#5aa9d9] to-[#2a6a9a]"
+        />
       </main>
       <Footer variant="full" accentTop />
     </div>

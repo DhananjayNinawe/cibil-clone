@@ -1,47 +1,51 @@
 "use client";
 
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
-import { OFFICIAL_PARTNERS } from "@/lib/footerPageData";
+import { renderRichText } from "@/lib/richText";
+
+const CIBIL_LOGO_URL = "https://www.cibil.com/content/dam/cibil/content-fragments/header/cibil-logo.png";
+
+/** Single artwork holding every partner logo, as published on cibil.com. */
+const PARTNER_LOGOS_URL =
+  "https://www.cibil.com/official-partners/_jcr_content/root/contentcontainer/pagesection/image.coreimg.75.1440.png/1781601071300/logo16jun.png";
 
 export default function OfficialPartnersContent() {
   const { t } = useLanguage();
 
   return (
-    <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-2xl font-bold text-gray-900 mb-8">{t("officialPartnersTitle")}</h1>
+    <section className="mx-auto max-w-360 px-6 py-10 sm:px-8 lg:px-11">
+      <h1 className="text-[26px] font-bold leading-snug text-gray-900">{t("officialPartnersTitle")}</h1>
 
-      <div className="flex flex-col items-start mb-8">
-        <span className="text-3xl font-bold text-[#00b0f0] tracking-tight">CIBIL</span>
-        <span className="text-[10px] text-gray-500 font-medium">Part of TransUnion</span>
-        <p className="text-sm text-gray-700 mt-3">{t("officialPartnersIntro")}</p>
-      </div>
+      <Image
+        src={CIBIL_LOGO_URL}
+        alt="CIBIL - Part of TransUnion"
+        width={182}
+        height={82}
+        preload
+        unoptimized
+        className="mt-12 h-auto w-50"
+      />
+      <p className="mt-3 text-[13px] text-gray-700">{t("officialPartnersIntro")}</p>
 
-      {/* Partner logo grid (brand-name placeholders — no logo assets) */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-10 py-8">
-        {OFFICIAL_PARTNERS.map((name) => (
-          <div
-            key={name}
-            className="h-16 rounded border border-gray-100 bg-gray-50 flex items-center justify-center text-center px-2 text-xs font-semibold text-gray-500"
-          >
-            {name}
-          </div>
-        ))}
-      </div>
+      <Image
+        src={PARTNER_LOGOS_URL}
+        alt={t("officialPartnersTitle")}
+        width={934}
+        height={642}
+        preload
+        unoptimized
+        className="mx-auto mt-10 h-auto w-full"
+      />
 
-      {/* Warnings / disclosure */}
-      <div className="mt-10 space-y-4 text-sm text-gray-700 leading-relaxed">
+      <div className="mt-14 space-y-3.5 text-[13px] leading-relaxed text-gray-700 [&_a]:text-[#0f6cbd]">
         <p>{t("officialPartnersWarn1")}</p>
         <p className="font-bold text-gray-900">{t("officialPartnersWarn2")}</p>
         <p>{t("officialPartnersWarn3")}</p>
         <p>{t("officialPartnersWarn4")}</p>
-        <p>
-          {t("officialPartnersReportPrefix")}{" "}
-          <a href="#" className="text-blue-700 hover:underline">
-            {t("officialPartnersClickingHere")}
-          </a>
-          .
-        </p>
+        {renderRichText(t("officialPartnersReport"))}
         <p>{t("officialPartnersWarn5")}</p>
+        {renderRichText(t("officialPartnersWarn6"))}
         <p className="italic underline">{t("officialPartnersKpmgNote")}</p>
       </div>
     </section>

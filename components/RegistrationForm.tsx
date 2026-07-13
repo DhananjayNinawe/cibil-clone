@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { EyeIcon, InfoIcon } from "@/components/icons";
 import {
@@ -384,9 +385,9 @@ export default function RegistrationForm() {
                 />
                 <label htmlFor="terms" className="text-xs text-gray-600 leading-relaxed cursor-pointer">
                   {t("termsText")}{" "}
-                  <a href="#" className="text-blue-600 hover:underline font-medium">{t("termsLink")}</a>{" "}
+                  <Link href="/legal/terms-and-conditions" className="text-blue-600 hover:underline font-medium">{t("termsLink")}</Link>{" "}
                   {t("andText")}{" "}
-                  <a href="#" className="text-blue-600 hover:underline font-medium">{t("privacyLink")}</a>{" "}
+                  <Link href="/privacy-policy" className="text-blue-600 hover:underline font-medium">{t("privacyLink")}</Link>{" "}
                   {t("termsFullText")}
                 </label>
               </div>

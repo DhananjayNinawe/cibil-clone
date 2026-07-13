@@ -15,7 +15,7 @@ export default function RegisterPage() {
       <main className="flex-1">
         <RegistrationForm />
       </main>
-      <Footer variant="simple" />
+      <Footer variant="full" accentTop />
     </div>
   );
 }

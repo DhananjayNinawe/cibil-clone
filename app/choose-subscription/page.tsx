@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import Hero from "@/components/subscription/Hero";
 import PricingPlans from "@/components/subscription/PricingPlans";
 import AppPromo from "@/components/subscription/AppPromo";
+import SubscriptionFaq from "@/components/subscription/SubscriptionFaq";
 
 export const metadata: Metadata = {
   title: "Choose Your CIBIL Subscription",
@@ -12,18 +13,17 @@ export const metadata: Metadata = {
 
 export default function ChooseSubscriptionPage() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <Header variant="marketing" />
       <main className="flex-1">
-        <section className="bg-[#e6f7fd]">
+        <section className="bg-white">
           <Hero />
-          <div className="pb-12">
-            <PricingPlans />
-          </div>
+          <PricingPlans />
         </section>
         <AppPromo />
+        <SubscriptionFaq />
       </main>
-      <Footer variant="full" />
+      <Footer variant="full" accentTop />
     </div>
   );
 }

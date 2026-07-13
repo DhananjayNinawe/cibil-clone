@@ -15,7 +15,7 @@ export default function SuitFiledCasesPage() {
       <main className="flex-1">
         <SuitFiledContent />
       </main>
-      <Footer variant="corporate" accentTop />
+      <Footer variant="full" accentTop />
     </div>
   );
 }

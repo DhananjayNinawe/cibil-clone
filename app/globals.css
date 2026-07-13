@@ -1,34 +1,9 @@
 @import "tailwindcss";
 
-/* Intro (Fontfabric) — self-served from cibil.com CDN. Sends Access-Control-Allow-Origin: * */
-@font-face {
-  font-family: "Intro";
-  src: url("https://www.cibil.com/content/dam/cibil/fonts/2CA963-3-0.woff") format("woff");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Intro";
-  src: url("https://www.cibil.com/content/dam/cibil/fonts/2CA963-6-0.woff") format("woff");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Intro";
-  src: url("https://www.cibil.com/content/dam/cibil/fonts/2CA963-9-0.woff") format("woff");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Intro";
-  src: url("https://www.cibil.com/content/dam/cibil/fonts/2CA963-0-0.woff") format("woff");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
+/* Intro is self-hosted via next/font/local in app/layout.tsx, which exposes it
+   as --font-intro. It used to be hotlinked from cibil.com, whose Cloudflare edge
+   intermittently 403s font requests — when the 400 face got blocked, every
+   normal-weight run of text silently fell back to a system font. */
 
 :root {
   --background: #ffffff;
@@ -38,7 +13,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: "Intro", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: var(--font-intro), Helvetica, Arial, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 

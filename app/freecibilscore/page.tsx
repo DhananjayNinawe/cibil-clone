@@ -12,8 +12,10 @@ export default function FreeCibilScorePage() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header variant="site" />
-      <main className="flex-1">
-        <FcsContent />
+      <main className="flex-1 bg-[#f5f5f5]">
+        <div className="mx-auto w-full max-w-360">
+          <FcsContent />
+        </div>
       </main>
       <Footer variant="full" accentTop />
     </div>

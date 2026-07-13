@@ -60,13 +60,46 @@ export const en = {
   planPremiumPrice: "₹1,200",
   planPremiumPeriod: "for 12 Months",
   planPremiumSave: "Save 81%",
+  planBasicDuration: "1 Month",
+  planStandardDuration: "6 Months",
+  planPremiumDuration: "12 Months",
+  planStandardWasPrice: "₹3,300",
+  planPremiumWasPrice: "₹6,600",
   featCibilScore: "CIBIL Score",
   featCibilCreditReport: "CIBIL Credit Report",
+  featCibilScoreReport: "CIBIL Score & Report",
   featScoreSimulator: "Score Simulator",
   featScoreHistory: "Score History",
   featWhereYouStand: "Where You Stand",
   featCibilAlerts: "CIBIL Alerts",
   featCibilSaksham: "CIBIL Saksham",
+  starterStripHeading: "Get your CIBIL Report without CIBIL Score",
+  starterStripPlanLabel: "Starter Plan",
+  starterStripNote: "Note: CIBIL score is NOT available with Starter Plan.",
+  planNoteLabel: "Note:",
+  planNoteAnnualReport: "You can also avail your free annual credit report available once a calendar year.",
+  planNoteClickHere: "Click Here",
+  planNoteRewards: "Reward points or discount codes cannot be used to purchase Starter Plan.",
+  subFaqHeading: "You have questions, we have answers.",
+  subFaqSubheading: "Browse our FAQs below.",
+  subFaqQ1: "What is a CIBIL Score and what factors affect my CIBIL Score?",
+  subFaqA1:
+    "Your CIBIL Score is a 3-digit number between 300 and 900 that summarises your credit history. It is calculated from your payment history, your credit utilisation, the mix and duration of your credit, and how often you apply for new credit. Paying dues on time and keeping balances low have the strongest positive effect.",
+  subFaqQ2: "Why is CIBIL Score important?",
+  subFaqA2:
+    "Lenders check your CIBIL Score first when you apply for a loan or credit card, and it is often the basis for approving or rejecting your application. A higher score improves your chances of approval and can help you negotiate a better interest rate and higher loan amount.",
+  subFaqQ3: "How does information get on my CIBIL Report?",
+  subFaqA3:
+    "Banks, NBFCs and other credit institutions report the details of your loans and credit cards to CIBIL every month. CIBIL organises this information into your Credit Report; it does not change the data on its own, so any correction has to be confirmed by the lender that reported it.",
+  subFaqQ4: "How can I improve my CIBIL Score?",
+  subFaqA4:
+    "Pay every EMI and credit card bill in full and on time, keep your credit card usage well below your limit, and avoid making several credit applications in a short span. Improvement is gradual — a consistent repayment record over several months is what moves the score.",
+  subFaqQ5: "Would my CIBIL Score be affected if I checked it?",
+  subFaqA5:
+    "No. Checking your own score is a soft enquiry and has no impact on it. Only hard enquiries — when a lender checks your report because you applied for credit — are recorded and can affect your score.",
+  subFaqQ6: "How much do I need to pay to get a CIBIL Credit Report?",
+  subFaqA6:
+    "You are entitled to one free credit report every calendar year. Beyond that, subscription plans start at ₹550 for 1 month, and the Starter Plan gives you a single Credit Report without the CIBIL Score for ₹118.",
   appPromoTitle: "Access your CIBIL Score & Report",
   appPromoSubtitle: "on the go with CIBIL Mobile App",
   appPromoTagline: "Quick & Secure Login.",
@@ -94,8 +127,12 @@ export const en = {
   footerSitemap: "Sitemap",
 
   // Login page
+  loginScoreTitle: "Know your CIBIL Score & Report",
+  loginScoreSubtitle: "Check the score and report that lenders see when you apply.",
   loginStayTitle: "Stay Secure with CIBIL Alerts",
   loginStaySubtitle: "Keep up to date with key changes in your credit profile.",
+  loginSimulatorTitle: "Plan with the CIBIL Score Simulator",
+  loginSimulatorSubtitle: "See how your financial decisions could impact your CIBIL Score.",
   loginToAccount: "Login to your CIBIL Account",
   enterRegisteredMobile: "Enter your registered mobile number",
   mobilePlaceholder: "e.g. 9879879870",
@@ -979,11 +1016,11 @@ export const en = {
   fcsFreeBanner: "FREE CIBIL Score & Report is available only once a calendar year.",
   fcsWhatYouGetHeading: "Here's What You Get In Your Free CIBIL Score & Report",
   getStartedNowBtn: "GET STARTED NOW",
-  fcsGet1: "Your latest CIBIL Score, a 3-digit numeric summary of your credit history (between 300 to 900).",
-  fcsGet2: "A summary of your credit payment history, gathered from information provided by lenders.",
-  fcsGet3: "Personal information such as your name, date of birth and gender linked to your loan and credit cards.",
-  fcsGet4: "A list of all enquiries made by the lender for your loan and credit card applications for last 36 months.",
-  fcsGet5: "Details of all your active and inactive loan and credit card accounts.",
+  fcsGet1: "Your latest **CIBIL Score**, a 3-digit numeric summary of your credit history (between 300 to 900).",
+  fcsGet2: "A summary of your credit **payment history**, gathered from information provided by lenders.",
+  fcsGet3: "**Personal information** such as your name, date of birth and gender linked to your loan and credit cards.",
+  fcsGet4: "A list of all **enquiries** made by the lender for your loan and credit card applications for last 36 months.",
+  fcsGet5: "Details of all your active and inactive **loan and credit card accounts**.",
   fcsFaqHeading: "Frequently Asked Questions",
   fcsFaq1: "What is CIBIL Score?",
   fcsFaq2: "What is CIBIL Report?",
@@ -995,6 +1032,16 @@ export const en = {
   fcsFaq8: "How do I report an inaccuracy, if I already have a CIBIL account?",
   fcsFaq9: "How often should I check my CIBIL score?",
   fcsFaq10: "How can I improve my CIBIL score?",
+  fcsA1: "Your CIBIL Score is a 3-digit numeric summary of your credit history that indicates your creditworthiness and demonstrates your ability to repay a loan. CIBIL score ranges from 300 to 900. The closer your score is to 900, the higher are the chances of you getting your loan /credit card. Watch this [video](https://www.youtube.com/watch?v=tKeRVGid-6o) now to learn more about CIBIL Score.",
+  fcsA2: "Your CIBIL Report (also known as CIR i.e. credit information report) is a record of your financial history compiled from information received from banks and financial institutions. It includes credit enquiries, open and closed credit accounts, personal & employment information and your payment history.",
+  fcsA3: "You will find the below details in your CIBIL report.\n- Your latest CIBIL Score, a 3-digit numeric summary of your credit history (between 300 to 900).\n- A summary of your credit payment history, gathered from information provided by lenders.\n- Personal information such as your name, date of birth and gender linked to your loan and credit cards.\n- A list of all enquiries made by the lender for your loan and credit card applications for last 36 months.\n- Details of all your active and inactive loan and credit card accounts.\nYou can also watch this [video](https://www.youtube.com/watch?v=O3dTqchBkao) to understand your CIBIL report.",
+  fcsA4: "Your CIBIL Score is calculated mainly using your Payment History, Credit Utilization, Age of Credit and Enquiries.\n- Your payment history shows how consistently you have made your payments on time and in full. Late payments, missed payments and delinquencies may negatively impact your CIBIL Score.\n- Credit utilization refers to the amount of available credit you're using. Higher credit utilization suggests you may be over-extended, making you appear to be at credit risk to the lenders. Aim to keep your credit utilization low for a better credit profile.\n- The length of time you've held credit accounts (i.e. loan account, credit card etc.). It shows lenders that you have a track record of managing credit responsibly over time. A longer credit history is typically seen as a sign of stability and reliability.\n- When you apply for new credit, lenders will often check your CIBIL Report to assess & onboard customers with a proven track record of making timely payments. This may have a marginal impact on your CIBIL Score. Applying for credit, too frequently in a short period of time may therefore negatively impact your CIBIL Score.",
+  fcsA5: "Your CIBIL Score plays a crucial role when lenders evaluate your loan or credit card applications. Regularly checking your CIBIL Score and Report allows you to assess your credit health, identify any errors, and enhance your chances of loan or credit card approval.",
+  fcsA6: "CIBIL cannot delete or change records reflecting on your Report on its own; we simply collect records of individuals provided to us by our members (banks and financial institutions).",
+  fcsA7: "If you notice errors, inaccuracies, or fraudulent activities in your CIBIL Report, you can report it to CIBIL. CIBIL registers this as a dispute and assists in reaching out to the respective banks/financial institutions to resolve the disputed or inaccurate data in your CIBIL Report. This is referred to as the dispute resolution process.\nTo report your concern, enroll to your Free Annual CIBIL Report [here](/register). And follow the steps as mentioned in the [video](https://www.youtube.com/watch?v=qHU-uKKaRjs).\nAlternatively, you can also contact the respective bank/financial institution directly. They appoint a principal nodal officer (PNO) expected to oversee the overall complaints management process of the bank. You can access this detail [here](/nodal-officer-list).",
+  fcsA8: "If you already have a CIBIL account, [login here](/login) and refresh your CIBIL report. If the information is still reflecting incorrectly then navigate to 'Raise a dispute' to report the inaccuracy.\nAlternatively, you can also contact the respective bank/financial institution directly. They appoint a principal nodal officer (PNO) expected to oversee the overall complaints management process of the bank. You can access this detail [here](/nodal-officer-list). For any more queries on dispute resolution process, click [here](/consumer-dispute-resolution).",
+  fcsA9: "It is recommended to check your CIBIL score at least once every month to stay informed about your credit health and spot any errors or potential fraud/identity theft. Checking your own CIBIL score doesn't impact it. Watch this [video](/credit-myths) to learn more about these common myths surrounding CIBIL.\nYou are entitled to one Free CIBIL Score and Report every calendar year, as per RBI guidelines. Get Started [here](/register). Additional reports may require a paid subscription. Explore our [CIBIL Subscription plans](/choose-subscription).",
+  fcsA10: "Pay your EMIs and credit card bills on time, maintain a low credit utilization ratio, avoid multiple loan applications, and regularly check your report for errors. Consumers are not required to pay a fee for improving their CIBIL Score, rectifying discrepancies or updating their credit information. Watch this [video](/watch-and-learn) to learn more.",
   fcsVideoBannerTitle: "Dive into our videos on CIBIL Score & Credit Monitoring and take control of your financial future!",
   watchNowBtn: "WATCH NOW",
   fcsTermsHeading: "Terms & Conditions",
@@ -1128,7 +1175,7 @@ export const en = {
   sakshamCourse1Desc:
     "Learn the A to Z of credit - from basics to smart money moves. Understand how credit scores work, what CIBIL reports show and why they matter. Master reading your credit report, handling EMIs and loans and keeping your credit history clean. Discover how things like late payments and credit enquiries can impact on your score and how to stay in control.",
   sakshamCourseNote: "Note: Available with standard and premium subscription plans",
-  sakshamCourse2Title: "Fundamentals of Credit – MSME Financing",
+  sakshamCourse2Title: "Basics of MSME Financing",
   sakshamCourse2Bold: "Unlock the world of MSMEs!",
   sakshamCourse2Desc:
     "Learn what MSMEs are, why they matter, and the challenges they face. Discover borrower types, credit options and key players in the MSME ecosystem. Understand credit reports, the CIBIL Commercial Rank and how credit info works.",
@@ -1146,7 +1193,11 @@ export const en = {
 
   // Products & Services — CIBIL Score & Report (Consumer)
   csrHeroTitle: "Prepare yourself for a promising journey ahead with your CIBIL Score & Report.",
-  csrDidYouKnow: "Did you know? Banks check your CIBIL Score before approving your loan.",
+  csrDidYouKnowLabel: "Did you know?",
+  csrDidYouKnowText: "Banks check your CIBIL Score before approving your loan.",
+  csrFreeBannerLink: "FREE Cibil Score & Report",
+  csrFreeBannerRest: "is available only once a calendar year.",
+  csrCloseBanner: "Close",
   csrWhatHeading: "What is CIBIL Score & Report?",
   csrWhatPara1:
     "Your CIBIL score is 3-digit number that indicates your creditworthiness and demonstrates your ability to repay a loan. It is derived using the credit history found in your CIBIL report.",
@@ -1187,6 +1238,8 @@ export const en = {
   alrMonitorLabel: "Monitor changes in your:",
   alrMonitorItems: "CIBIL Score | Accounts | Personal Information | Enquiries | Delinquencies | Credit Utilisation",
   alrInstantHeading: "Get Instant Alerts About Critical Changes In Your Credit Profile",
+  /** Must appear verbatim inside alrInstantHeading — it gets the yellow underline. */
+  alrInstantHeadingHighlight: "Alerts",
   alrInstantDesc: "24x7 credit monitoring with CIBIL Alerts",
   alrOtherBenefits: "Other benefits with your CIBIL Subscription:",
   alrPlanStandard: "Standard",
@@ -1220,14 +1273,18 @@ export const en = {
   ccpAlready: "Already have an account ?",
   loginNow: "Login Now",
   ccpQ1: "What is CIBIL Rank ?",
+  ccpA1:
+    "CIBIL Rank is a single number summary of your CIBIL Company Credit Report (CCR), on a scale of 10 to 1, where 1 is the best rank a company can achieve. It is available for companies with a credit exposure of up to ₹ 50 crores.",
   ccpQ2: "What is CIBIL Company Credit Report (CCR) ?",
   ccpQ2Bullet1:
     "CIBIL CCR is a record of your company's credit history, created from data submitted to CIBIL by lending institutions across India.",
   ccpQ2Bullet2:
     "The past payment behavior of a company is a strong indication of its future behavior. It is, therefore, important to understand that the CCR is heavily relied on by loan providers to evaluate and approve loan applications.",
   ccpCheckNow: "CHECK YOUR COMPANY'S CIBIL RANK & CCR NOW",
-  ccpDownloadNote:
-    'If you wish to purchase your CIBIL Company Credit Report (CCR) through Demand Draft (DD), please "DOWNLOAD" and follow the instructions.',
+  ccpPlayVideo: "Play the CIBIL Rank video",
+  ccpDownloadPrefix: "If you wish to purchase your CIBIL Company Credit Report (CCR) through Demand Draft (DD), please",
+  ccpDownloadLink: "DOWNLOAD",
+  ccpDownloadSuffix: "and follow the instructions.",
   ccpBenefitsHeading: "What are the benefits of CIBIL Rank & Company Credit Report (CCR) ?",
   ccpBenefitsSub: "Your CIBIL Rank & CCR can help you :",
   ccpBenefit1Title: "Get a Lower Interest Rate",
@@ -1258,7 +1315,17 @@ export const en = {
   ccpFaqTab1: "Subscription Related Queries",
   ccpFaqTab2: "Post Purchase Queries",
   ccpFaq1: "What are the different subscription plans that I can choose from?",
+  ccpFaqA1:
+    "You can choose from three plans — Basic (₹ 3,000 for 1 month), Standard (₹ 6,000 for 6 months) and Premium (₹ 12,000 for 12 months). Every plan includes a weekly refresh of your CIBIL Rank and Company Credit Report along with access to the dashboard.",
   ccpFaq2: "I do not have a GSTIN for my business. Will I be able to access CIBIL Rank and Company Credit Report?",
+  ccpFaqA2:
+    "Yes. A GSTIN is not mandatory. If your business is not registered under GST, you can complete your purchase using your PAN and the other business details requested during registration.",
+  ccpFaq3: "How long does it take to receive my Company Credit Report after purchase?",
+  ccpFaqA3:
+    "Once your payment is successful and your company is authenticated, your CIBIL Rank and Company Credit Report are made available on your dashboard, and refreshed weekly for the duration of your subscription.",
+  ccpFaq4: "What should I do if I find an error in my Company Credit Report?",
+  ccpFaqA4:
+    "Raise a dispute through the online Company Dispute Resolution form. We will take it up with the credit institution that reported the information and update your report once the correction is confirmed.",
 
   // Products & Services — Microfinance Score & Report
   mfpHeroTitle: "Get your Free CIBIL Microfinance Score & Report today!",
@@ -1267,7 +1334,8 @@ export const en = {
     "Microfinance (MFI) loans are small, short-term loans provided without collateral, typically to groups of women from rural and low-income households. Banks/financial institutions check CIBIL Microfinance Score and Report before approving your MFI loan.",
   mfpWhatHeading: "What is CIBIL Microfinance Score and Report?",
   mfpWhatPara1:
-    "Your CIBIL Microfinance Score is a 3-digit numeric summary of your credit history that indicates your creditworthiness and demonstrates your ability to repay a loan. CIBIL Microfinance Score ranges from 300 to 900. The higher the score of the borrower, the better is the credit profile of the borrower.",
+    "Your CIBIL Microfinance Score is a 3-digit numeric summary of your credit history that indicates your creditworthiness and demonstrates your ability to repay a loan. CIBIL Microfinance Score ranges from 300 to 900.",
+  mfpWhatPara1Italic: "The higher the score of the borrower, the better is the credit profile of the borrower.",
   mfpWhatPara2:
     "Your CIBIL Microfinance Report (also known as MFI CIR i.e. credit information report) is a record of borrower's financial history compiled from information received from banks/financial institutions. It includes credit enquiries, open and closed credit accounts, personal & employment information and payment history across Microfinance loans.",
   mfpIncludesHeading: "Your CIBIL Microfinance Score & Report includes:",
@@ -1317,10 +1385,12 @@ export const en = {
     "We advise all our customers to be cautious of these claims and identify our official partners through the 'Powered by CIBIL Logo' displayed on their website.",
   officialPartnersWarn3: "Please note that our member institutions like any Bank, NBFC or other financial institutions are also able to offer CIBIL Score and Report to consumers.",
   officialPartnersWarn4: "Please read the detailed disclosure below.",
-  officialPartnersReportPrefix: "You are requested to immediately report to us any such incidence by",
-  officialPartnersClickingHere: "clicking here",
+  officialPartnersReport:
+    "You are requested to immediately report to us any such incidence by [clicking here](/contact-us).",
   officialPartnersWarn5:
     "Please note TransUnion CIBIL Limited ( TU CIBIL) does not either by itself or through any agent (via E-mail / SMS / Phone Calls) advise any Customers ( collectively individual(s) and/ or corporates) regarding methods to improve credit scores or seek rectification of trade lines entries appearing on an individual/entity's TransUnion CIBIL Report either for a fee or otherwise.",
+  officialPartnersWarn6:
+    'Save and except for the purposes of authentication as required when accessing the TU CIBIL report directly from the TU CIBIL official website at [www.cibil.com](https://www.cibil.com) TU CIBIL does not in any manner and for any reason whatsoever require any Customer to disclose/ share any personal or sensitive personal data and information (collectively "Identifier Information") such PAN, TAN, Date of Birth etc. financial information. TU CIBIL advises all Customers to reconfirm/ verify the authenticity of any formal arrangement claimed to be set up between any Third Party and TU CIBIL which enables the Third Party to provide a TU CIBIL Report to the Customer on the basis Identifier Information required to be shared by the Customers with such Third Party. TU CIBIL further advises all individual(s) /entity (ies) to refrain from opening any attachments/ accessing any suspicious / phishing websites. TU CIBIL communicates with its customers only through its official website [www.cibil.com](https://www.cibil.com) or through emails with domain ids ending with @cibil.com or @transunion.com.',
   officialPartnersKpmgNote: "Note : The KPMG name and logo are trademarks used under license by the independent member firms of the KPMG global organization",
 
   // Suit Filed Cases page (shared side nav + terms)
@@ -1329,6 +1399,7 @@ export const en = {
   suitFiledSideSuit: "Suit Filed Cases",
   suitFiledSideNonSuit: "Non Suit Filed Cases",
   suitFiledSideRbi: "RBI Notifications",
+  suitFiledOverviewTitle: "Overview",
   suitFiledPageTitle: "Non Suit and Suit Filed Cases",
   suitFiledTermsHeading: "I. Terms and conditions:",
   suitFiledTerm1:
@@ -1356,6 +1427,30 @@ export const en = {
   iAgreeBtn: "I AGREE",
   iDisagreeBtn: "I DISAGREE",
 
+  // Gist of RBI Scheme page (body copy lives in lib/gistRbiSchemeData.ts — see the note there)
+  gistRbiPageTitle: "Gist of RBI Scheme",
+
+  // Non Suit Filed Cases page (reuses the side nav, headings, disclaimer bullets and buttons above)
+  nonSuitPageTitle: "Non Suit Filed Cases",
+  nonSuitTerm1:
+    'The information contained in these web pages ("Information") relates to the non-suit filed accounts of defaulters of various scheduled commercial Banks and all India notified Financial Institutions (FIs), and have been provided to TransUnion CIBIL Limited (Formerly: Credit Information Bureau (India) Limited-CIBIL) by various scheduled commercial banks and FIs pursuant to the directions of the Reserve Bank of India dated June 27, 2014, bearing reference number DBOD.CID.BC.127/20.16.056/2013-14, as modified from time to time.',
+  nonSuitTerm2:
+    "In the event any clarifications are required with respect to the Information or any person is aggrieved in any manner by the contents of the Information, such person may directly contact the Bank or FI concerned for clarifications and/or actions.",
+  nonSuitTerm3:
+    "The Information may also contain names of non-promoter/non-wholetime directors (Nominee and Independent Directors). This may be kept in view.",
+  nonSuitTerm4:
+    "The Information given is as reported by Banks and FIs. Its accuracy, completeness and veracity is the responsibility of the concerned Bank/FI, and not that of TransUnion CIBIL.",
+  nonSuitTerm5:
+    "The Information is not intended to be used as a source for bulk downloads or any other process that denies or degrades service to other users by generating unusually high numbers of daily database access, whether manually or in an automated fashion.",
+  nonSuitTerm6:
+    "The Information shall not be, for whatsoever purpose, reproduced, copied, stored or archived in any manner, format or medium whatsoever, either in full or in parts, for sale or any other commercial purposes.",
+  nonSuitTerm7:
+    "Governing Law: Use of this site shall be governed by the laws of India and the courts of Mumbai shall have exclusive jurisdiction on any disputes arising out of the use of this site or any Information given therein.",
+  nonSuitGoverning1:
+    'The information contained in these web pages ("Information") relates to the non-suit filed accounts of defaulters of various scheduled commercial Banks and all India notified Financial Institutions (FIs), and have been provided to TransUnion CIBIL by various scheduled commercial Banks and FIs pursuant to the directions of the Reserve Bank of India dated June 27, 2014, bearing reference number DBOD.CID.BC.127/20.16.056/2013-14, as modified from time to time. By accessing and using the Information, the user acknowledges and accepts that TransUnion CIBIL does not take responsibility for any errors and/or omissions, which are caused by incorrect or inadequate information supplied by concerned Credit Institution/Bank. Further, TransUnion CIBIL does not guarantee the accuracy, adequacy or completeness of the Information and/or its suitability for any specific purpose nor is TransUnion CIBIL responsible for results obtained from use of the Information.',
+  nonSuitGoverning2:
+    "Neither TransUnion CIBIL nor any of its Directors, Employees and Representatives accept any liability, and TransUnion CIBIL its Directors etc. expressly disclaim any liability, for all such Information and shall not be liable for any direct, indirect, incidental, special, consequential or exemplary damages including but not limited to, damages for loss of profits, goodwill, use, data or other losses, costs, expenses, claims, proceedings, actions wherever and whenever occurring (even if TransUnion CIBIL has been advised of the possibility of the same), directly or indirectly resulting from:",
+
   // RBI Notifications page
   rbiNotifTitle: "RBI Circulars pertaining to Credit Information and its Submission",
   rbiColSrNo: "Sr. No.",
@@ -1379,6 +1474,35 @@ export const en = {
   blogViewAll: "VIEW ALL",
   blogCategoryLabel: "CATEGORY",
   blogViewAllPlain: "View All",
+
+  // Privacy Policy page (body copy lives in lib/privacyPolicyData.ts — see the note there)
+  privacyLastUpdated: "Last updated",
+
+  // Sitemap page
+  sitemapTitle: "Site Map",
+  sitemapCreditReportProducts: "Credit Report Products",
+  sitemapHelpCenter: "Help Center",
+  sitemapMyAccount: "My Account",
+  sitemapSupportAbout: "Support & About",
+  sitemapRankCompanyReport: "CIBIL Rank and Company Report",
+  sitemapFreeScoreReport: "Free CIBIL Score and Report",
+  sitemapSubscriptionPlans: "Subscription Plans",
+  sitemapContactUsLink: "Contact Us",
+
+  // Terms and Conditions page (body copy lives in lib/legalPageData.ts — see the note there)
+  termsPageTitle: "Terms and Conditions for Provision of Services",
+  termsTocHeading: "On this page",
+
+  // Accessibility labels / image alt text (user-visible to screen readers)
+  a11yCloseMenu: "Close menu",
+  a11yOpenMenu: "Open menu",
+  a11yPlayVideo: "Play video",
+  a11yDismiss: "Dismiss",
+  fcsBannerAlt: "Looking for a Loan? Check your Free CIBIL Score first.",
+  fcsWatchLearnAlt: "Watch and learn about CIBIL Score & Credit Monitoring",
+  contactHeroAlt: "CIBIL customer support",
+  ucsVideoReadReportTitle: "How to read your CIBIL Report | TransUnion CIBIL",
+  ucsVideoEnquiryTitle: "Does an enquiry affect your CIBIL Score? | TransUnion CIBIL",
 } as const;
 
 export type TranslationKey = keyof typeof en;

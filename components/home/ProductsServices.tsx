@@ -6,7 +6,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { TranslationKey } from "@/lib/i18n";
 import { ArrowRightIcon } from "@/components/icons";
 
-const CTA_HREF = "/select-plan";
+const CTA_HREF = "/choose-subscription";
 
 interface ProductCardConfig {
   tag: TranslationKey;
@@ -54,11 +54,10 @@ function ProductCta({ open = false }: { open?: boolean }) {
       className="group/cta inline-flex items-center h-11 rounded-full bg-[#0e5c80] text-white shadow-sm transition-colors hover:bg-[#137199] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
     >
       <span
-        className={`overflow-hidden whitespace-nowrap text-xs font-bold uppercase tracking-wider transition-all duration-300 ease-out ${
-          open
+        className={`overflow-hidden whitespace-nowrap text-xs font-bold uppercase tracking-wider transition-all duration-300 ease-out ${open
             ? "max-w-40 pl-5"
             : "max-w-0 pl-0 group-hover/cta:max-w-40 group-hover/cta:pl-5"
-        }`}
+          }`}
       >
         {t("productGetStarted")}
       </span>

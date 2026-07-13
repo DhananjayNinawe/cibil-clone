@@ -111,13 +111,13 @@ export default function LoginForm() {
             />
             <label htmlFor="login-terms" className="text-xs text-gray-600 leading-relaxed cursor-pointer">
               {t("termsText")}{" "}
-              <a href="#" className="text-blue-600 hover:underline font-medium">
+              <Link href="/legal/terms-and-conditions" className="text-blue-600 hover:underline font-medium">
                 {t("termsLink")}
-              </a>{" "}
+              </Link>{" "}
               {t("andText")}{" "}
-              <a href="#" className="text-blue-600 hover:underline font-medium">
+              <Link href="/privacy-policy" className="text-blue-600 hover:underline font-medium">
                 {t("privacyLink")}
-              </a>{" "}
+              </Link>{" "}
               <span className={termsExpanded ? "" : "line-clamp-1"}>{t("termsFullText")}</span>{" "}
               <button
                 type="button"
@@ -169,12 +169,12 @@ export default function LoginForm() {
         <a href="#" className="text-xs text-gray-600 hover:text-[#00b0f0] hover:underline font-medium">
           {t("faqs")}
         </a>
-        <Link href="/register" className="text-xs text-gray-600 hover:text-[#00b0f0] hover:underline font-medium">
+        <Link href="/legal/terms-and-conditions" className="text-xs text-gray-600 hover:text-[#00b0f0] hover:underline font-medium">
           {t("termsConditions")}
         </Link>
-        <a href="#" className="text-xs text-gray-600 hover:text-[#00b0f0] hover:underline font-medium">
+        <Link href="/privacy-policy" className="text-xs text-gray-600 hover:text-[#00b0f0] hover:underline font-medium">
           {t("privacyPolicy")}
-        </a>
+        </Link>
       </div>
     </div>
   );

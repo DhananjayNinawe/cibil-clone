@@ -17,20 +17,20 @@ export default function GetReportSection() {
           </div>
           <ul className="space-y-2 text-sm text-gray-700">
             <li>
-              <span className="font-bold">Step 1:</span> {t("mfiRequestFormStep1")}{" "}
+              <span className="font-bold">{t("step1Label")}:</span> {t("mfiRequestFormStep1")}{" "}
               <a href="#" className="text-blue-700 underline">
                 {t("mfiRequestFormLink")}
               </a>
               .
             </li>
             <li>
-              <span className="font-bold">Step 2:</span> {t("mfiRequestFormStep2")}
+              <span className="font-bold">{t("step2Label")}:</span> {t("mfiRequestFormStep2")}
             </li>
             <li>
-              <span className="font-bold">Step 3:</span> {t("mfiRequestFormStep3")}
+              <span className="font-bold">{t("step3Label")}:</span> {t("mfiRequestFormStep3")}
             </li>
             <li>
-              <span className="font-bold">Step 4:</span> {t("mfiRequestFormStep4")}
+              <span className="font-bold">{t("step4Label")}:</span> {t("mfiRequestFormStep4")}
             </li>
           </ul>
         </div>

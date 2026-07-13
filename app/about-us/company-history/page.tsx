@@ -15,7 +15,7 @@ export default function CompanyHistoryPage() {
       <main className="flex-1">
         <CompanyHistoryContent />
       </main>
-      <Footer variant="corporate" accentTop />
+      <Footer variant="full" accentTop />
     </div>
   );
 }

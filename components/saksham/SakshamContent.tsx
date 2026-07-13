@@ -1,41 +1,58 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import { TranslationKey } from "@/lib/i18n";
-import { DocumentIcon, PlayIcon, ClockIcon } from "@/components/icons";
 
-function IncludeCard({ icon, label, bg }: { icon: React.ReactNode; label: string; bg: string }) {
+const HERO_IMAGE = "https://www.cibil.com/content/dam/cibil/consumer/saksham-banner.jpg";
+
+/** Ships as one raster: the "Each course includes:" heading, the five cards, and the 60-day note. */
+const COURSE_IMAGE =
+  "https://www.cibil.com/cibil-saksham/_jcr_content/root/contentcontainer/pagesection/basicimage.coreimg.png/1762406676567/saksham-course.png";
+
+const BULLET_CLASS = "list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-gray-700 marker:text-[#00b0f0]";
+const CTA_CLASS =
+  "mt-4 inline-block w-fit rounded-full bg-[#f5c518] px-6 py-3 text-xs font-bold uppercase tracking-wide text-gray-900 transition-colors hover:bg-[#e8b800]";
+
+/** Every locale writes these notes as "<label>: <body>", and the label alone is bold. */
+function NoteLine({ text, className = "" }: { text: string; className?: string }) {
+  const at = text.indexOf(":");
+
   return (
-    <div className={`rounded-xl ${bg} p-4 flex items-center gap-3`}>
-      <span className="shrink-0">{icon}</span>
-      <p className="font-bold text-sm text-gray-800 leading-tight">{label}</p>
-    </div>
+    <p className={`text-xs italic text-gray-700 underline underline-offset-2 ${className}`}>
+      {at === -1 ? (
+        text
+      ) : (
+        <>
+          <span className="font-bold">{text.slice(0, at + 1)}</span>
+          {text.slice(at + 1)}
+        </>
+      )}
+    </p>
   );
 }
 
 function CourseBlock({
-  title,
-  bold,
-  desc,
+  titleKey,
+  boldKey,
+  descKey,
   ctaKey,
 }: {
-  title: string;
-  bold: string;
-  desc: string;
+  titleKey: TranslationKey;
+  boldKey: TranslationKey;
+  descKey: TranslationKey;
   ctaKey: TranslationKey;
 }) {
   const { t } = useLanguage();
+
   return (
-    <div className="mb-10">
-      <p className="font-bold text-gray-900 underline underline-offset-4">{title}</p>
-      <p className="font-bold text-gray-800 mt-3">{bold}</p>
-      <p className="text-sm text-gray-700 mt-1 leading-relaxed">{desc}</p>
-      <p className="text-xs text-gray-500 italic mt-3">{t("sakshamCourseNote")}</p>
-      <Link
-        href="/register"
-        className="inline-block mt-4 bg-[#f5c518] hover:bg-[#e8b800] text-gray-900 text-xs font-bold rounded px-5 py-2.5 transition-colors"
-      >
+    <div className="mt-8">
+      <p className="text-sm font-bold text-gray-900 underline underline-offset-4">{t(titleKey)}</p>
+      <p className="mt-4 text-sm font-bold text-gray-900">{t(boldKey)}</p>
+      <p className="mt-1 text-sm leading-relaxed text-gray-700">{t(descKey)}</p>
+      <NoteLine text={t("sakshamCourseNote")} className="mt-4" />
+      <Link href="/register" className={CTA_CLASS}>
         {t(ctaKey)}
       </Link>
     </div>
@@ -52,68 +69,89 @@ export default function SakshamContent() {
     ["sakshamWhy4Bold", "sakshamWhy4"],
   ];
 
+  /** The course raster carries its text as pixels, so restate it for screen readers. */
+  const courseImageAlt = [
+    t("sakshamIncludesHeading"),
+    [t("sakshamInc1"), t("sakshamInc2"), t("sakshamInc3"), t("sakshamInc4"), t("sakshamInc5")].join(", "),
+    t("sakshamAccessNote"),
+  ].join(" ");
+
   return (
     <>
-      {/* Hero */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 bg-gray-100">
-        <div className="flex flex-col justify-center px-4 sm:px-8 lg:px-16 py-14 text-center lg:text-left">
-          <h1 className="text-3xl font-bold text-gray-900">{t("sakshamTitle")}</h1>
-          <p className="text-lg text-gray-700 mt-2">{t("sakshamSubtitle")}</p>
-          <Link
-            href="#courses"
-            className="inline-block mt-6 w-fit mx-auto lg:mx-0 bg-[#f5c518] hover:bg-[#e8b800] text-gray-900 text-sm font-bold rounded-full px-6 py-2.5 transition-colors"
-          >
-            {t("learnMoreUpper")}
-          </Link>
+      {/* Hero — copy on a grey field, photo bleeding off the right edge */}
+      <section className="relative overflow-hidden bg-[#f2f2f2]">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-md py-14 lg:py-24">
+            <h1 className="text-3xl leading-snug text-gray-900 sm:text-4xl">{t("sakshamTitle")}</h1>
+            <p className="mt-3 text-lg leading-snug text-gray-700">{t("sakshamSubtitle")}</p>
+            <Link href="#courses" className={CTA_CLASS}>
+              {t("learnMoreUpper")}
+            </Link>
+          </div>
         </div>
-        <div className="relative w-full h-full min-h-[220px] overflow-hidden bg-gradient-to-br from-[#bcd0c0] to-[#5a7a60] flex items-center justify-center" />
+        <div className="relative h-56 sm:h-72 lg:absolute lg:inset-y-0 lg:right-0 lg:h-auto lg:w-[26%]">
+          <Image
+            src={HERO_IMAGE}
+            alt={`${t("sakshamTitle")} — ${t("sakshamSubtitle")}`}
+            fill
+            preload
+            unoptimized
+            sizes="(max-width: 1024px) 100vw, 26vw"
+            className="object-cover"
+          />
+        </div>
       </section>
 
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-2xl font-bold text-gray-900 mb-3">{t("sakshamWhatHeading")}</h2>
-        <p className="text-gray-700 leading-relaxed">{t("sakshamWhatDesc")}</p>
+      <section className="mx-auto max-w-[1600px] px-4 py-14 sm:px-8 lg:px-14">
+        <h2 className="mb-5 text-2xl text-gray-900">{t("sakshamWhatHeading")}</h2>
+        <p className="leading-relaxed text-gray-700">{t("sakshamWhatDesc")}</p>
 
-        <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-3">{t("sakshamWhoHeading")}</h2>
-        <ul className="space-y-2 list-disc pl-5 text-sm text-gray-700">
+        <h2 className="mt-10 mb-5 text-2xl text-gray-900">{t("sakshamWhoHeading")}</h2>
+        <ul className={BULLET_CLASS}>
           <li>
-            <span className="font-bold">{t("sakshamWho1Bold")}</span> {t("sakshamWho1")}
+            <span className="font-bold text-gray-900">{t("sakshamWho1Bold")}</span> {t("sakshamWho1")}
           </li>
           <li>
-            <span className="font-bold">{t("sakshamWho2Bold")}</span> {t("sakshamWho2")}
+            <span className="font-bold text-gray-900">{t("sakshamWho2Bold")}</span> {t("sakshamWho2")}
           </li>
         </ul>
 
-        <h2 className="text-2xl font-extrabold text-gray-900 mt-12 mb-6">{t("sakshamIncludesHeading")}</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          <IncludeCard icon={<DocumentIcon className="w-6 h-6 text-orange-500" />} label={t("sakshamInc1")} bg="bg-yellow-50" />
-          <IncludeCard icon={<PlayIcon className="w-6 h-6 text-purple-500" />} label={t("sakshamInc2")} bg="bg-purple-50" />
-          <IncludeCard icon={<DocumentIcon className="w-6 h-6 text-green-600" />} label={t("sakshamInc3")} bg="bg-green-50" />
-          <IncludeCard icon={<DocumentIcon className="w-6 h-6 text-red-500" />} label={t("sakshamInc4")} bg="bg-red-50" />
-          <IncludeCard icon={<DocumentIcon className="w-6 h-6 text-amber-600" />} label={t("sakshamInc5")} bg="bg-gray-50" />
-        </div>
+        {/* Heading, cards and 60-day note all live inside the official artwork */}
+        <Image
+          src={COURSE_IMAGE}
+          alt={courseImageAlt}
+          width={1280}
+          height={264}
+          unoptimized
+          sizes="100vw"
+          className="mt-14 h-auto w-full"
+        />
 
-        <div className="bg-[#eef5fb] rounded-lg p-4 flex items-start gap-3 mt-6">
-          <ClockIcon className="w-5 h-5 text-[#00b0f0] mt-0.5 shrink-0" />
-          <p className="text-sm text-gray-700 italic">
-            <span className="font-bold">Note:</span> {t("sakshamAccessNote").replace(/^Note:\s*/, "")}
-          </p>
-        </div>
-
-        <h2 id="courses" className="text-2xl font-bold text-gray-900 mt-14 mb-6">
+        <h2 id="courses" className="mt-14 text-2xl text-gray-900">
           {t("sakshamCoursesHeading")}
         </h2>
-        <CourseBlock title={t("sakshamCourse1Title")} bold={t("sakshamCourse1Bold")} desc={t("sakshamCourse1Desc")} ctaKey="learnMoreUpper" />
-        <CourseBlock title={t("sakshamCourse2Title")} bold={t("sakshamCourse2Bold")} desc={t("sakshamCourse2Desc")} ctaKey="learnNowUpper" />
+        <CourseBlock
+          titleKey="sakshamCourse1Title"
+          boldKey="sakshamCourse1Bold"
+          descKey="sakshamCourse1Desc"
+          ctaKey="learnMoreUpper"
+        />
+        <CourseBlock
+          titleKey="sakshamCourse2Title"
+          boldKey="sakshamCourse2Bold"
+          descKey="sakshamCourse2Desc"
+          ctaKey="learnNowUpper"
+        />
 
-        <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">{t("sakshamWhyHeading")}</h2>
-        <ul className="space-y-2 list-disc pl-5 text-sm text-gray-700">
+        <h2 className="mt-12 mb-5 text-2xl text-gray-900">{t("sakshamWhyHeading")}</h2>
+        <ul className={BULLET_CLASS}>
           {why.map(([bold, rest]) => (
             <li key={bold}>
-              <span className="font-bold">{t(bold)}</span> {t(rest)}
+              <span className="font-bold text-gray-900">{t(bold)}</span> {t(rest)}
             </li>
           ))}
         </ul>
-        <p className="text-xs text-gray-500 italic mt-4">{t("sakshamWhyNote")}</p>
+        <NoteLine text={t("sakshamWhyNote")} className="mt-6" />
       </section>
     </>
   );

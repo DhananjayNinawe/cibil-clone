@@ -336,9 +336,9 @@ export default function LearnAboutCredit() {
         aria-hidden
         width={206}
         height={444}
-        className="pointer-events-none absolute left-0 -top-1/2 hidden -translate-y-1/2 select-none md:block"
+        className="pointer-events-none absolute left-0 -top-40 z-0 hidden select-none md:block"
       />
-      <div className="relative max-w-7xl mx-auto">
+      <div className="relative z-10 max-w-7xl mx-auto">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
           {t("learnHeadingPrefix")} <span className="text-[#00b0f0]">{t("learnHeadingBrand")}</span>
         </h2>

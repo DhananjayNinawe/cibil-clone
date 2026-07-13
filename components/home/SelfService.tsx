@@ -20,13 +20,13 @@ export default function SelfService() {
           <div className="mt-6 space-y-4 text-sm text-gray-700 max-w-lg">
             <p>
               {t("selfServiceReportDispute")}{" "}
-              <a href="#" className="text-[#0072c6] font-semibold underline hover:no-underline">
+              <a href="/consumer-dispute-resolution" className="text-[#0072c6] font-semibold underline hover:no-underline">
                 {t("hereLink")}
               </a>
             </p>
             <p>
               {t("selfServiceMfiDispute")}{" "}
-              <a href="#" className="text-[#0072c6] font-semibold underline hover:no-underline">
+              <a href="/microfinance-dispute-resolution" className="text-[#0072c6] font-semibold underline hover:no-underline">
                 {t("hereLink")}
               </a>
             </p>

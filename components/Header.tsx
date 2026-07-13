@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
@@ -19,7 +20,7 @@ export type HeaderVariant = "full" | "marketing" | "auth" | "site";
 interface HeaderProps {
   /**
    * "full"      – logo + login button + script size switcher + language dropdown (used by /register)
-   * "marketing" – logo + plain "Login" link only (used by /choose-subscription)
+   * "marketing" – logo + yellow "Login" pill only (used by /choose-subscription)
    * "auth"      – logo + script size switcher + language dropdown, no login button, gold accent border (used by /login)
    * "site"      – full two-row site nav: business/personal tabs, primary nav, search, New/Existing User CTAs (used by home page)
    */
@@ -44,25 +45,73 @@ function Logo() {
   );
 }
 
+/** Matches the panel's `w-44`; needed to keep it inside the viewport. */
+const LANGUAGE_PANEL_WIDTH = 176;
+
 function LanguageDropdown() {
   const { language, setLanguage } = useLanguage();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [coords, setCoords] = useState<{ top: number; left: number } | null>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const currentLang = languages.find((l) => l.code === language)!;
 
+  // The panel is portalled to <body> and positioned against the trigger: both
+  // hosts of this dropdown clip their children (the header's utility strip is
+  // overflow-hidden so it can collapse on scroll, the mobile drawer scrolls),
+  // so an absolutely positioned panel would be cut off.
   useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+    if (!dropdownOpen) return;
+
+    const place = () => {
+      const rect = triggerRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      // Right-aligned to the trigger, clamped to the viewport — in the mobile
+      // drawer the trigger sits near the left edge, so it would overflow.
+      const right = Math.max(8, rect.right - LANGUAGE_PANEL_WIDTH);
+      const left = Math.min(right, window.innerWidth - LANGUAGE_PANEL_WIDTH - 8);
+      setCoords({ top: rect.bottom + 8, left });
+    };
+    place();
+
+    const handlePointerDown = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (triggerRef.current?.contains(target) || panelRef.current?.contains(target)) return;
+      setDropdownOpen(false);
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setDropdownOpen(false);
+    };
+    const handleScroll = (e: Event) => {
+      // Page scroll collapses the utility strip out from under the trigger, so
+      // close. Scrolling an inner container (mobile drawer) just re-anchors.
+      const target = e.target;
+      if (target === document || target === document.documentElement || target === document.body) {
         setDropdownOpen(false);
+      } else {
+        place();
       }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("scroll", handleScroll, true);
+    window.addEventListener("resize", place);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("scroll", handleScroll, true);
+      window.removeEventListener("resize", place);
+    };
+  }, [dropdownOpen]);
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative">
       <button
+        ref={triggerRef}
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={dropdownOpen}
         onClick={() => setDropdownOpen((prev) => !prev)}
         className="flex items-center gap-1 text-sm font-semibold text-gray-700 hover:text-gray-900"
       >
@@ -70,24 +119,35 @@ function LanguageDropdown() {
         <ChevronDownIcon className={`w-4 h-4 transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
       </button>
 
-      {dropdownOpen && (
-        <div className="absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded shadow-lg z-50">
-          {languages.map((lang) => (
-            <button
-              key={lang.code}
-              onClick={() => {
-                setLanguage(lang.code as Language);
-                setDropdownOpen(false);
-              }}
-              className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 flex items-center justify-between ${language === lang.code ? "text-[#00b0f0] font-semibold bg-blue-50" : "text-gray-700"
-                }`}
-            >
-              <span>{lang.label}</span>
-              <span className="text-gray-400 text-xs">{lang.nativeLabel}</span>
-            </button>
-          ))}
-        </div>
-      )}
+      {dropdownOpen &&
+        coords &&
+        createPortal(
+          <div
+            ref={panelRef}
+            role="listbox"
+            style={{ top: coords.top, left: coords.left }}
+            className="fixed z-200 w-44 overflow-hidden rounded border border-gray-200 bg-white shadow-lg"
+          >
+            {languages.map((lang) => (
+              <button
+                key={lang.code}
+                type="button"
+                role="option"
+                aria-selected={language === lang.code}
+                onClick={() => {
+                  setLanguage(lang.code as Language);
+                  setDropdownOpen(false);
+                }}
+                className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 flex items-center justify-between ${language === lang.code ? "text-[#00b0f0] font-semibold bg-blue-50" : "text-gray-700"
+                  }`}
+              >
+                <span>{lang.label}</span>
+                <span className="text-gray-400 text-xs">{lang.nativeLabel}</span>
+              </button>
+            ))}
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }
@@ -239,10 +299,10 @@ function MobileNav({ open, onClose }: { open: boolean; onClose: () => void }) {
             </span>
           </nav>
           <div className="flex items-center gap-4 text-gray-600">
-            <button type="button" aria-label="Search" className="hover:text-[#00b0f0]">
+            <button type="button" aria-label={t("searchPlaceholder")} className="hover:text-[#00b0f0]">
               <SearchIcon />
             </button>
-            <button type="button" aria-label="Close menu" onClick={onClose} className="hover:text-[#00b0f0]">
+            <button type="button" aria-label={t("a11yCloseMenu")} onClick={onClose} className="hover:text-[#00b0f0]">
               <CloseIcon />
             </button>
           </div>
@@ -396,7 +456,7 @@ function SiteHeader() {
           <div className="flex md:hidden items-center gap-4 ml-auto h-16 text-gray-600">
             <button
               type="button"
-              aria-label="Search"
+              aria-label={t("searchPlaceholder")}
               onClick={() => setActiveMenu((prev) => (prev === "search" ? null : "search"))}
               className="hover:text-[#00b0f0]"
             >
@@ -404,7 +464,7 @@ function SiteHeader() {
             </button>
             <button
               type="button"
-              aria-label="Open menu"
+              aria-label={t("a11yOpenMenu")}
               onClick={() => setMobileOpen(true)}
               className="hover:text-[#00b0f0]"
             >
@@ -490,7 +550,7 @@ function SiteHeader() {
               </nav>
               <button
                 type="button"
-                aria-label="Search"
+                aria-label={t("searchPlaceholder")}
                 onClick={() => setActiveMenu((prev) => (prev === "search" ? null : "search"))}
                 onMouseEnter={() => setActiveMenu((prev) => (prev === "search" ? prev : null))}
                 className={`h-12 w-12 flex items-center justify-center transition-colors ${activeMenu === "search" ? "bg-[#f5c518] text-gray-900" : "text-gray-500 hover:text-[#00b0f0]"
@@ -540,7 +600,7 @@ function SiteHeader() {
                 />
                 <button
                   type="button"
-                  aria-label="Search"
+                  aria-label={t("searchPlaceholder")}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#00b0f0]"
                 >
                   <SearchIcon className="w-4 h-4" />
@@ -582,7 +642,7 @@ export default function Header({ variant = "full" }: HeaderProps) {
             {showLoginLink && (
               <Link
                 href="/login"
-                className="text-sm font-semibold text-gray-800 hover:text-[#00b0f0] transition-colors"
+                className="rounded-full bg-[#f5c518] px-6 py-2 text-xs font-bold tracking-wide text-gray-900 uppercase transition-colors hover:bg-[#e8b800]"
               >
                 {t("login")}
               </Link>

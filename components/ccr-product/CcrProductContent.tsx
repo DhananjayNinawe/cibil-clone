@@ -1,68 +1,186 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { TranslationKey } from "@/lib/i18n";
-import { PlusMinusCircleIcon, CheckCircleIcon, DocumentIcon, PersonContactIcon, PlayIcon } from "@/components/icons";
+import OfferBanner from "@/components/shared/OfferBanner";
+import { PlusMinusCircleIcon, RosetteCheckIcon, ClipboardIcon, CircleCheckOutlineIcon, PlayIcon } from "@/components/icons";
 
-function OfferBanner() {
-  const { t } = useLanguage();
-  return (
-    <div className="bg-[#0a3a52] py-4 px-4">
-      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p className="text-white text-lg font-semibold">
-          {t("ccrfOfferPrefix")} <span className="text-[#f5c518] font-bold">{t("ccrfOfferPercent")}</span> {t("ccrfOfferSuffix")}
-        </p>
-        <div className="flex items-center gap-3">
-          <span className="bg-white text-gray-900 text-sm font-bold rounded px-3 py-1.5">{t("ccrfUseCode")}</span>
-          <span className="border border-white text-white text-sm font-bold rounded px-3 py-1.5">{t("ccrfCode")}</span>
-        </div>
-        <div className="text-right">
-          <p className="text-[#f5c518] text-sm font-bold">{t("ccrfLimitedOffer")}</p>
-          <p className="text-white text-xs mt-1">30 : 05 : 13</p>
-        </div>
-      </div>
-    </div>
-  );
-}
+const HERO_IMAGE = "https://www.cibil.com/content/dam/cibil/consumer/vyapaari.jpg";
+const RANK_VIDEO = "https://www.cibil.com/content/dam/cibil/consumer/media/video/cibil-rank.mp4";
 
-function BenefitCard({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
-  return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 text-center">
-      <div className="flex justify-center mb-4">{icon}</div>
-      <p className="font-bold text-gray-900">{title}</p>
-      <p className="text-sm text-gray-600 mt-2">{desc}</p>
-    </div>
-  );
-}
+type Accordion = { questionKey: TranslationKey; bodyKeys: TranslationKey[] };
 
-function PlanColumn({
-  name,
-  priceKey,
-  periodKey,
-  refreshKey,
-  saksham,
-}: {
+const INTRO_QUESTIONS: Accordion[] = [
+  { questionKey: "ccpQ1", bodyKeys: ["ccpA1"] },
+  { questionKey: "ccpQ2", bodyKeys: ["ccpQ2Bullet1", "ccpQ2Bullet2"] },
+];
+
+const FAQ_TABS: { labelKey: TranslationKey; items: Accordion[] }[] = [
+  {
+    labelKey: "ccpFaqTab1",
+    items: [
+      { questionKey: "ccpFaq1", bodyKeys: ["ccpFaqA1"] },
+      { questionKey: "ccpFaq2", bodyKeys: ["ccpFaqA2"] },
+    ],
+  },
+  {
+    labelKey: "ccpFaqTab2",
+    items: [
+      { questionKey: "ccpFaq3", bodyKeys: ["ccpFaqA3"] },
+      { questionKey: "ccpFaq4", bodyKeys: ["ccpFaqA4"] },
+    ],
+  },
+];
+
+const BENEFITS: { icon: (props: { className?: string }) => React.ReactElement; titleKey: TranslationKey; descKey: TranslationKey }[] = [
+  { icon: RosetteCheckIcon, titleKey: "ccpBenefit1Title", descKey: "ccpBenefit1Desc" },
+  { icon: ClipboardIcon, titleKey: "ccpBenefit2Title", descKey: "ccpBenefit2Desc" },
+  { icon: CircleCheckOutlineIcon, titleKey: "ccpBenefit3Title", descKey: "ccpBenefit3Desc" },
+];
+
+const PLANS: {
   name: string;
   priceKey: TranslationKey;
   periodKey: TranslationKey;
   refreshKey: TranslationKey;
-  saksham?: boolean;
+  saksham: boolean;
+}[] = [
+  { name: "BASIC", priceKey: "ccpBasicPrice", periodKey: "ccpBasicPeriod", refreshKey: "ccpBasicRefresh", saksham: false },
+  { name: "STANDARD", priceKey: "ccpStandardPrice", periodKey: "ccpStandardPeriod", refreshKey: "ccpStandardRefresh", saksham: true },
+  { name: "PREMIUM", priceKey: "ccpPremiumPrice", periodKey: "ccpPremiumPeriod", refreshKey: "ccpPremiumRefresh", saksham: true },
+];
+
+const THINGS: TranslationKey[] = ["ccpThing1", "ccpThing2", "ccpThing3"];
+
+function YellowButton({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="inline-block bg-[#f5c518] hover:bg-[#e8b800] text-gray-900 text-xs font-bold tracking-wide uppercase rounded-full px-7 py-3 transition-colors"
+    >
+      {children}
+    </Link>
+  );
+}
+
+/** Yellow-underlined centered section heading. */
+function UnderlinedHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="text-center">
+      <span className="inline-block border-b-2 border-[#f5c518] pb-1 text-sm font-bold tracking-wide text-gray-900">
+        {children}
+      </span>
+    </h2>
+  );
+}
+
+function AccordionRow({
+  item,
+  open,
+  onToggle,
+  highlight = false,
+}: {
+  item: Accordion;
+  open: boolean;
+  onToggle: () => void;
+  highlight?: boolean;
 }) {
   const { t } = useLanguage();
+
   return (
-    <div className="border border-gray-200">
-      <div className="bg-[#00b0f0] text-white text-center font-bold py-3">{name}</div>
-      <div className="text-center font-bold text-gray-900 py-3 border-b border-gray-100">{t(priceKey)}</div>
-      <div className="text-center text-sm text-gray-700 py-3 border-b border-gray-100">{t(periodKey)}</div>
-      <div className="text-center text-xs text-gray-600 py-3 border-b border-gray-100 px-2">{t(refreshKey)}</div>
-      <div className="text-center text-xs text-gray-600 py-3 border-b border-gray-100">{t("ccpAccessDashboard")}</div>
-      <div className="text-center text-xs text-gray-600 py-3 border-b border-gray-100 h-9">{saksham ? t("featCibilSaksham") : ""}</div>
-      <div className="p-4 text-center">
-        <Link href="/choose-subscription" className="inline-block bg-[#f5c518] hover:bg-[#e8b800] text-gray-900 text-xs font-bold rounded-full px-5 py-2 transition-colors">
-          {t("sidebarSubscribeNowBtn")}
-        </Link>
+    <div className={`border-b ${open && highlight ? "border-[#f5c518] border-b-2" : "border-gray-200"}`}>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={open}
+        className="flex items-center gap-3 w-full text-left py-4 cursor-pointer"
+      >
+        <PlusMinusCircleIcon expanded={open} className="w-5 h-5 shrink-0 text-[#00b0f0]" />
+        <span className="text-sm font-bold text-gray-800">{t(item.questionKey)}</span>
+      </button>
+      {open && (
+        <ul className="ml-8 pl-4 pb-4 list-disc space-y-2 text-sm text-gray-600 leading-relaxed">
+          {item.bodyKeys.map((key) => (
+            <li key={key}>{t(key)}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+/** Accordion list where at most one row is open; `defaultOpen` is an index into `items`. */
+function AccordionList({ items, defaultOpen = null, highlight = false }: { items: Accordion[]; defaultOpen?: number | null; highlight?: boolean }) {
+  const [openIndex, setOpenIndex] = useState<number | null>(defaultOpen);
+
+  return (
+    <div>
+      {items.map((item, i) => (
+        <AccordionRow
+          key={item.questionKey}
+          item={item}
+          open={openIndex === i}
+          highlight={highlight}
+          onToggle={() => setOpenIndex((current) => (current === i ? null : i))}
+        />
+      ))}
+    </div>
+  );
+}
+
+function RankVideo() {
+  const { t } = useLanguage();
+  const [playing, setPlaying] = useState(false);
+
+  return (
+    <div className="relative w-full aspect-video bg-black">
+      <video
+        src={RANK_VIDEO}
+        controls
+        preload="metadata"
+        playsInline
+        onPlay={() => setPlaying(true)}
+        className="w-full h-full"
+      >
+        <track kind="captions" />
+      </video>
+      {!playing && (
+        <button
+          type="button"
+          aria-label={t("ccpPlayVideo")}
+          onClick={(e) => {
+            const video = e.currentTarget.parentElement?.querySelector("video");
+            void video?.play();
+          }}
+          className="absolute inset-0 flex items-center justify-center cursor-pointer"
+        >
+          <span className="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
+            <PlayIcon className="w-9 h-9 text-[#00b0f0] ml-1" />
+          </span>
+        </button>
+      )}
+    </div>
+  );
+}
+
+function PlanColumn({ plan }: { plan: (typeof PLANS)[number] }) {
+  const { t } = useLanguage();
+
+  return (
+    <div className="border border-gray-200 flex flex-col">
+      <div className="bg-[#29abd6] text-white text-center text-sm font-bold tracking-wide py-3.5">{plan.name}</div>
+      <div className="bg-[#f2f2f2] text-center text-sm font-bold text-gray-900 py-3.5">{t(plan.priceKey)}</div>
+      <div className="text-center text-xs font-bold text-gray-800 py-3.5 border-b border-gray-200">{t(plan.periodKey)}</div>
+      <div className="text-center text-xs text-gray-700 py-3.5 px-3 border-b border-gray-200">{t(plan.refreshKey)}</div>
+      <div className="text-center text-xs text-gray-700 py-3.5 border-b border-gray-200">{t("ccpAccessDashboard")}</div>
+      <div className="text-center text-xs text-gray-700 py-3.5 border-b border-gray-200 min-h-11">
+        {plan.saksham ? t("featCibilSaksham") : ""}
+      </div>
+      <div className="bg-[#f2f2f2] mt-auto py-4 text-center">
+        <YellowButton href="/choose-subscription">{t("sidebarSubscribeNowBtn")}</YellowButton>
       </div>
     </div>
   );
@@ -70,134 +188,146 @@ function PlanColumn({
 
 export default function CcrProductContent() {
   const { t } = useLanguage();
-  const [openQ2, setOpenQ2] = useState(true);
 
   return (
     <>
       {/* Hero */}
-      <section className="bg-white border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-snug">{t("ccpHeroTitle")}</h1>
-            <p className="text-gray-600 mt-3">{t("ccpHeroDesc")}</p>
-            <Link
-              href="/choose-subscription"
-              className="inline-block mt-5 bg-[#f5c518] hover:bg-[#e8b800] text-gray-900 text-sm font-bold rounded-full px-6 py-2.5 transition-colors"
-            >
-              {t("sidebarSubscribeNowBtn")}
-            </Link>
-            <p className="text-sm text-gray-600 mt-3">
+      <section className="relative bg-[#f2f2f2] overflow-hidden">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="lg:w-1/2 py-10 lg:py-14 lg:pl-10">
+            <h1 className="text-2xl sm:text-[26px] font-bold text-gray-900 leading-snug max-w-sm">{t("ccpHeroTitle")}</h1>
+            <p className="text-sm text-gray-700 mt-4">{t("ccpHeroDesc")}</p>
+            <div className="mt-5">
+              <YellowButton href="/choose-subscription">{t("sidebarSubscribeNowBtn")}</YellowButton>
+            </div>
+            <p className="text-sm text-gray-700 mt-5">
               {t("ccpAlready")}{" "}
-              <Link href="/login" className="text-blue-700 hover:underline font-semibold">
+              <Link href="/login" className="text-gray-900 font-bold underline underline-offset-2">
                 {t("loginNow")}
               </Link>
             </p>
           </div>
-          <div className="relative h-48 rounded-xl bg-gradient-to-br from-[#c99a5a] to-[#5a3a1f] flex items-center justify-center">
-            <PersonContactIcon className="w-14 h-14 text-white/40" />
-          </div>
+        </div>
+
+        {/* Banner art — bleeds to the right edge on desktop, stacks below the copy on mobile */}
+        <div className="lg:hidden">
+          <Image src={HERO_IMAGE} alt={t("ccpHeroTitle")} width={780} height={480} priority unoptimized className="w-full h-auto" />
+        </div>
+        <div className="hidden lg:block absolute top-0 right-0 h-full w-[42%]">
+          <Image src={HERO_IMAGE} alt={t("ccpHeroTitle")} fill priority unoptimized sizes="42vw" className="object-cover object-left" />
         </div>
       </section>
 
-      <OfferBanner />
+      <div className="pt-8">
+        <OfferBanner inset />
+      </div>
 
-      {/* Q&A + video */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 lg:grid-cols-2 gap-10">
-        <div>
-          <div className="flex items-center gap-3 border-b border-gray-200 py-4">
-            <PlusMinusCircleIcon expanded={false} className="w-5 h-5 text-[#00b0f0]" />
-            <span className="font-bold text-sm text-gray-800">{t("ccpQ1")}</span>
-          </div>
-          <div className="border-b-2 border-[#f5c518] py-4">
-            <button type="button" onClick={() => setOpenQ2((o) => !o)} className="flex items-center gap-3 w-full text-left">
-              <PlusMinusCircleIcon expanded={openQ2} className="w-5 h-5 text-[#00b0f0]" />
-              <span className="font-bold text-sm text-gray-800">{t("ccpQ2")}</span>
-            </button>
-            {openQ2 && (
-              <ul className="mt-3 ml-8 list-disc pl-4 space-y-2 text-sm text-gray-600">
-                <li>{t("ccpQ2Bullet1")}</li>
-                <li>{t("ccpQ2Bullet2")}</li>
-              </ul>
-            )}
-          </div>
-        </div>
-        <div className="relative h-64 rounded-lg bg-gradient-to-br from-[#5a8ab0] to-[#1c3a52] flex items-center justify-center">
-          <button aria-label="Play video" className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center">
-            <PlayIcon className="w-7 h-7 text-[#00b0f0] ml-0.5" />
-          </button>
-        </div>
+      {/* Intro Q&A + video */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+        <AccordionList items={INTRO_QUESTIONS} defaultOpen={1} highlight />
+        <RankVideo />
       </section>
 
-      {/* Check now + DD note */}
-      <div className="bg-gray-100 py-8 px-4 text-center">
-        <Link href="/register" className="inline-block bg-[#f5c518] hover:bg-[#e8b800] text-gray-900 text-sm font-bold rounded-full px-6 py-2.5 transition-colors">
-          {t("ccpCheckNow")}
-        </Link>
-        <p className="text-sm text-gray-600 mt-4 max-w-3xl mx-auto">{t("ccpDownloadNote")}</p>
+      {/* Check now + Demand Draft note */}
+      <div className="bg-[#f2f2f2] py-10 px-4 text-center">
+        <YellowButton href="/register">{t("ccpCheckNow")}</YellowButton>
+        <p className="text-sm text-gray-700 mt-5 max-w-3xl mx-auto">
+          {t("ccpDownloadPrefix")}{" "}
+          <span>
+            &quot;
+            <a href="#" className="font-bold text-gray-900 underline underline-offset-2">
+              {t("ccpDownloadLink")}
+            </a>
+            &quot;
+          </span>{" "}
+          {t("ccpDownloadSuffix")}
+        </p>
       </div>
 
       {/* Benefits */}
-      <section className="bg-gray-100 py-16 px-4">
+      <section className="relative bg-[#f2f2f2] border-t border-white pt-14 pb-16 px-4">
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-xl font-bold text-gray-900">{t("ccpBenefitsHeading")}</h2>
-          <p className="text-sm text-gray-500 mt-2">{t("ccpBenefitsSub")}</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8 text-left">
-            <BenefitCard icon={<CheckCircleIcon className="w-10 h-10 text-[#00b0f0]" />} title={t("ccpBenefit1Title")} desc={t("ccpBenefit1Desc")} />
-            <BenefitCard icon={<DocumentIcon className="w-10 h-10 text-[#00b0f0]" />} title={t("ccpBenefit2Title")} desc={t("ccpBenefit2Desc")} />
-            <BenefitCard icon={<CheckCircleIcon className="w-10 h-10 text-[#00b0f0]" />} title={t("ccpBenefit3Title")} desc={t("ccpBenefit3Desc")} />
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">{t("ccpBenefitsHeading")}</h2>
+          <p className="text-sm text-gray-600 mt-2">{t("ccpBenefitsSub")}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8">
+            {BENEFITS.map(({ icon: Icon, titleKey, descKey }) => (
+              <div key={titleKey} className="bg-white border border-gray-200 rounded-lg px-6 py-8 min-h-52">
+                <div className="flex justify-center">
+                  <Icon className="w-12 h-12 text-[#0a3a52]" />
+                </div>
+                <p className="mt-5 text-sm font-bold text-gray-900">{t(titleKey)}</p>
+                <p className="mt-3 text-xs text-gray-600 leading-relaxed">{t(descKey)}</p>
+              </div>
+            ))}
           </div>
           <p className="text-xs text-gray-500 italic mt-6">{t("ccpBenefitsDisclaimer")}</p>
-          <Link href="/register" className="inline-block mt-6 bg-[#f5c518] hover:bg-[#e8b800] text-gray-900 text-sm font-bold rounded-full px-6 py-2.5 transition-colors">
-            {t("ccpGetCcrNow")}
-          </Link>
+        </div>
+
+        {/* Straddles the section edge, as on cibil.com */}
+        <div className="absolute left-1/2 -translate-x-1/2 -bottom-5 w-full text-center">
+          <YellowButton href="/register">{t("ccpGetCcrNow")}</YellowButton>
         </div>
       </section>
 
       {/* Pricing */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-center text-xl font-bold text-gray-900">{t("ccpMonitorHeading")}</h2>
-        <p className="text-center text-sm text-gray-500 mt-2">{t("ccpMonitorDesc")}</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-8">
-          <PlanColumn name="BASIC" priceKey="ccpBasicPrice" periodKey="ccpBasicPeriod" refreshKey="ccpBasicRefresh" />
-          <PlanColumn name="STANDARD" priceKey="ccpStandardPrice" periodKey="ccpStandardPeriod" refreshKey="ccpStandardRefresh" saksham />
-          <PlanColumn name="PREMIUM" priceKey="ccpPremiumPrice" periodKey="ccpPremiumPeriod" refreshKey="ccpPremiumRefresh" saksham />
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16">
+        <h2 className="text-center text-xl sm:text-2xl font-bold text-gray-900">{t("ccpMonitorHeading")}</h2>
+        <p className="text-center text-sm text-gray-600 mt-3 max-w-3xl mx-auto">{t("ccpMonitorDesc")}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-10">
+          {PLANS.map((plan) => (
+            <PlanColumn key={plan.name} plan={plan} />
+          ))}
         </div>
 
-        <div className="text-center mt-12">
-          <p className="font-bold text-gray-800 border-b-2 border-[#f5c518] inline-block pb-1">{t("ccpThingsHeading")}</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6 text-sm">
-            <a href="#" className="text-blue-700 hover:underline">
-              {t("ccpThing1")}
-            </a>
-            <a href="#" className="text-blue-700 hover:underline">
-              {t("ccpThing2")}
-            </a>
-            <a href="#" className="text-blue-700 hover:underline">
-              {t("ccpThing3")}
-            </a>
+        {/* Things you need to understand */}
+        <div className="mt-14">
+          <UnderlinedHeading>{t("ccpThingsHeading")}</UnderlinedHeading>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6 text-center">
+            {THINGS.map((key) => (
+              <a key={key} href="#" className="text-sm text-[#0a5fa8] underline underline-offset-2 hover:text-[#00b0f0]">
+                {t(key)}
+              </a>
+            ))}
           </div>
         </div>
 
-        <div className="mt-12">
-          <p className="text-center font-bold text-gray-800 border-b-2 border-[#f5c518] inline-block pb-1 mx-auto block w-fit">
-            {t("ccpFaqHeading")}
-          </p>
-          <div className="flex items-center justify-center gap-10 mt-6">
-            <span className="text-sm font-bold text-gray-900 border-b-2 border-gray-900 pb-1">{t("ccpFaqTab1")}</span>
-            <span className="text-sm text-gray-400">{t("ccpFaqTab2")}</span>
-          </div>
-          <div className="max-w-3xl mx-auto mt-6">
-            <div className="flex items-center gap-3 border-b border-gray-200 py-4">
-              <PlusMinusCircleIcon expanded={false} className="w-5 h-5 text-[#00b0f0]" />
-              <span className="font-bold text-sm text-gray-800">{t("ccpFaq1")}</span>
-            </div>
-            <div className="flex items-center gap-3 border-b border-gray-200 py-4">
-              <PlusMinusCircleIcon expanded={false} className="w-5 h-5 text-[#00b0f0]" />
-              <span className="font-bold text-sm text-gray-800">{t("ccpFaq2")}</span>
-            </div>
-          </div>
+        {/* FAQs */}
+        <div className="mt-14">
+          <UnderlinedHeading>{t("ccpFaqHeading")}</UnderlinedHeading>
+          <FaqTabs />
         </div>
       </section>
+    </>
+  );
+}
+
+function FaqTabs() {
+  const { t } = useLanguage();
+  const [activeTab, setActiveTab] = useState(0);
+
+  return (
+    <>
+      <div role="tablist" className="flex items-center justify-center gap-10 sm:gap-20 mt-8">
+        {FAQ_TABS.map((tab, i) => (
+          <button
+            key={tab.labelKey}
+            type="button"
+            role="tab"
+            onClick={() => setActiveTab(i)}
+            aria-selected={activeTab === i}
+            className={`text-sm pb-1 cursor-pointer transition-colors ${
+              activeTab === i
+                ? "font-bold text-gray-900 border-b-2 border-gray-900"
+                : "text-gray-400 hover:text-gray-600"
+            }`}
+          >
+            {t(tab.labelKey)}
+          </button>
+        ))}
+      </div>
+      <div className="mt-6">
+        <AccordionList key={activeTab} items={FAQ_TABS[activeTab].items} />
+      </div>
     </>
   );
 }

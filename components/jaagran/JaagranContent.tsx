@@ -1,46 +1,300 @@
 "use client";
 
+import { useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { TranslationKey } from "@/lib/i18n";
-import { PlayIcon, PersonSilhouetteIcon, CheckCircleIcon } from "@/components/icons";
+import {
+  ChevronDownIcon,
+  DocumentIcon,
+  DocumentAlertIcon,
+  GaugeIcon,
+  PeopleIcon,
+  TrendIcon,
+} from "@/components/icons";
 
-const JAAGRAN_VIDEOS = [
-  "Know The Four Factors That Influence Your CIBIL Score",
-  "Building Credit Profile for New-To-Credit users",
-  "5 Simple Ways To Start Your Journey",
+const CIBIL_BLOG = "https://www.cibil.com/blog";
+const KAHAANIYAAN_ART = "https://www.cibil.com/content/dam/cibil/consumer/ack";
+const yt = (id: string) => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+
+/** The six chips above the "Learn about credit" section; "Featured" shows everything. */
+const FILTERS: TranslationKey[] = [
+  "filterFeatured",
+  "filterNewToCredit",
+  "filterCreditAdvice",
+  "filterCreditMyths",
+  "filterCommercialCredit",
+  "filterUnderstandingCibil",
 ];
 
-const JAAGRAN_BLOGS = [
-  "New-to-credit? Here's how to maintain a healthy CIBIL score",
-  "First-time users guide to establishing credit",
-  "Set Yourself Up in Your 20s for Financial Stability in Your 40s",
-  "How To Create Your Financial And Credit Roadmap",
-  "Millennials Guide For Building A Healthy Credit Profile",
+interface Video {
+  key: string;
+  youtubeId: string;
+  title: string;
+  topics: TranslationKey[];
+}
+
+interface Blog {
+  key: string;
+  title: string;
+  image: string;
+  href: string;
+  topics: TranslationKey[];
+}
+
+const VIDEOS: Video[] = [
+  {
+    key: "five-simple-ways",
+    youtubeId: "5kzfjlJ5s1o",
+    title: "5 Simple Ways To Start Your Credit Journey",
+    topics: ["filterNewToCredit", "filterCreditAdvice"],
+  },
+  {
+    key: "four-factors",
+    youtubeId: "VOHHGpDfd-8",
+    title: "Know The Four Factors That Influence Your CIBIL Score",
+    topics: ["filterUnderstandingCibil", "filterCreditAdvice", "filterCreditMyths"],
+  },
+  {
+    key: "building-profile",
+    youtubeId: "VOHHGpDfd-8",
+    title: "Building Credit Profile for New-To-Credit users",
+    topics: ["filterNewToCredit", "filterUnderstandingCibil", "filterCommercialCredit"],
+  },
+];
+
+const BLOGS: Blog[] = [
+  {
+    key: "maintain-healthy-score",
+    title: "New-to-credit? Here's how to maintain a healthy CIBIL score",
+    image: `${CIBIL_BLOG}/new-to-credit-heres-how-to-maintain-a-healthy-cibil-score/_jcr_content/root/pagesection_1639233989/image.coreimg.75.1440.png/1699255454828/ntc-credit.png`,
+    href: `${CIBIL_BLOG}/new-to-credit-heres-how-to-maintain-a-healthy-cibil-score/`,
+    topics: ["filterNewToCredit", "filterCreditAdvice", "filterUnderstandingCibil"],
+  },
+  {
+    key: "first-time-users",
+    title: "First-time users guide to establishing credit",
+    image: `${CIBIL_BLOG}/first-time-users-guide-to-establishing-credit-infographic/_jcr_content/root/pagesection_1639233989/image.coreimg.75.1440.png/1671208834821/first-time-users-guide.png`,
+    href: `${CIBIL_BLOG}/first-time-users-guide-to-establishing-credit-infographic/`,
+    topics: ["filterNewToCredit", "filterCreditAdvice"],
+  },
+  {
+    key: "stability-in-your-forties",
+    title: "Set Yourself Up in Your 20s for Financial Stability in Your 40s",
+    image: `${CIBIL_BLOG}/set-yourself-up-in-your-twenties-for-financial-stability-in-your-fourties/_jcr_content/root/pagesection_1639233989/image.coreimg.75.1440.png/1696483648677/stability-in-your-fourties-.png`,
+    href: `${CIBIL_BLOG}/set-yourself-up-in-your-twenties-for-financial-stability-in-your-fourties/`,
+    topics: ["filterCreditAdvice", "filterCreditMyths"],
+  },
+  {
+    key: "credit-roadmap",
+    title: "How To Create Your Financial And Credit Roadmap",
+    image: `${CIBIL_BLOG}/how-to-create-your-financial-and-credit-roadmap/_jcr_content/root/pagesection_1639233989/image.coreimg.75.1440.jpeg/1671208803156/credit-roadmap.jpeg`,
+    href: `${CIBIL_BLOG}/how-to-create-your-financial-and-credit-roadmap/`,
+    topics: ["filterCreditAdvice", "filterCommercialCredit", "filterCreditMyths"],
+  },
+  {
+    key: "millennials-guide",
+    title: "Millennials Guide For Building A Healthy Credit Profile",
+    image: `${CIBIL_BLOG}/millennial-consumer-pattern/_jcr_content/root/pagesection_1639233989/image.coreimg.75.1440.jpeg/1671208513747/millenial.jpeg`,
+    href: `${CIBIL_BLOG}/millennial-consumer-pattern/`,
+    topics: ["filterNewToCredit", "filterCreditMyths", "filterCommercialCredit"],
+  },
 ];
 
 const KAHAANIYAAN = [
-  "Suppandi and his dream car",
-  "Suppandi wants a credit card",
-  "Suppandi and Renu's dream college",
-  "Suppandi and the neighbourhood store",
-  "Suppandi and the CIBIL myths",
+  { title: "Suppandi and his dream car", image: `${KAHAANIYAAN_ART}/c1.jpg` },
+  { title: "Suppandi wants a credit card", image: `${KAHAANIYAAN_ART}/c2.jpg` },
+  { title: "Suppandi and Renu's dream college", image: `${KAHAANIYAAN_ART}/c3.jpg` },
+  { title: "Suppandi and the neighbourhood store", image: `${KAHAANIYAAN_ART}/c4.jpg` },
+  { title: "Suppandi and the CIBIL myths", image: `${KAHAANIYAAN_ART}/c5.jpg` },
 ];
 
-function Feature({ title, desc }: { title: string; desc: string }) {
+function HeroArt() {
   return (
-    <div className="flex items-start gap-3 bg-white border border-gray-100 rounded-lg p-4">
-      <CheckCircleIcon className="w-5 h-5 text-[#00b0f0] mt-0.5 shrink-0" />
+    <svg viewBox="0 0 520 260" aria-hidden className="w-full h-full" fill="none">
+      <circle cx="96" cy="72" r="72" fill="#cdeefb" />
+      <circle cx="158" cy="34" r="26" fill="#b3e4f7" />
+      <g stroke="#a9dcf1" strokeWidth="4" strokeLinecap="round">
+        <path d="M392 96h108M400 96v74M424 96v74M448 96v74M472 96v74M492 96v74M384 178h116" />
+        <path d="M446 58l58 38H388l58-38z" strokeLinejoin="round" />
+      </g>
+      <g>
+        <path
+          d="M262 150c-30 0-54 15-54 34v34h108v-34c0-19-24-34-54-34z"
+          fill="#4a7d96"
+        />
+        <path d="M262 60a34 34 0 100 68 34 34 0 000-68z" fill="#6ea6bd" />
+        <path d="M240 150h44l-22 30-22-30z" fill="#dbeef7" />
+      </g>
+      <g>
+        <circle cx="150" cy="196" r="38" fill="#f3c623" />
+        <circle cx="150" cy="196" r="27" fill="#e0aa08" />
+        <text
+          x="150"
+          y="207"
+          textAnchor="middle"
+          fontSize="28"
+          fontWeight="700"
+          fill="#fff8dc"
+        >
+          ₹
+        </text>
+        <circle cx="370" cy="212" r="30" fill="#f3c623" />
+        <circle cx="370" cy="212" r="21" fill="#e0aa08" />
+        <text
+          x="370"
+          y="221"
+          textAnchor="middle"
+          fontSize="22"
+          fontWeight="700"
+          fill="#fff8dc"
+        >
+          ₹
+        </text>
+        <circle cx="204" cy="234" r="20" fill="#f8d558" />
+      </g>
+    </svg>
+  );
+}
+
+function Feature({
+  icon,
+  title,
+  desc,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  desc: string;
+}) {
+  return (
+    <div className="flex items-start gap-3 rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#e6f7fd] text-[#00b0f0]">
+        {icon}
+      </span>
       <div>
-        <p className="font-bold text-sm text-gray-800">{title}</p>
-        <p className="text-xs text-gray-500 mt-1">{desc}</p>
+        <p className="text-sm font-bold text-gray-800">{title}</p>
+        <p className="mt-1 text-xs leading-relaxed text-gray-500">{desc}</p>
       </div>
     </div>
   );
 }
 
+function VideoCard({ video }: { video: Video }) {
+  return (
+    <a
+      href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group block"
+    >
+      <div className="relative aspect-video overflow-hidden rounded-lg bg-gray-900">
+        <Image
+          src={yt(video.youtubeId)}
+          alt={video.title}
+          fill
+          unoptimized
+          sizes="(max-width: 640px) 80vw, 33vw"
+          className="object-cover"
+        />
+        <span className="absolute inset-0 flex items-center justify-center">
+          <span className="flex h-9 w-13 items-center justify-center rounded-lg bg-[#ff0000]/90 transition-colors group-hover:bg-[#ff0000]">
+            <svg viewBox="0 0 24 24" fill="#fff" className="ml-0.5 h-4 w-4">
+              <path d="M8 5.14v13.72a1 1 0 001.5.87l11-6.86a1 1 0 000-1.72l-11-6.86A1 1 0 008 5.14z" />
+            </svg>
+          </span>
+        </span>
+      </div>
+      <p className="mt-2 text-sm font-semibold leading-snug text-gray-800 group-hover:text-[#00b0f0]">
+        {video.title}
+      </p>
+    </a>
+  );
+}
+
+function VideoCarousel({ videos }: { videos: Video[] }) {
+  const track = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: -1 | 1) => {
+    const el = track.current;
+    if (!el) return;
+    el.scrollBy({ left: direction * el.clientWidth, behavior: "smooth" });
+  };
+
+  return (
+    <div className="relative">
+      <div
+        ref={track}
+        className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-1 [-ms-overflow-style:none] scrollbar-none"
+      >
+        {videos.map((video) => (
+          <div
+            key={video.key}
+            className="w-[78%] shrink-0 snap-start sm:w-[calc((100%-2.5rem)/3)]"
+          >
+            <VideoCard video={video} />
+          </div>
+        ))}
+      </div>
+
+      {(["prev", "next"] as const).map((direction) => (
+        <button
+          key={direction}
+          type="button"
+          onClick={() => scroll(direction === "prev" ? -1 : 1)}
+          aria-label={direction === "prev" ? "Previous videos" : "Next videos"}
+          className={`absolute top-[35%] hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-md transition-colors hover:text-[#00b0f0] sm:flex ${
+            direction === "prev" ? "left-0 -translate-x-1/2" : "right-0 translate-x-1/2"
+          }`}
+        >
+          <ChevronDownIcon
+            className={`h-4 w-4 ${direction === "prev" ? "rotate-90" : "-rotate-90"}`}
+          />
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function BlogCard({ blog }: { blog: Blog }) {
+  const { t } = useLanguage();
+
+  return (
+    <article className="flex flex-col overflow-hidden rounded-lg">
+      <div className="relative aspect-16/10 bg-gray-100">
+        <Image
+          src={blog.image}
+          alt={blog.title}
+          fill
+          unoptimized
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className="object-cover"
+        />
+      </div>
+      <div className="flex flex-1 flex-col justify-between bg-[#eef1f8] px-4 py-3">
+        <p className="text-sm font-semibold leading-snug text-gray-800">{blog.title}</p>
+        <a
+          href={blog.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 self-start text-xs text-[#0a5cb8] underline hover:text-[#00b0f0]"
+        >
+          {t("jaagranReadNow")}
+        </a>
+      </div>
+    </article>
+  );
+}
+
 export default function JaagranContent() {
   const { t } = useLanguage();
+  const [activeFilter, setActiveFilter] = useState<TranslationKey>("filterFeatured");
+
+  const matches = (topics: TranslationKey[]) =>
+    activeFilter === "filterFeatured" || topics.includes(activeFilter);
+
+  const videos = VIDEOS.filter((video) => matches(video.topics));
+  const blogs = BLOGS.filter((blog) => matches(blog.topics));
 
   const why: [TranslationKey, TranslationKey][] = [
     ["jaagranWhy1Title", "jaagranWhy1Desc"],
@@ -48,56 +302,85 @@ export default function JaagranContent() {
     ["jaagranWhy3Title", "jaagranWhy3Desc"],
   ];
 
+  const checks: [TranslationKey, React.ReactNode][] = [
+    ["jaagranCheck1", <DocumentIcon key="1" className="h-8 w-8" />],
+    ["jaagranCheck2", <DocumentAlertIcon key="2" className="h-8 w-8" />],
+    ["jaagranCheck3", <TrendIcon key="3" className="h-8 w-8" />],
+  ];
+
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-white to-[#dff3fb]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <section className="relative overflow-hidden bg-linear-to-r from-white via-[#eaf7fd] to-[#c9ebfa]">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-8 px-4 pt-12 pb-14 sm:px-6 lg:grid-cols-2 lg:px-8">
           <div>
-            <p className="text-3xl font-extrabold text-[#00b0f0] tracking-tight">
-              CIBIL <span className="text-[#0a3a52]">JAAGRAN</span>
+            <p className="text-4xl font-extrabold leading-tight tracking-tight text-[#00b0f0]">
+              CIBIL
+              <br />
+              <span className="text-[#0a3a52]">JAAG₹AN</span>
             </p>
-            <p className="text-xs font-semibold tracking-widest text-gray-600 mt-2">{t("jaagranTagline")}</p>
+            <p className="mt-3 text-xs font-semibold tracking-[0.2em] text-gray-600">
+              {t("jaagranTagline")}
+            </p>
             <Link
               href="/register"
-              className="inline-block mt-6 bg-[#f5c518] hover:bg-[#e8b800] text-gray-900 text-sm font-bold rounded-full px-6 py-2.5 transition-colors"
+              className="mt-7 inline-block rounded-full bg-[#f5c518] px-6 py-2.5 text-xs font-bold text-gray-900 transition-colors hover:bg-[#e8b800]"
             >
               {t("jaagranHeroCta")}
             </Link>
           </div>
-          <div className="relative h-48 rounded-xl bg-gradient-to-br from-[#7fc8e8] to-[#3a8ab0] flex items-center justify-center">
-            <PersonSilhouetteIcon className="w-20 h-20 text-white/30" />
+          <div className="h-48 sm:h-56 lg:h-64">
+            <HeroArt />
           </div>
         </div>
+        <span className="absolute bottom-4 left-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-[#00b0f0]" />
       </section>
 
       {/* About */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 lg:grid-cols-2 gap-10">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t("jaagranAboutHeading")}</h2>
-          <p className="text-sm text-gray-600 leading-relaxed">{t("jaagranAboutPara1")}</p>
-          <p className="text-sm text-gray-600 leading-relaxed mt-4">{t("jaagranAboutPara2")}</p>
-          <div className="border-l-2 border-[#00b0f0] pl-4 mt-6">
-            <p className="text-sm font-semibold text-gray-800">{t("jaagranMissionLabel")}</p>
-            <p className="text-sm text-gray-600">{t("jaagranMission")}</p>
+      <section className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+        <span
+          aria-hidden
+          className="pointer-events-none absolute right-0 top-16 hidden h-16 w-24 bg-[radial-gradient(#a9dcf1_1.5px,transparent_1.5px)] bg-size-[10px_10px] lg:block"
+        />
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
+          <div>
+            <h2 className="mb-4 text-2xl font-bold text-gray-900 sm:text-3xl">
+              {t("jaagranAboutHeading")}
+            </h2>
+            <p className="text-sm leading-relaxed text-gray-600">{t("jaagranAboutPara1")}</p>
+            <p className="mt-4 text-sm leading-relaxed text-gray-600">{t("jaagranAboutPara2")}</p>
+            <div className="mt-6 border-l-2 border-[#00b0f0] pl-4">
+              <p className="text-sm font-semibold text-gray-800">{t("jaagranMissionLabel")}</p>
+              <p className="mt-1 text-sm leading-relaxed text-gray-600">{t("jaagranMission")}</p>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <Feature
+              icon={<GaugeIcon className="h-5 w-5" />}
+              title={t("jaagranFeat1Title")}
+              desc={t("jaagranFeat1Desc")}
+            />
+            <Feature
+              icon={<TrendIcon className="h-5 w-5" />}
+              title={t("jaagranFeat2Title")}
+              desc={t("jaagranFeat2Desc")}
+            />
+            <Feature
+              icon={<PeopleIcon className="h-5 w-5" />}
+              title={t("jaagranFeat3Title")}
+              desc={t("jaagranFeat3Desc")}
+            />
           </div>
         </div>
-        <div className="space-y-4">
-          <Feature title={t("jaagranFeat1Title")} desc={t("jaagranFeat1Desc")} />
-          <Feature title={t("jaagranFeat2Title")} desc={t("jaagranFeat2Desc")} />
-          <Feature title={t("jaagranFeat3Title")} desc={t("jaagranFeat3Desc")} />
-        </div>
-      </section>
 
-      {/* Why it matters */}
-      <section className="bg-gray-50 py-12 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h3 className="font-bold text-gray-900 mb-6">{t("jaagranWhyMattersHeading")}</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+        {/* Why it matters */}
+        <div className="mt-12 rounded-xl bg-[#f4f6f9] px-6 py-8 sm:px-10">
+          <h3 className="text-center font-bold text-gray-900">{t("jaagranWhyMattersHeading")}</h3>
+          <div className="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-3">
             {why.map(([title, desc]) => (
               <div key={title}>
-                <p className="font-bold text-sm text-gray-800">{t(title)}</p>
-                <p className="text-xs text-gray-500 mt-1">{t(desc)}</p>
+                <p className="text-sm font-bold text-gray-800">{t(title)}</p>
+                <p className="mt-1 text-xs leading-relaxed text-gray-500">{t(desc)}</p>
               </div>
             ))}
           </div>
@@ -105,85 +388,111 @@ export default function JaagranContent() {
       </section>
 
       {/* Don't worry / free score */}
-      <section className="bg-[#eef5fb] py-14 px-4">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="bg-[#eef5fb] px-4 py-14">
+        <div className="mx-auto max-w-4xl text-center">
           <p className="font-semibold text-gray-800">{t("jaagranDontWorry")}</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8">
-            {[t("jaagranCheck1"), t("jaagranCheck2"), t("jaagranCheck3")].map((c) => (
-              <div key={c} className="flex flex-col items-center gap-2">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center">
-                  <CheckCircleIcon className="w-6 h-6 text-[#00b0f0]" />
-                </div>
-                <p className="text-xs text-gray-600">{c}</p>
+          <div className="mx-auto mt-8 grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-3">
+            {checks.map(([label, icon]) => (
+              <div key={label} className="flex flex-col items-center gap-3">
+                <span className="text-[#00b0f0]">{icon}</span>
+                <p className="max-w-40 text-xs leading-relaxed text-gray-600">{t(label)}</p>
               </div>
             ))}
           </div>
-          <div className="bg-white rounded-full mt-8 inline-flex flex-col sm:flex-row items-center gap-4 px-6 py-3 shadow-sm">
+          <div className="mt-8 inline-flex flex-col items-center gap-4 rounded-full bg-white px-6 py-3 shadow-sm sm:flex-row">
             <span className="text-sm text-gray-700">{t("jaagranCheckFree")}</span>
-            <Link href="/register" className="bg-[#f5c518] hover:bg-[#e8b800] text-gray-900 text-xs font-bold rounded-full px-5 py-2 transition-colors">
+            <Link
+              href="/register"
+              className="rounded-full bg-[#f5c518] px-5 py-2 text-xs font-bold text-gray-900 transition-colors hover:bg-[#e8b800]"
+            >
               {t("jaagranGetFreeScore")}
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Learn / videos + blogs */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-2xl font-bold text-gray-900 mb-8">{t("jaagranLearnHeading")}</h2>
+      {/* Learn about credit */}
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">{t("jaagranLearnHeading")}</h2>
 
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-bold text-gray-800">{t("jaagranVideosHeading")}</h3>
-          <a href="#" className="text-sm text-blue-700 hover:underline">
-            {t("jaagranWatchMore")} →
-          </a>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-12">
-          {JAAGRAN_VIDEOS.map((v) => (
-            <div key={v}>
-              <div className="relative h-32 rounded-lg bg-gradient-to-br from-[#1c2a3a] to-[#0a1420] flex items-center justify-center">
-                <PlayIcon className="w-10 h-10 text-red-600" />
-              </div>
-              <p className="text-sm font-semibold text-gray-800 mt-2">{v}</p>
-            </div>
+        <div className="mt-6 flex flex-wrap gap-2">
+          {FILTERS.map((filter) => (
+            <button
+              key={filter}
+              type="button"
+              onClick={() => setActiveFilter(filter)}
+              className={`rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors ${
+                activeFilter === filter
+                  ? "border-[#00b0f0] bg-[#e6f7fd] text-[#00b0f0]"
+                  : "border-gray-300 text-gray-600 hover:border-gray-400"
+              }`}
+            >
+              {t(filter)}
+            </button>
           ))}
         </div>
 
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-bold text-gray-800">{t("jaagranBlogsHeading")}</h3>
-          <a href="#" className="text-sm text-blue-700 hover:underline">
-            {t("jaagranReadMoreBlogs")} →
-          </a>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-          {JAAGRAN_BLOGS.map((b) => (
-            <div key={b}>
-              <div className="h-28 rounded-lg bg-gradient-to-br from-[#cdeffb] to-[#8fd0ea]" />
-              <p className="text-sm font-semibold text-gray-800 mt-2 leading-snug">{b}</p>
-              <a href="#" className="text-xs text-blue-700 hover:underline">
-                {t("jaagranReadNow")}
-              </a>
+        {videos.length > 0 && (
+          <>
+            <div className="mt-10 mb-4 flex items-center justify-between">
+              <h3 className="font-bold text-gray-800">{t("jaagranVideosHeading")}</h3>
+              <Link
+                href="/watch-and-learn"
+                className="text-sm text-[#0a5cb8] underline-offset-2 hover:underline"
+              >
+                {t("jaagranWatchMore")} →
+              </Link>
             </div>
-          ))}
-        </div>
+            <VideoCarousel videos={videos} />
+          </>
+        )}
+
+        {blogs.length > 0 && (
+          <>
+            <div className="mt-12 mb-4 flex items-center justify-between">
+              <h3 className="font-bold text-gray-800">{t("jaagranBlogsHeading")}</h3>
+              <Link
+                href="/blog"
+                className="text-sm text-[#0a5cb8] underline-offset-2 hover:underline"
+              >
+                {t("jaagranReadMoreBlogs")} →
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {blogs.map((blog) => (
+                <BlogCard key={blog.key} blog={blog} />
+              ))}
+            </div>
+          </>
+        )}
       </section>
 
       {/* CIBIL Ki Kahaaniyaan */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+      <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6 lg:px-8">
         <p className="text-sm text-gray-500">{t("jaagranIntroducing")}</p>
-        <h2 className="text-2xl font-bold text-gray-900 mb-8 border-b border-gray-200 pb-2 inline-block">
+        <h2 className="mt-1 text-2xl font-bold text-gray-900 sm:text-3xl">
           {t("jaagranKahaaniyaan")}
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-          {KAHAANIYAAN.map((k, i) => (
-            <div key={k}>
-              <div className="h-40 rounded-lg bg-gradient-to-br from-[#3aa8d8] to-[#0a3a52] flex items-center justify-center p-4">
-                <p className="text-[#f5c518] font-extrabold text-center uppercase text-sm">{k}</p>
+        <span className="mt-3 block h-0.5 w-24 bg-[#00b0f0]" />
+
+        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {KAHAANIYAAN.map((chapter, index) => (
+            <article key={chapter.title}>
+              <div className="relative aspect-4/3 overflow-hidden rounded-lg bg-gray-100">
+                <Image
+                  src={chapter.image}
+                  alt={chapter.title}
+                  fill
+                  unoptimized
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover"
+                />
               </div>
-              <p className="text-xs text-gray-500 mt-2">
-                {t("jaagranChapterLabel")} {i + 1}
+              <p className="mt-3 text-xs text-gray-500">
+                {t("jaagranChapterLabel")} {index + 1}
               </p>
-              <p className="text-sm font-semibold text-gray-800">{k}</p>
-            </div>
+              <p className="mt-0.5 text-sm font-semibold text-gray-800">{chapter.title}</p>
+            </article>
           ))}
         </div>
       </section>

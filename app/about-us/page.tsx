@@ -17,7 +17,7 @@ export default function AboutUsPage() {
         <HeroSection />
         <AboutContent />
       </main>
-      <Footer variant="corporate" accentTop />
+      <Footer variant="full" accentTop />
     </div>
   );
 }

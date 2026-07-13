@@ -17,7 +17,7 @@ export default function VideoSection() {
           href={VIDEO_URL}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Play video"
+          aria-label={t("a11yPlayVideo")}
           className="relative w-full sm:w-56 h-32 rounded overflow-hidden shrink-0 flex items-center justify-center bg-black"
         >
           <Image

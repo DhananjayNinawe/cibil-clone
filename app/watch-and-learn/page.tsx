@@ -9,12 +9,14 @@ export const metadata: Metadata = {
   description: "Watch and learn about credit with TransUnion CIBIL blog articles and videos.",
 };
 
+const HERO_IMAGE = "https://www.cibil.com/content/dam/cibil/consumer/Blog-Banner-1440x460_Watchlearn.jpg";
+
 export default function WatchAndLearnPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header variant="site" />
       <main className="flex-1">
-        <BlogGrid titleKey="watchLearnTitle" cards={WATCH_LEARN_CARDS} gradient="from-[#7a8a5a] to-[#3a4a2a]" />
+        <BlogGrid titleKey="watchLearnTitle" heroImage={HERO_IMAGE} cards={WATCH_LEARN_CARDS} />
       </main>
       <Footer variant="full" accentTop />
     </div>

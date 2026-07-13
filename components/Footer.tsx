@@ -27,17 +27,45 @@ interface FooterProps {
 
 /** Maps footer link translation keys to their internal route. Missing keys fall back to "#". */
 const FOOTER_LINK_HREFS: Partial<Record<TranslationKey, string>> = {
+  privacyPolicy: "/privacy-policy",
+  termsConditions: "/legal/terms-and-conditions",
+  footerTermsOfUse: "/legal/terms-and-conditions",
   footerAboutTransunionCibil: "/about-us",
   footerCompanyHistory: "/about-us/company-history",
   footerSupport: "/contact-us",
   footerReportVulnerability: "/contact-us",
   footerCodeOfConduct: "/external-links/business-code-of-conduct",
   footerOfficialPartners: "/official-partners",
+  footerOverview: "/suit-filed-cases/overview",
   footerNonSuitCases: "/suit-filed-cases/suit-filed-cases",
   footerRbiNotifications: "/external-links/rbi-notifications",
   footerRegulatoryDisclosure: "/regulatory",
   footerBlog: "/blog/main",
+  footerSitemap: "/sitemap",
 };
+
+const SOCIAL_LINKS = [
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/credit-information-bureau-india-limited",
+    Icon: LinkedInIcon,
+  },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/CIBIL-329225453912063/",
+    Icon: FacebookIcon,
+  },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/user/CIBILonline",
+    Icon: YoutubeIcon,
+  },
+  {
+    label: "Instagram",
+    href: "https://instagram.com/transunion_cibil/",
+    Icon: InstagramIcon,
+  },
+];
 
 interface FooterColumnConfig {
   title: string;
@@ -103,12 +131,12 @@ export default function Footer({ variant = "simple", accentTop = false }: Footer
           <a href="#" className="text-xs text-gray-500 hover:text-[#00b0f0] hover:underline transition-colors">
             {t("faqs")}
           </a>
-          <a href="#" className="text-xs text-gray-500 hover:text-[#00b0f0] hover:underline transition-colors">
+          <Link href="/legal/terms-and-conditions" className="text-xs text-gray-500 hover:text-[#00b0f0] hover:underline transition-colors">
             {t("termsConditions")}
-          </a>
-          <a href="#" className="text-xs text-gray-500 hover:text-[#00b0f0] hover:underline transition-colors">
+          </Link>
+          <Link href="/privacy-policy" className="text-xs text-gray-500 hover:text-[#00b0f0] hover:underline transition-colors">
             {t("privacyPolicy")}
-          </a>
+          </Link>
         </div>
       </div>
     </footer>
@@ -164,18 +192,17 @@ function FullFooterLayout({
               {t("contactUs")}
             </Link>
             <div className="flex items-center gap-3 mt-4">
-              <a href="#" aria-label="LinkedIn">
-                <LinkedInIcon className="w-8 h-8" />
-              </a>
-              <a href="#" aria-label="Facebook">
-                <FacebookIcon className="w-8 h-8" />
-              </a>
-              <a href="#" aria-label="YouTube">
-                <YoutubeIcon className="w-8 h-8" />
-              </a>
-              <a href="#" aria-label="Instagram">
-                <InstagramIcon className="w-8 h-8" />
-              </a>
+              {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icon className="w-8 h-8" />
+                </a>
+              ))}
             </div>
             <div className="mt-6">
               <Image

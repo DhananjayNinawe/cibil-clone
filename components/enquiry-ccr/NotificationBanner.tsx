@@ -16,7 +16,7 @@ export default function NotificationBanner() {
         <button
           type="button"
           onClick={() => setVisible(false)}
-          aria-label="Dismiss"
+          aria-label={t("a11yDismiss")}
           className="text-white/70 hover:text-white text-lg leading-none shrink-0"
         >
           ×

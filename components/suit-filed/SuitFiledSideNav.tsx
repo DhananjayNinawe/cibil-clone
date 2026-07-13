@@ -5,10 +5,10 @@ import { useLanguage } from "@/context/LanguageContext";
 import { TranslationKey } from "@/lib/i18n";
 
 const ITEMS: { key: TranslationKey; href: string }[] = [
-  { key: "suitFiledSideOverview", href: "#" },
-  { key: "suitFiledSideGist", href: "#" },
+  { key: "suitFiledSideOverview", href: "/suit-filed-cases/overview" },
+  { key: "suitFiledSideGist", href: "/suit-filed-cases/gist-rbi-scheme" },
   { key: "suitFiledSideSuit", href: "/suit-filed-cases/suit-filed-cases" },
-  { key: "suitFiledSideNonSuit", href: "#" },
+  { key: "suitFiledSideNonSuit", href: "/suit-filed-cases/non-suit-filed-cases" },
   { key: "suitFiledSideRbi", href: "/external-links/rbi-notifications" },
 ];
 
