@@ -1,0 +1,649 @@
+/*
+ * V2 design system — tokens, motion, and primitive classes.
+ *
+ * Everything here is scoped to `.v2-root` (the wrapper in app/v2/layout.tsx) or to a
+ * `v2-` prefixed class/keyframe. V1 shares the same document (both trees hang off the
+ * root layout's <body>), so an unscoped `:root` block or a bare `body {}` rule here
+ * would bleed into the production site the moment a reader crossed between them.
+ *
+ * Tailwind utilities still work in V2 components: v4 scans the whole project from the
+ * single `@import "tailwindcss"` in app/globals.css. This file deliberately does NOT
+ * re-import Tailwind — that would emit the entire utility layer a second time.
+ */
+
+.v2-root {
+  /* Canvas — a navy so deep it reads as black, but stays warm under the cyan light. */
+  --v2-bg: #05070d;
+  --v2-bg-2: #080d18;
+  --v2-elev-1: #0b1220;
+  --v2-elev-2: #101a2c;
+
+  /* Brand DNA, inherited from V1. */
+  --v2-cyan: #00b0f0;
+  --v2-cyan-soft: #6cc5ec;
+  --v2-cyan-dim: rgba(0, 176, 240, 0.14);
+  --v2-gold: #f5c518;
+  --v2-gold-dim: rgba(245, 197, 24, 0.14);
+  --v2-deep: #0a3a52;
+
+  /* Semantic */
+  --v2-success: #3ddc97;
+  --v2-warning: #f5c518;
+  --v2-error: #ff6b6b;
+
+  /* Text hierarchy */
+  --v2-text: #f4f8fc;
+  --v2-text-2: #a9b7c8;
+  --v2-text-3: #6c7c91;
+
+  /* Surfaces & lines */
+  --v2-surface: rgba(255, 255, 255, 0.035);
+  --v2-surface-2: rgba(255, 255, 255, 0.06);
+  --v2-line: rgba(255, 255, 255, 0.08);
+  --v2-line-2: rgba(255, 255, 255, 0.14);
+
+  /* Radii */
+  --v2-r-sm: 10px;
+  --v2-r-md: 16px;
+  --v2-r-lg: 24px;
+  --v2-r-xl: 34px;
+
+  /* Elevation — layered, never a single flat drop. */
+  --v2-shadow-1: 0 1px 1px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.28);
+  --v2-shadow-2: 0 2px 4px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.4);
+  --v2-shadow-3: 0 8px 24px rgba(0, 0, 0, 0.45), 0 32px 80px rgba(0, 0, 0, 0.55);
+  --v2-glow-cyan: 0 0 0 1px rgba(0, 176, 240, 0.35), 0 12px 48px -12px rgba(0, 176, 240, 0.55);
+  --v2-glow-gold: 0 10px 40px -12px rgba(245, 197, 24, 0.6);
+
+  /* Motion — one easing family, so everything feels like one hand made it. */
+  --v2-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --v2-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --v2-dur-1: 200ms;
+  --v2-dur-2: 420ms;
+  --v2-dur-3: 900ms;
+
+  /* Rhythm */
+  --v2-gutter: clamp(1.25rem, 4vw, 4rem);
+  --v2-max: 1440px;
+
+  color: var(--v2-text);
+  background-color: var(--v2-bg);
+  font-feature-settings: "kern" 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  /* The horizontal-overflow backstop for the whole experience.
+     Two things in this design legitimately extend past the viewport's right edge: a mesh blob
+     positioned off-canvas, and any `v2-reveal-left/right` element sitting at its pre-animation
+     translate. Both are invisible or decorative, but both widen the document — which on a phone
+     means a real horizontal scrollbar, and for the reveals, one that appears and then vanishes
+     as you scroll. Rather than police every section, clip once here.
+     `clip`, not `hidden`: `hidden` would make this a scroll container and break every
+     `position: sticky` rail in the legal and FAQ clusters. `clip` does not. */
+  overflow-x: clip;
+}
+
+.v2-root ::selection {
+  background: rgba(0, 176, 240, 0.28);
+  color: #fff;
+}
+
+/* ---------------------------------------------------------------- Typography */
+
+/* Intro ships 300/400/700 only (see app/layout.tsx) — the display scale leans on
+   weight 300 at large sizes and tight tracking, which is where it looks best. */
+/* Sized against the *column*, not the viewport: the hero headline sits in roughly half the
+   grid, so a 6vw display set the four-word line breaking five ways. 4.6vw tops out at ~66px
+   on a 1440 canvas, which holds "Your CIBIL Score, in your hands." in two clean lines. */
+.v2-display {
+  font-weight: 300;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  font-size: clamp(2.35rem, 4.6vw, 4.5rem);
+}
+
+.v2-h2 {
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+  font-size: clamp(2rem, 3.8vw, 3.5rem);
+}
+
+.v2-h3 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  font-size: clamp(1.3rem, 1.9vw, 1.75rem);
+}
+
+.v2-lede {
+  font-weight: 300;
+  line-height: 1.55;
+  font-size: clamp(1.0625rem, 1.25vw, 1.3125rem);
+  color: var(--v2-text-2);
+}
+
+.v2-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Devanagari and Tamil have taller ascenders/descenders than Latin; at display sizes
+   the 0.98 line-height above clips them. */
+.v2-root:lang(hi) .v2-display,
+.v2-root:lang(mr) .v2-display,
+.v2-root:lang(ta) .v2-display {
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.v2-root:lang(hi) .v2-h2,
+.v2-root:lang(mr) .v2-h2,
+.v2-root:lang(ta) .v2-h2 {
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+/* ------------------------------------------------------------------ Surfaces */
+
+/* For surfaces that sit IN the page flow — cards, stat panels, quote blocks. There is nothing
+   behind them but the canvas and its blooms, so they can be genuinely translucent. */
+.v2-glass {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.028) 100%
+  );
+  border: 1px solid var(--v2-line);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+
+/* For surfaces that float OVER the page — the mega menu, dropdowns, the search palette, the
+   chat popover. These must be opaque, and they cannot rely on backdrop-filter to get there.
+ *
+ * `backdrop-filter` on an ancestor establishes a new backdrop root, and a descendant's own
+ * backdrop-filter then samples only that ancestor's (empty) content instead of the page. The
+ * header sets `backdrop-blur-xl` on itself the moment a menu opens — so the mega panel nested
+ * inside it silently blurred nothing at all, and the hero headline read straight through the
+ * "frosted" glass. A translucent panel over live text is a legibility bug, not a style.
+ *
+ * So the frost here comes from a fully opaque base colour. The blur is kept only as an
+ * enhancement for the cases where it does work; nothing depends on it.
+ *
+ * The base is opaque, not 97%: at 0.97 the remaining 3% of a large white headline still ghosted
+ * through legibly against a near-black panel. Over live text, "almost opaque" is not opaque.
+ * Depth comes from the gradient and the rim on top of the solid, not from letting the page
+ * through. */
+.v2-panel {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%),
+    var(--v2-elev-1);
+  border: 1px solid var(--v2-line-2);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+}
+
+/* A 1px gradient rim that catches "light" from the top-left — the cheapest way to
+   make a flat card read as a physical object. */
+.v2-rim {
+  position: relative;
+}
+
+.v2-rim::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    140deg,
+    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0.02) 38%,
+    rgba(0, 176, 240, 0.18) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.v2-noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+}
+
+/* Hairline that fades at both ends, instead of a hard 1px rule edge to edge. */
+.v2-hairline {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(90deg, transparent, var(--v2-line-2) 18%, var(--v2-line-2) 82%, transparent);
+}
+
+/* ---------------------------------------------------------------- Backgrounds */
+
+.v2-mesh {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.v2-mesh-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  will-change: transform;
+}
+
+.v2-grid-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 88px 88px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%);
+}
+
+/* --------------------------------------------------------------- Scroll reveal */
+
+/* The hidden half of every reveal is gated behind `@media (scripting: enabled)` — the media
+   feature that exists for exactly this. So:
+   - JS on  → the query matches at parse time, the element starts hidden, and the
+              IntersectionObserver in <Reveal> animates it in. No flash of finished content,
+              and no inline script mutating <html> (which React owns, and which would be a
+              server/client attribute mismatch at hydration).
+   - JS off → the query does not match, `opacity: 0` never applies, and every reveal is simply
+              visible. Content is readable without scripting, always.
+   - Browser too old to know `scripting` → same as JS off: content visible, motion skipped.
+     Degrading to "everything is legible, nothing moves" is the right failure. */
+.v2-reveal {
+  transition:
+    opacity var(--v2-dur-3) var(--v2-ease),
+    transform var(--v2-dur-3) var(--v2-ease),
+    filter var(--v2-dur-3) var(--v2-ease),
+    clip-path var(--v2-dur-3) var(--v2-ease);
+  transition-delay: var(--v2-reveal-delay, 0ms);
+}
+
+.v2-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.v2-word > span {
+  display: inline-block;
+  transition: transform 1s var(--v2-ease);
+  transition-delay: var(--v2-word-delay, 0ms);
+}
+
+@media (scripting: enabled) {
+  .v2-reveal {
+    opacity: 0;
+    will-change: opacity, transform, filter;
+  }
+
+  .v2-reveal-up {
+    transform: translate3d(0, 34px, 0);
+  }
+
+  .v2-reveal-fade {
+    transform: none;
+  }
+
+  .v2-reveal-blur {
+    filter: blur(14px);
+    transform: translate3d(0, 18px, 0);
+  }
+
+  .v2-reveal-scale {
+    transform: scale(0.94);
+  }
+
+  .v2-reveal-mask {
+    clip-path: inset(0 0 100% 0);
+    opacity: 1;
+  }
+
+  .v2-reveal-left {
+    transform: translate3d(-40px, 0, 0);
+  }
+
+  .v2-reveal-right {
+    transform: translate3d(40px, 0, 0);
+  }
+
+  .v2-reveal.is-in {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    clip-path: inset(0 0 0 0);
+    will-change: auto;
+  }
+
+  /* Word-by-word headline reveal — same gate, same reasoning. */
+  .v2-word > span {
+    transform: translate3d(0, 110%, 0);
+  }
+
+  .is-in .v2-word > span {
+    transform: none;
+  }
+}
+
+/* -------------------------------------------------------------------- Effects */
+
+/* Mouse-tracked specular highlight. --mx/--my are written by useSpotlight(). */
+.v2-spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--v2-dur-2) var(--v2-ease);
+  background: radial-gradient(
+    460px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(0, 176, 240, 0.16),
+    transparent 62%
+  );
+}
+
+.v2-spotlight:hover::after,
+.v2-spotlight:focus-within::after {
+  opacity: 1;
+}
+
+.v2-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--v2-dur-2) var(--v2-ease);
+}
+
+.v2-underline:hover,
+.v2-underline:focus-visible {
+  background-size: 100% 1px;
+}
+
+.v2-focus:focus-visible {
+  outline: 2px solid var(--v2-cyan);
+  outline-offset: 3px;
+  border-radius: var(--v2-r-sm);
+}
+
+/* ----------------------------------------------------------------- Keyframes */
+
+@keyframes v2-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0);
+  }
+}
+
+@keyframes v2-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(3%, -4%, 0) scale(1.06);
+  }
+  66% {
+    transform: translate3d(-3%, 3%, 0) scale(0.97);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes v2-sweep {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+@keyframes v2-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes v2-pulse-ring {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes v2-dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes v2-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Mega panel / overlay entrance. */
+@keyframes v2-panel-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -10px, 0) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.v2-panel-in {
+  animation: v2-panel-in 320ms var(--v2-ease) both;
+}
+
+.v2-float {
+  animation: v2-float 7s var(--v2-ease-in-out) infinite;
+}
+
+.v2-drift {
+  animation: v2-drift 26s var(--v2-ease-in-out) infinite;
+}
+
+.v2-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: v2-marquee var(--v2-marquee-dur, 42s) linear infinite;
+}
+
+.v2-marquee:hover .v2-marquee-track {
+  animation-play-state: paused;
+}
+
+/* Sheen that crosses a button on hover. */
+.v2-sheen::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 45%;
+  border-radius: inherit;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.42), transparent);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+
+.v2-sheen:hover::before {
+  animation: v2-sweep 900ms var(--v2-ease);
+}
+
+/* ------------------------------------------------------------------- Prose */
+
+/* Long-form legal / policy copy. Ported pages hand their rich text to <Prose>. */
+.v2-prose {
+  color: var(--v2-text-2);
+  font-weight: 300;
+  line-height: 1.75;
+  font-size: 1rem;
+}
+
+.v2-prose h2 {
+  color: var(--v2-text);
+  font-weight: 700;
+  font-size: 1.375rem;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  margin: 2.75rem 0 1rem;
+}
+
+.v2-prose h3 {
+  color: var(--v2-text);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  margin: 2rem 0 0.75rem;
+}
+
+.v2-prose p {
+  margin: 0 0 1.125rem;
+}
+
+.v2-prose ul,
+.v2-prose ol {
+  margin: 0 0 1.25rem;
+  padding-left: 1.25rem;
+}
+
+.v2-prose ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.v2-prose ul > li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.625rem;
+}
+
+.v2-prose ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--v2-cyan);
+  box-shadow: 0 0 12px rgba(0, 176, 240, 0.8);
+}
+
+.v2-prose ol {
+  list-style: decimal;
+}
+
+.v2-prose ol > li {
+  margin-bottom: 0.625rem;
+  padding-left: 0.25rem;
+}
+
+.v2-prose ol > li::marker {
+  color: var(--v2-cyan);
+  font-weight: 700;
+}
+
+.v2-prose strong,
+.v2-prose b {
+  color: var(--v2-text);
+  font-weight: 700;
+}
+
+.v2-prose a {
+  color: var(--v2-cyan);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.v2-prose a:hover {
+  color: var(--v2-cyan-soft);
+}
+
+.v2-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+}
+
+.v2-prose th,
+.v2-prose td {
+  border: 1px solid var(--v2-line);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.v2-prose th {
+  background: var(--v2-surface);
+  color: var(--v2-text);
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------- Reduced motion */
+
+/* Award-level motion is still motion. Honour the OS switch: everything lands in its
+   final state instantly, nothing loops, nothing translates. */
+@media (prefers-reduced-motion: reduce) {
+  .v2-root *,
+  .v2-root *::before,
+  .v2-root *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .v2-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    clip-path: none !important;
+  }
+
+  .v2-word > span {
+    transform: none !important;
+  }
+}
