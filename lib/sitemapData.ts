@@ -133,6 +133,7 @@ const supportAndAbout: SitemapColumn = {
         { key: "footerRegulatoryDisclosure", href: "/regulatory" },
       ],
     },
+    { key: "searchTitle", href: "/search", links: [] },
     { key: "privacyPolicy", href: "/privacy-policy", links: [] },
     { key: "termsConditions", href: "/legal/terms-and-conditions", links: [] },
     { key: "footerCodeBusinessConduct", href: "/external-links/business-code-of-conduct", links: [] },

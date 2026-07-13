@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import SearchSection from "@/components/nodal-officer/SearchSection";
-import EmptyStateAndPoints from "@/components/nodal-officer/EmptyStateAndPoints";
+import NodalOfficerSearch from "@/components/nodal-officer/NodalOfficerSearch";
 
 export const metadata: Metadata = {
   title: "Nodal Officer List - CIBIL",
@@ -14,8 +13,7 @@ export default function NodalOfficerListPage() {
     <div className="flex flex-col min-h-screen">
       <Header variant="site" />
       <main className="flex-1">
-        <SearchSection />
-        <EmptyStateAndPoints />
+        <NodalOfficerSearch />
       </main>
       <Footer variant="full" accentTop />
     </div>

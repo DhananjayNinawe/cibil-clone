@@ -1,11 +1,16 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+// KeyboardEvent is aliased: LanguageDropdown listens for the DOM one, so the React type cannot
+// take that name here.
+import { useState, useRef, useEffect, useMemo, type FormEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 import { languages, Language, TranslationKey } from "@/lib/i18n";
+import { searchPages } from "@/lib/searchIndex";
+import HighlightedText from "@/components/shared/HighlightedText";
 import {
   ChevronDownIcon,
   SearchIcon,
@@ -258,7 +263,170 @@ const MEGA_MENUS: Partial<Record<TranslationKey, MegaMenuColumn[]>> = {
 
 type ActiveMenu = TranslationKey | "search" | null;
 
-function MobileNav({ open, onClose }: { open: boolean; onClose: () => void }) {
+/** Suggestions shown under the header input; the rest live on /search. */
+const SUGGESTION_LIMIT = 6;
+
+/**
+ * Site search. Typing filters the page index in memory (see lib/searchIndex.ts) and offers the
+ * best matches; Enter opens the highlighted one, or /search for the full ranked list.
+ */
+function SearchPanel({ onClose }: { onClose: () => void }) {
+  const { t, language } = useLanguage();
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  const trimmed = query.trim();
+  const results = useMemo(
+    () => searchPages(trimmed, language, SUGGESTION_LIMIT),
+    [trimmed, language],
+  );
+
+  // Dismiss on any click outside the panel. The toggle button is exempt: it would otherwise be
+  // closed here and immediately reopened by its own onClick, so it could never close the panel.
+  useEffect(() => {
+    const handlePointerDown = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (panelRef.current?.contains(target) || target.closest("[data-search-toggle]")) return;
+      onClose();
+    };
+    document.addEventListener("mousedown", handlePointerDown);
+    return () => document.removeEventListener("mousedown", handlePointerDown);
+  }, [onClose]);
+
+  const goTo = (href: string) => {
+    onClose();
+    router.push(href);
+  };
+
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    if (!trimmed) return;
+    const selected = activeIndex >= 0 ? results[activeIndex] : undefined;
+    goTo(selected ? selected.href : `/search?q=${encodeURIComponent(trimmed)}`);
+  };
+
+  const handleKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Escape") {
+      onClose();
+      return;
+    }
+    if (results.length === 0) return;
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setActiveIndex((prev) => (prev + 1) % results.length);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setActiveIndex((prev) => (prev > 0 ? prev - 1 : results.length - 1));
+    }
+  };
+
+  return (
+    <div
+      ref={panelRef}
+      className="absolute left-0 top-[calc(100%+3px)] w-full bg-white shadow-lg z-40"
+    >
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
+        <form role="search" onSubmit={handleSubmit} className="max-w-xl">
+          <div className="relative">
+            <input
+              type="text"
+              autoFocus
+              role="combobox"
+              aria-expanded={results.length > 0}
+              aria-controls="site-search-suggestions"
+              aria-activedescendant={activeIndex >= 0 ? `site-search-option-${activeIndex}` : undefined}
+              aria-label={t("searchPlaceholder")}
+              autoComplete="off"
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setActiveIndex(-1);
+              }}
+              onKeyDown={handleKeyDown}
+              placeholder={t("searchPlaceholder")}
+              className="w-full border border-gray-300 rounded px-4 py-2.5 pr-20 text-sm focus:outline-none focus:border-[#00b0f0] focus:ring-1 focus:ring-[#00b0f0]"
+            />
+            {trimmed && (
+              <button
+                type="button"
+                aria-label={t("searchClear")}
+                onClick={() => {
+                  setQuery("");
+                  setActiveIndex(-1);
+                }}
+                className="absolute right-10 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+              >
+                <CloseIcon className="w-4 h-4" />
+              </button>
+            )}
+            <button
+              type="submit"
+              aria-label={t("searchPlaceholder")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#00b0f0]"
+            >
+              <SearchIcon className="w-4 h-4" />
+            </button>
+          </div>
+
+          {trimmed && (
+            <ul
+              id="site-search-suggestions"
+              role="listbox"
+              aria-label={t("searchSuggestionsLabel")}
+              className="mt-2 overflow-hidden rounded border border-gray-200 bg-white shadow-sm"
+            >
+              {results.map((result, index) => (
+                <li key={result.href} id={`site-search-option-${index}`} role="option" aria-selected={index === activeIndex}>
+                  <button
+                    type="button"
+                    onMouseEnter={() => setActiveIndex(index)}
+                    onClick={() => goTo(result.href)}
+                    className={`flex w-full flex-col items-start gap-0.5 px-4 py-2.5 text-left transition-colors ${index === activeIndex ? "bg-gray-50" : ""
+                      }`}
+                  >
+                    <span className="text-sm text-gray-800">
+                      <HighlightedText text={t(result.titleKey)} query={trimmed} />
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {t(result.sectionKey)}
+                      {result.groupKey ? ` › ${t(result.groupKey)}` : ""}
+                    </span>
+                  </button>
+                </li>
+              ))}
+
+              {results.length === 0 ? (
+                <li className="px-4 py-3 text-sm text-gray-500">{t("searchNoSuggestions")}</li>
+              ) : (
+                <li className="border-t border-gray-100">
+                  <button
+                    type="submit"
+                    onMouseEnter={() => setActiveIndex(-1)}
+                    className="w-full px-4 py-2.5 text-left text-xs font-semibold text-[#0f6cbd] hover:bg-gray-50"
+                  >
+                    {t("searchViewAll")}
+                  </button>
+                </li>
+              )}
+            </ul>
+          )}
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function MobileNav({
+  open,
+  onClose,
+  onSearch,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onSearch: () => void;
+}) {
   const { t } = useLanguage();
   const [openSection, setOpenSection] = useState<TranslationKey | null>(null);
   const [openSub, setOpenSub] = useState<string | null>(null);
@@ -299,7 +467,12 @@ function MobileNav({ open, onClose }: { open: boolean; onClose: () => void }) {
             </span>
           </nav>
           <div className="flex items-center gap-4 text-gray-600">
-            <button type="button" aria-label={t("searchPlaceholder")} className="hover:text-[#00b0f0]">
+            <button
+              type="button"
+              aria-label={t("searchPlaceholder")}
+              onClick={onSearch}
+              className="hover:text-[#00b0f0]"
+            >
               <SearchIcon />
             </button>
             <button type="button" aria-label={t("a11yCloseMenu")} onClick={onClose} className="hover:text-[#00b0f0]">
@@ -442,7 +615,9 @@ function SiteHeader() {
   return (
     <header
       className="bg-white sticky top-0 z-50 border-b-[3px] border-[#f5c518]"
-      onMouseLeave={() => setActiveMenu(null)}
+      // Mega menus close when the pointer leaves the header, but search must not: it would
+      // vanish mid-typing the moment the pointer drifted off. It closes on Escape / click-away.
+      onMouseLeave={() => setActiveMenu((prev) => (prev === "search" ? prev : null))}
     >
       <div className="relative w-full px-4 sm:px-6 lg:px-8">
         <div className="flex items-stretch">
@@ -456,7 +631,9 @@ function SiteHeader() {
           <div className="flex md:hidden items-center gap-4 ml-auto h-16 text-gray-600">
             <button
               type="button"
+              data-search-toggle
               aria-label={t("searchPlaceholder")}
+              aria-expanded={activeMenu === "search"}
               onClick={() => setActiveMenu((prev) => (prev === "search" ? null : "search"))}
               className="hover:text-[#00b0f0]"
             >
@@ -550,7 +727,9 @@ function SiteHeader() {
               </nav>
               <button
                 type="button"
+                data-search-toggle
                 aria-label={t("searchPlaceholder")}
+                aria-expanded={activeMenu === "search"}
                 onClick={() => setActiveMenu((prev) => (prev === "search" ? null : "search"))}
                 onMouseEnter={() => setActiveMenu((prev) => (prev === "search" ? prev : null))}
                 className={`h-12 w-12 flex items-center justify-center transition-colors ${activeMenu === "search" ? "bg-[#f5c518] text-gray-900" : "text-gray-500 hover:text-[#00b0f0]"
@@ -588,30 +767,17 @@ function SiteHeader() {
           </div>
         )}
 
-        {activeMenu === "search" && (
-          <div className="absolute left-0 top-[calc(100%+3px)] w-full bg-white shadow-lg z-40">
-            <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
-              <div className="relative max-w-xl">
-                <input
-                  type="text"
-                  autoFocus
-                  placeholder={t("searchPlaceholder")}
-                  className="w-full border border-gray-300 rounded px-4 py-2.5 pr-11 text-sm focus:outline-none focus:border-[#00b0f0] focus:ring-1 focus:ring-[#00b0f0]"
-                />
-                <button
-                  type="button"
-                  aria-label={t("searchPlaceholder")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#00b0f0]"
-                >
-                  <SearchIcon className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        {activeMenu === "search" && <SearchPanel onClose={() => setActiveMenu(null)} />}
       </div>
 
-      <MobileNav open={mobileOpen} onClose={() => setMobileOpen(false)} />
+      <MobileNav
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+        onSearch={() => {
+          setMobileOpen(false);
+          setActiveMenu("search");
+        }}
+      />
     </header>
   );
 }

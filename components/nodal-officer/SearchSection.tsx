@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
-import { SearchIcon } from "@/components/icons";
+import { SearchIcon, CloseIcon } from "@/components/icons";
 
-export default function SearchSection() {
+interface SearchSectionProps {
+  query: string;
+  onQueryChange: (query: string) => void;
+}
+
+export default function SearchSection({ query, onQueryChange }: SearchSectionProps) {
   const { t } = useLanguage();
-  const [query, setQuery] = useState("");
 
   return (
     <section className="bg-gray-100 py-16 px-4">
@@ -21,10 +24,22 @@ export default function SearchSection() {
           <input
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => onQueryChange(e.target.value)}
+            aria-label={t("nodalListSearchPlaceholder")}
             placeholder={t("nodalListSearchPlaceholder")}
+            autoComplete="off"
             className="w-full border border-gray-300 rounded px-11 py-3 text-sm bg-white focus:outline-none focus:border-[#00b0f0] focus:ring-1 focus:ring-[#00b0f0]"
           />
+          {query && (
+            <button
+              type="button"
+              aria-label={t("searchClear")}
+              onClick={() => onQueryChange("")}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+            >
+              <CloseIcon className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </div>
     </section>

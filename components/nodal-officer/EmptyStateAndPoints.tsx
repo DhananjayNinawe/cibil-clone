@@ -16,12 +16,27 @@ function EmptyStateIllustration() {
   );
 }
 
-export default function EmptyStateAndPoints() {
+interface EmptyStateAndPointsProps {
+  /** False once the search has results to show in its place — the points below always stay. */
+  showEmptyState?: boolean;
+  /** Shown under the illustration when a search returned nothing. */
+  emptyMessage?: string;
+}
+
+export default function EmptyStateAndPoints({
+  showEmptyState = true,
+  emptyMessage,
+}: EmptyStateAndPointsProps) {
   const { t } = useLanguage();
 
   return (
     <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 text-center">
-      <EmptyStateIllustration />
+      {showEmptyState && (
+        <>
+          <EmptyStateIllustration />
+          {emptyMessage && <p className="-mt-8 mb-8 text-sm text-gray-600">{emptyMessage}</p>}
+        </>
+      )}
 
       <h2 className="font-bold text-gray-900 text-lg mb-6">{t("pointsToNoteHeading")}</h2>
       <ul className="text-left space-y-3 text-sm text-gray-700">
