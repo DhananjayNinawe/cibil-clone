@@ -1,0 +1,714 @@
+/*
+ * V3 — "The Ledger". Tokens, type, rules and motion.
+ *
+ * Everything here is scoped to `.v3-root` (the wrapper in app/v3/layout.tsx) or to a `v3-`
+ * prefixed class/keyframe. V1 and V2 share the same document — all three trees hang off the
+ * root layout's <body> — so an unscoped `:root` block or a bare `body {}` rule here would bleed
+ * into production the moment a reader crossed between them.
+ *
+ * Tailwind utilities still work in V3 components: v4 scans the whole project from the single
+ * `@import "tailwindcss"` in app/globals.css. This file deliberately does NOT re-import
+ * Tailwind — that would emit the entire utility layer a third time.
+ *
+ * ── The idea ──────────────────────────────────────────────────────────────────────────────
+ * V3 is a printed financial broadsheet, not an interface. Its material is paper and ink, and
+ * its structure is the rule — the hairline that separates one entry from the next. There are
+ * no cards, no glass, no glow, and no rounded corners anywhere in this file: depth comes from
+ * paper tone and ruled lines, never from a shadow under a floating box. Where V2 lights a dark
+ * room, V3 sets type on a page.
+ */
+
+.v3-root {
+  /* ── The three voices, composed from the faces app/v3/layout.tsx loads.
+        The Tiro faces sit *after* the Latin ones in the display stack rather than replacing
+        them: a browser walks a font-family list per glyph, so an English headline is set in
+        Instrument Serif and a Hindi one falls through to Tiro Devanagari automatically. They
+        are declared `preload: false`, so an English reader never downloads a byte of either —
+        the file is only fetched once a glyph actually needs it. */
+  --font-v3-display: var(--font-v3-serif), var(--font-v3-serif-deva), var(--font-v3-serif-tamil),
+    Georgia, "Times New Roman", serif;
+  --font-v3-sans: var(--font-v3-grotesk), system-ui, -apple-system, sans-serif;
+  --font-v3-mono: var(--font-v3-plex), ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* ── Paper. Warm, not white: a white page next to a white browser chrome has no edge. */
+  --v3-paper: #f6f3ec;
+  --v3-paper-2: #fdfcf9; /* raised — a fresh sheet laid on the stack */
+  --v3-paper-3: #ece7dc; /* sunken — the tray the sheet sits in */
+
+  /* ── Ink. Warm near-black; a true #000 on ivory reads as a hole punched in the page. */
+  --v3-ink: #16150f;
+  --v3-ink-2: #57544a; /* secondary prose */
+  --v3-ink-3: #8b8779; /* captions, folios, disabled */
+
+  /* ── The rule. V3's only structural device. */
+  --v3-rule: rgba(22, 21, 15, 0.14);
+  --v3-rule-2: rgba(22, 21, 15, 0.28);
+  --v3-rule-3: rgba(22, 21, 15, 0.55);
+
+  /* ── CIBIL's brand colours. NOT ours to change.
+   *
+   * These are the identity V1 ships, to the byte: the cyan mark, the gold, and the deep blue.
+   * A redesign gets to change the grid, the type, the motion and the tone of a page. It does not
+   * get to change the company's colours or its logo — that is a rebrand, and nobody asked for one.
+   * So V3's paper-and-ink art direction is built *around* this palette rather than replacing it.
+   */
+  --v3-cyan: #00b0f0; /* the brand mark colour */
+  --v3-deep: #0a3a52; /* CIBIL's deep blue — the same identity at a legible weight */
+  --v3-gold-brand: #f5c518; /* the brand's gold, exactly */
+  --v3-gold-text: #8a6a12; /* the same gold, darkened only where it must carry text on ivory */
+
+  /* Two working tints, derived from the brand rather than invented alongside it. Contrast, not
+     taste, is what forces them: brand cyan on ivory is ~2.3:1, so it can fill a shape but must
+     never *be* text; on ink it clears 6:1 and becomes the accent it is meant to be. */
+  --v3-cyan-ink: #4fc9f6; /* cyan lifted to stay legible on an ink surface */
+  --v3-deep-hover: #0d4d6b;
+
+  /* ── The score bands, and every chart drawn from them. This is data, not identity: it keeps
+        the red→gold→green reading V1's gauge already teaches, with the brand's own gold at the
+        centre of the scale. */
+  --v3-clay: #c0392b;
+  --v3-ochre: var(--v3-gold-brand);
+  --v3-olive: #7fa650;
+  --v3-pine: #1f7a4d;
+
+  /* ── Semantic, resolved from the palette above. */
+  --v3-success: var(--v3-pine);
+  --v3-warning: var(--v3-gold-text);
+  --v3-error: var(--v3-clay);
+
+  /* ── Adaptive surface tokens.
+        Components address these, never the raw colours above. `.v3-tone-ink` re-points them at
+        the dark end of the scale, so a section can invert wholesale and every child follows
+        without knowing it was inverted. That is the entire dark-surface mechanism. */
+  --v3-bg: var(--v3-paper);
+  --v3-bg-raised: var(--v3-paper-2);
+  --v3-bg-sunken: var(--v3-paper-3);
+  --v3-fg: var(--v3-ink);
+  --v3-fg-2: var(--v3-ink-2);
+  --v3-fg-3: var(--v3-ink-3);
+  --v3-line: var(--v3-rule);
+  --v3-line-2: var(--v3-rule-2);
+  --v3-line-3: var(--v3-rule-3);
+  /* On paper the accent is CIBIL's deep blue — the brand's own colour, at the only weight of it
+     that is legible as text on ivory. The cyan mark still appears on paper, but as a *fill*
+     (a rule, a band, a marker), never as type. */
+  --v3-accent: var(--v3-deep);
+  --v3-accent-hover: var(--v3-deep-hover);
+  --v3-accent-contrast: var(--v3-paper-2);
+  --v3-mark: var(--v3-cyan);
+  /* `--v3-gold` is whatever gold is *legible on this surface*: the brand gold itself on ink, and
+     a darkened draw of it on ivory, where #f5c518 as small text is ~1.6:1 and simply unreadable.
+     Reach for `--v3-gold-brand` directly for fills and marks, which have no contrast floor. */
+  --v3-gold: var(--v3-gold-text);
+
+  /* ── Rhythm. A wide outer margin is the point: the page should feel like a book, and a book
+        does not run its type to the trim. */
+  --v3-gutter: clamp(1.25rem, 5vw, 5rem);
+  --v3-max: 1400px;
+  --v3-measure: 68ch;
+
+  /* ── Motion. One easing family; type settles, it does not bounce. */
+  --v3-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --v3-ease-rule: cubic-bezier(0.65, 0, 0.35, 1);
+  --v3-dur-1: 180ms;
+  --v3-dur-2: 520ms;
+  --v3-dur-3: 1000ms;
+
+  color: var(--v3-fg);
+  background-color: var(--v3-bg);
+  font-family: var(--font-v3-sans), system-ui, sans-serif;
+  font-feature-settings: "kern" 1, "liga" 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  /* Horizontal-overflow backstop for the whole experience. Two things here legitimately extend
+     past the right edge: a plate mid-reveal (sitting at its pre-animation clip) and the ruled
+     grid overlay. Both are decorative, both widen the document, and on a phone that means a
+     real horizontal scrollbar. Rather than police every section, clip once here.
+     `clip`, not `hidden`: `hidden` makes this a scroll container, which would break every
+     `position: sticky` margin rail in the legal and FAQ clusters. `clip` does not. */
+  overflow-x: clip;
+}
+
+/* The ink tone. Applied to a <Section tone="ink">, it swaps the surface tokens — nothing else
+   in the subtree changes, because nothing else in the subtree hardcodes a colour. */
+.v3-tone-ink {
+  --v3-bg: var(--v3-ink);
+  --v3-bg-raised: #201e17;
+  --v3-bg-sunken: #0e0d09;
+  --v3-fg: var(--v3-paper);
+  --v3-fg-2: #b3ada0;
+  --v3-fg-3: #85806f;
+  --v3-line: rgba(246, 243, 236, 0.16);
+  --v3-line-2: rgba(246, 243, 236, 0.3);
+  --v3-line-3: rgba(246, 243, 236, 0.6);
+  /* On ink, the brand cyan finally gets to be the accent it is — it clears 6:1 here. */
+  --v3-accent: var(--v3-cyan-ink);
+  --v3-accent-hover: #8adcfa;
+  --v3-accent-contrast: var(--v3-ink);
+  --v3-mark: var(--v3-cyan);
+  --v3-gold: var(--v3-gold-brand);
+
+  color: var(--v3-fg);
+  background-color: var(--v3-bg);
+}
+
+/* A pale band — the same paper, one step down, for alternating section rhythm. */
+.v3-tone-sunken {
+  --v3-bg: var(--v3-paper-3);
+  background-color: var(--v3-bg);
+}
+
+/* Selection is a fill, not type — so it is the one place on paper the brand cyan can appear at
+   full strength, with ink on top of it. */
+.v3-root ::selection {
+  background: var(--v3-cyan);
+  color: var(--v3-ink);
+}
+
+.v3-tone-ink ::selection {
+  background: var(--v3-cyan);
+  color: var(--v3-ink);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── Typography */
+
+/* Three voices, and they never blur into each other:
+   · the serif speaks   — every headline, every number that matters
+   · the sans explains  — body copy, controls, anything you read at length
+   · the mono labels    — folios, captions, table heads, units. Never prose. */
+
+.v3-display,
+.v3-h1,
+.v3-h2,
+.v3-h3 {
+  font-family: var(--font-v3-display), Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  color: var(--v3-fg);
+}
+
+/* Oversized on purpose. The headline is the loudest thing on a broadsheet, and at this scale
+   Instrument Serif's contrast finally shows — at 24px it is just a serif; at 120px it is a
+   masthead. Sized against the viewport, then capped, so an ultra-wide never runs it away. */
+.v3-display {
+  font-size: clamp(2.75rem, 7.4vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: -0.022em;
+}
+
+.v3-h1 {
+  font-size: clamp(2.35rem, 5.4vw, 4.75rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.v3-h2 {
+  font-size: clamp(1.9rem, 3.6vw, 3.15rem);
+  line-height: 1.06;
+  letter-spacing: -0.018em;
+}
+
+.v3-h3 {
+  font-size: clamp(1.3rem, 1.9vw, 1.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.012em;
+}
+
+/* The italic is the emphasis device — a word set in italic serif inside a roman headline. It
+   replaces the coloured word V1 and V2 both use, which is why V3's headlines are monochrome. */
+.v3-em {
+  font-style: italic;
+}
+
+.v3-lede {
+  font-family: var(--font-v3-sans), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(1.0625rem, 1.3vw, 1.3125rem);
+  line-height: 1.6;
+  color: var(--v3-fg-2);
+}
+
+/* The folio: V3's eyebrow. A mono numeral, a rule, and a label — the mark that says where on
+   the page you are. Small, quiet, and everywhere. */
+.v3-folio {
+  font-family: var(--font-v3-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v3-fg-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.v3-caption {
+  font-family: var(--font-v3-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: var(--v3-fg-3);
+}
+
+/* Every figure in the design is set in mono with tabular figures, so a number that changes —
+   a tally counting up, a score sweeping — never reflows the rule beside it. */
+.v3-num {
+  font-family: var(--font-v3-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Devanagari and Tamil have deeper descenders and taller ascenders than Latin; at display sizes
+   the sub-1 line-heights above clip them outright. They also have no italic tradition, so the
+   emphasis device falls back to weight. Instrument Serif carries no Devanagari or Tamil at all,
+   which is why the display stack names Tiro after it — a serif in every script the site ships. */
+.v3-root:lang(hi) .v3-display,
+.v3-root:lang(mr) .v3-display,
+.v3-root:lang(ta) .v3-display,
+.v3-root:lang(hi) .v3-h1,
+.v3-root:lang(mr) .v3-h1,
+.v3-root:lang(ta) .v3-h1 {
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+}
+
+.v3-root:lang(hi) .v3-h2,
+.v3-root:lang(mr) .v3-h2,
+.v3-root:lang(ta) .v3-h2,
+.v3-root:lang(hi) .v3-h3,
+.v3-root:lang(mr) .v3-h3,
+.v3-root:lang(ta) .v3-h3 {
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+.v3-root:lang(hi) .v3-em,
+.v3-root:lang(mr) .v3-em,
+.v3-root:lang(ta) .v3-em {
+  font-style: normal;
+  color: var(--v3-accent);
+}
+
+/* The mono face carries no Indic glyphs either, so a folio in Hindi would silently fall back to
+   a system font mid-label. In those locales the folio is set in the sans instead — same size,
+   same tracking, same role. */
+.v3-root:lang(hi) .v3-folio,
+.v3-root:lang(mr) .v3-folio,
+.v3-root:lang(ta) .v3-folio,
+.v3-root:lang(hi) .v3-caption,
+.v3-root:lang(mr) .v3-caption,
+.v3-root:lang(ta) .v3-caption {
+  font-family: var(--font-v3-sans), system-ui, sans-serif;
+  letter-spacing: 0.08em;
+}
+
+/* ───────────────────────────────────────────────────────────────────────── Surfaces */
+
+/* The grain. Paper is not flat, and a perfectly flat ivory reads as "beige div". This is the
+   only texture in the system, it is nearly invisible, and it is the reason the canvas has a
+   material at all. */
+.v3-grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.32;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)' opacity='0.22'/%3E%3C/svg%3E");
+}
+
+/* The ruled column grid, drawn faintly behind the hero. It is the skeleton of the layout made
+   visible — an admission of how the page is built, which is a very old broadsheet idea. */
+.v3-columns {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--v3-line) 0 1px,
+    transparent 1px calc(100% / 6)
+  );
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 82%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 82%);
+  opacity: 0.7;
+}
+
+/* A hairline. Full-bleed, hard-edged, 1px — the opposite of V2's fading gradient rule, and the
+   single most-used object in the design. */
+.v3-rule {
+  height: 1px;
+  border: 0;
+  background: var(--v3-line);
+}
+
+.v3-rule-strong {
+  background: var(--v3-line-3);
+}
+
+/* The plate: a frame that crops artwork. Square, ruled, and mounted — never a rounded card with
+   a picture in it. The image inside may drift (usePlateDrift); the frame never moves. */
+.v3-plate {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--v3-line-2);
+  background: var(--v3-bg-sunken);
+}
+
+/* CIBIL's artwork is drawn for a white page. On an ink band it would sit in a glowing white
+   box, so it gets a paper mount — the way a dark-matted print keeps its white border. */
+.v3-plate-mount {
+  background: var(--v3-paper-2);
+}
+
+/* ─────────────────────────────────────────────────────────────────── Scroll reveal */
+
+/* The hidden half of every reveal is gated behind `@media (scripting: enabled)` — the media
+   feature that exists for exactly this. So:
+   · JS on  → the query matches at parse time, the element starts hidden, and the
+              IntersectionObserver in <Reveal> sets it. No flash of finished content, and no
+              inline script mutating <html> (which React owns, and which would be a
+              server/client attribute mismatch at hydration).
+   · JS off → the query never matches, `opacity: 0` never applies, and every reveal is simply
+              visible. The page is readable without scripting, always.
+   · Browser too old to know `scripting` → same as JS off. "Everything legible, nothing moves"
+              is the right failure. */
+.v3-reveal {
+  transition:
+    opacity var(--v3-dur-3) var(--v3-ease),
+    transform var(--v3-dur-3) var(--v3-ease),
+    clip-path var(--v3-dur-3) var(--v3-ease);
+  transition-delay: var(--v3-reveal-delay, 0ms);
+}
+
+/* Type set line by line: each line sits in an overflow-hidden box and rises into it. */
+.v3-line {
+  display: block;
+  overflow: hidden;
+}
+
+.v3-line > span {
+  display: block;
+  transition: transform var(--v3-dur-3) var(--v3-ease);
+  transition-delay: var(--v3-line-delay, 0ms);
+}
+
+@media (scripting: enabled) {
+  .v3-reveal {
+    opacity: 0;
+    will-change: opacity, transform, clip-path;
+  }
+
+  /* Copy rises a short distance — 14px, not 40. This is paper settling, not a card flying in. */
+  .v3-reveal-rise {
+    transform: translate3d(0, 14px, 0);
+  }
+
+  .v3-reveal-fade {
+    transform: none;
+  }
+
+  /* A block of type uncovered from the top down, as though a sheet were being pulled away. */
+  .v3-reveal-wipe {
+    opacity: 1;
+    clip-path: inset(0 0 100% 0);
+  }
+
+  /* A plate unveiled left to right. The image is revealed, never scaled or faded — a photograph
+     does not fade in, it is uncovered. */
+  .v3-reveal-plate {
+    opacity: 1;
+    clip-path: inset(0 100% 0 0);
+  }
+
+  /* A rule drawn from its left edge. The signature move of the whole design. */
+  .v3-reveal-rule {
+    opacity: 1;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition-duration: var(--v3-dur-2);
+    transition-timing-function: var(--v3-ease-rule);
+  }
+
+  .v3-reveal.is-set {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+    will-change: auto;
+  }
+
+  /* The clip-based reveals (`wipe`, `plate`) hang their clip on an *inner* element, and the
+     observer watches the unclipped wrapper around it. That indirection is not stylistic — it is
+     load-bearing:
+     IntersectionObserver measures the target's clipped box. An element clipped to zero height
+     (`inset(0 0 100% 0)`) therefore reports an intersection ratio of 0 for ever, the observer
+     never fires, and the very element the reveal exists to uncover stays invisible permanently.
+     (The `rule` variant survives only by accident of the spec: a zero-*area* target is defined to
+     report a ratio of 1, so `scaleX(0)` still intersects. Clipping produces a zero-area
+     intersection of a non-zero-area target, which does not get that exemption.)
+     So: wrapper is observed and gets `is-set`; the child carries the clip and resolves from it. */
+  .is-set > .v3-reveal {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+    will-change: auto;
+  }
+
+  .v3-line > span {
+    transform: translate3d(0, 105%, 0);
+  }
+
+  .is-set .v3-line > span {
+    transform: none;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────── Interaction */
+
+/* A link is ink with a rule under it, and the rule thickens on hover. No colour change, no
+   glow — this is how a printed cross-reference behaves when you put your finger on it. */
+.v3-link {
+  color: var(--v3-fg);
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  padding-bottom: 1px;
+  transition: background-size var(--v3-dur-1) var(--v3-ease-rule);
+}
+
+.v3-link:hover,
+.v3-link:focus-visible {
+  background-size: 100% 2px;
+}
+
+/* Its counterpart for lists and index entries: the rule grows in from the left instead. */
+.v3-link-draw {
+  color: var(--v3-fg);
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--v3-dur-2) var(--v3-ease);
+}
+
+.v3-link-draw:hover,
+.v3-link-draw:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* An index row: the whole line is the target, and the rule under it darkens as you travel it. */
+.v3-row {
+  transition:
+    background-color var(--v3-dur-1) var(--v3-ease),
+    border-color var(--v3-dur-1) var(--v3-ease);
+}
+
+.v3-row:hover {
+  background-color: var(--v3-bg-raised);
+  border-color: var(--v3-line-3);
+}
+
+.v3-focus:focus-visible {
+  outline: 2px solid var(--v3-accent);
+  outline-offset: 3px;
+}
+
+/* ───────────────────────────────────────────────────────────────────────── Keyframes */
+
+@keyframes v3-draw {
+  from {
+    stroke-dashoffset: var(--v3-dash, 1000);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes v3-fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes v3-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes v3-caret {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  95% {
+    opacity: 0;
+  }
+}
+
+.v3-overlay-in {
+  animation: v3-overlay-in var(--v3-dur-2) var(--v3-ease) both;
+}
+
+.v3-fade-up {
+  animation: v3-fade-up var(--v3-dur-2) var(--v3-ease) both;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── Prose */
+
+/* Long-form legal, policy and regulatory copy. Set to a measure, on a baseline, with the rules
+   doing the sectioning — this is the part of the site that most wants to be a printed document,
+   and V3 finally lets it be one. */
+.v3-prose {
+  color: var(--v3-fg-2);
+  font-size: 1rem;
+  line-height: 1.75;
+  max-width: var(--v3-measure);
+}
+
+.v3-prose h2 {
+  font-family: var(--font-v3-display), Georgia, serif;
+  font-weight: 400;
+  font-size: 1.75rem;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--v3-fg);
+  margin: 3rem 0 1rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--v3-line);
+}
+
+.v3-prose h3 {
+  font-family: var(--font-v3-sans), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  color: var(--v3-fg);
+  margin: 2rem 0 0.625rem;
+}
+
+.v3-prose p {
+  margin: 0 0 1.125rem;
+}
+
+.v3-prose ul,
+.v3-prose ol {
+  margin: 0 0 1.25rem;
+  padding-left: 0;
+  list-style: none;
+}
+
+/* An en dash, not a bullet. A printed document does not use dots. */
+.v3-prose ul > li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.v3-prose ul > li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--v3-fg-3);
+}
+
+.v3-prose ol {
+  counter-reset: v3-ol;
+}
+
+.v3-prose ol > li {
+  position: relative;
+  padding-left: 2.25rem;
+  margin-bottom: 0.5rem;
+  counter-increment: v3-ol;
+}
+
+.v3-prose ol > li::before {
+  content: counter(v3-ol, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  font-family: var(--font-v3-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--v3-fg-3);
+}
+
+.v3-prose strong,
+.v3-prose b {
+  color: var(--v3-fg);
+  font-weight: 600;
+}
+
+.v3-prose a {
+  color: var(--v3-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.v3-prose a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.v3-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.75rem 0;
+  font-size: 0.875rem;
+}
+
+/* Ruled, not boxed: horizontal lines only, the way a ledger is ruled. */
+.v3-prose th,
+.v3-prose td {
+  border: 0;
+  border-bottom: 1px solid var(--v3-line);
+  padding: 0.75rem 1rem 0.75rem 0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.v3-prose th {
+  font-family: var(--font-v3-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--v3-fg-3);
+  border-bottom: 1px solid var(--v3-line-3);
+}
+
+/* ────────────────────────────────────────────────────────────────── Reduced motion */
+
+/* Award-level motion is still motion. Honour the OS switch: everything lands in its final
+   state instantly, nothing draws, nothing rises. */
+@media (prefers-reduced-motion: reduce) {
+  .v3-root *,
+  .v3-root *::before,
+  .v3-root *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .v3-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+
+  .v3-line > span {
+    transform: none !important;
+  }
+}
