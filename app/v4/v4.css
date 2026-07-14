@@ -518,6 +518,32 @@
   transform: translateY(1px);
 }
 
+/*
+ * Hiding a button on small screens.
+ *
+ * `className="hidden sm:inline-flex"` does NOT work on a `.v4-btn`, and the failure is silent —
+ * which is exactly why this class exists rather than a comment telling people to be careful.
+ *
+ * Tailwind v4 emits its utilities inside `@layer utilities`. This file is unlayered, and in the
+ * cascade *any* unlayered rule beats *every* layered one, regardless of specificity or source
+ * order. So `.v4-btn { display: inline-flex }` here quietly outranks `.hidden { display: none }`
+ * there, and the button stays on screen at every width. (An `!important` utility — `hidden!` —
+ * would win, but reaching for `!important` to defeat your own design system is a smell, and it
+ * teaches the next person the wrong lesson.)
+ *
+ * This rule is unlayered too, and carries higher specificity than `.v4-btn` alone, so it wins
+ * honestly.
+ */
+.v4-btn.v4-btn-sm-up {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .v4-btn.v4-btn-sm-up {
+    display: inline-flex;
+  }
+}
+
 .v4-btn[disabled],
 .v4-btn[aria-disabled="true"] {
   opacity: 0.45;

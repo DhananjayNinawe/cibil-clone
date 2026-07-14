@@ -75,20 +75,27 @@ export default function Header() {
           <div className="ml-auto flex items-center gap-1.5 sm:gap-2.5">
             <LanguageSwitch />
 
-            <ButtonLink
-              href={toV4("/login")}
-              variant="ghost"
-              size="sm"
-              className="hidden sm:inline-flex"
-            >
+            <ButtonLink href={toV4("/login")} variant="ghost" size="sm">
               {t("login")}
             </ButtonLink>
 
-            {/* The one CTA on the page furniture. Both labels are V1's own — this is the sentence
-                the business already leads with, not a new one. The short label is not a truncation
-                of the long one but a different existing string, because "Become credit ready
-                today!" cut to fit a phone is not a call to action, it is a fragment. */}
-            <ButtonLink href={toV4("/freecibilscore")} size="sm">
+            {/* The CTA, from `sm` up only.
+             *
+             * On a phone the bar was carrying five things — mark, Explore, language, Login and this
+             * — and the fifth is the one to lose, because it is the only one that is *duplicated*:
+             * the hero's own "Get your free CIBIL Score & Report" button sits a thumb's width below
+             * it, and the Launcher lists the same destination as its first task. A header that
+             * competes with the page's own call to action does not double the conversion; it just
+             * leaves no room for the navigation.
+             *
+             * Both labels are V1's own copy. The short one is a *different existing string*, not a
+             * truncation — "Become credit ready today!" cut to fit is not a call to action, it is a
+             * fragment.
+             *
+             * `v4-btn-sm-up`, not Tailwind's `hidden sm:inline-flex`: a Tailwind display utility
+             * cannot override `.v4-btn`, because utilities are layered and v4.css is not. See the
+             * note beside the class in v4.css. */}
+            <ButtonLink href={toV4("/freecibilscore")} size="sm" className="v4-btn-sm-up">
               <span className="hidden md:inline">{t("heroBecomeReady")}</span>
               <span className="md:hidden">{t("megaFreeCibilScore")}</span>
             </ButtonLink>
